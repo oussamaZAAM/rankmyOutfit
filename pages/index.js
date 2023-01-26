@@ -280,7 +280,7 @@ export default function Home() {
                 className="
                           flex md:flex-col justify-center items-center
                           md:w-40 my-4 mx-4 | md:col-start-1 md:col-span-4
-                          rounded-b-full rounded-tr-full drop-shadow-md"
+                          rounded-b-full rounded-tl-full md:rounded-t-full md:rounded-bl-none md:rounded-br-full drop-shadow-md"
                 style={{ backgroundColor: "#FFF4FF" }}
               >
                 <img
@@ -312,7 +312,7 @@ export default function Home() {
                 className="
                           flex md:flex-col justify-center items-center
                           md:w-40 my-4 mx-4 | md:col-start-6 md:col-span-5
-                          rounded-b-full rounded-tr-full drop-shadow-md"
+                          rounded-b-full rounded-t-full drop-shadow-md"
                 style={{ backgroundColor: "#FFF4FF" }}
               >
                 <img
@@ -344,7 +344,7 @@ export default function Home() {
                 className="
                           flex md:flex-col justify-center items-center
                           md:w-40 my-4 mx-4 | md:col-start-12 md:col-span-4
-                          rounded-b-full rounded-tr-full drop-shadow-md"
+                          rounded-bl-full rounded-t-full drop-shadow-md"
                 style={{ backgroundColor: "#FFF4FF" }}
               >
                 <img
