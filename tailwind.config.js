@@ -6,10 +6,30 @@ module.exports = {
   ],
   theme: {
     extend: {
+      animation: {
+        'pingonce': 'ping 0.3s ease-in-out',
+      },
+      keyframes: {
+          ping: {
+            '50%, 75%': {
+              transform: 'scale(5)',
+              opacity: '0'
+            },
+            '75%, 100%': {
+              transform: 'scale(0.5)',
+              opacity: '0'
+            }
+            // '75%, 100%': {
+            //   transform: 'scale(2)',
+            //   opacity: '0'
+            // }
+          }
+      },
       colors: {
         'my-purple': '#6F1AB6',
         'my-pink1': '#EE88EE',
         'my-pink2': '#DB76DC',
+        'soft-pink': '#FFF4FF',
       },
     },
     fontFamily: {

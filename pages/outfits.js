@@ -1,6 +1,8 @@
 import Head from 'next/head'
 import { useState } from 'react';
 import { MdOutlineAddCircle, MdOutlineArrowDropDown } from 'react-icons/md'
+import { HiOutlineStar, HiStar } from 'react-icons/hi'
+import styles from '../styles/Home.module.css'
 
 const outfits = () => {
     const [sort, setSort] = useState({
@@ -12,6 +14,8 @@ const outfits = () => {
         type: 'both'
     });
     const [rankingType, setRankingType] = useState('basic');
+
+    const [test, setTest] = useState(false)
 
   return (
     <>
@@ -51,24 +55,25 @@ const outfits = () => {
                                             group-hover:fill-white `+(sort.state ? 'fill-white' : 'fill-my-pink1')} 
                                             />
                             </div>
-                            <div className={'flex flex-col justify-center items-center w-10/12 z-30 -mt-12 '+(sort.state ? 'transition duration-200 translate-y-12 opacity-100' : 'transition duration-200 opacity-0')}>
-                                <div className="
-                                                flex justify-start items-center w-full
-                                                bg-white hover:bg-gray-100 cursor-pointer transition duration-200
+                            <div className={'flex flex-col justify-center items-center w-10/12 z-30 -mt-8 '+(sort.state ? 'transition duration-200 translate-y-8 opacity-100' : 'transition duration-200 opacity-0')}>
+                                <div 
+                                    className={`flex justify-start items-center w-full
                                                 indent-1 text-base font-body
-                                                border-b-2 border-x-2 border-my-pink1"
+                                                border-b-2 border-x-2 border-my-pink1
+                                                cursor-pointer transition duration-300 `+(sort.type==='recent' ? 'bg-my-pink1 text-white' : 'bg-white hover:bg-gray-100')}
+                                    onClick={()=>setSort({...sort, type: 'recent'})}
                                 >Recent</div>
-                                <div className="
-                                                flex justify-start items-center w-full
-                                                bg-white hover:bg-gray-100 cursor-pointer transition duration-200
+                                <div className={`flex justify-start items-center w-full
                                                 indent-1 text-base font-body
-                                                border-b-2 border-x-2 border-my-pink1"
+                                                border-b-2 border-x-2 border-my-pink1
+                                                cursor-pointer transition duration-300 `+(sort.type==='rank' ? 'bg-my-pink1 text-white' : 'bg-white hover:bg-gray-100')}
+                                    onClick={()=>setSort({...sort, type: 'rank'})}
                                 >Rank</div>
-                                <div className="
-                                                flex justify-start items-center w-full
-                                                bg-white hover:bg-gray-100 cursor-pointer transition duration-200
+                                <div className={`flex justify-start items-center w-full
                                                 indent-1 text-base font-body
-                                                border-b-2 border-x-2 border-my-pink1"
+                                                border-b-2 border-x-2 border-my-pink1
+                                                cursor-pointer transition duration-300 `+(sort.type==='popularity' ? 'bg-my-pink1 text-white' : 'bg-white hover:bg-gray-100')}
+                                    onClick={()=>setSort({...sort, type: 'popularity'})}
                                 >Popularity</div>
                             </div>
                         </div>
@@ -93,24 +98,24 @@ const outfits = () => {
                                             group-hover:fill-white `+(filter.state ? 'fill-white' : 'fill-my-purple')} 
                                         />
                             </div>
-                            <div className={'flex flex-col justify-center items-center w-10/12 z-10 -mt-12 '+(filter.state ? 'transition duration-200 translate-y-12 opacity-100' : 'transition duration-200 opacity-0')}>
-                                <div className="
-                                                flex justify-start items-center w-full
-                                                bg-white hover:bg-gray-100 cursor-pointer transition duration-200
+                            <div className={'flex flex-col justify-center items-center w-10/12 z-10 -mt-8 '+(filter.state ? 'transition duration-200 translate-y-8 opacity-100' : 'transition duration-200 opacity-0')}>
+                                <div className={`flex justify-start items-center w-full
                                                 indent-1 text-base font-body
-                                                border-b-2 border-x-2 border-my-purple"
+                                                border-b-2 border-x-2 border-my-purple
+                                                cursor-pointer transition duration-300 `+(filter.type==='both' ? 'bg-my-purple text-white' : 'bg-white hover:bg-gray-100')}
+                                    onClick={()=>setFilter({...filter, type: 'both'})}
                                 >Both</div>
-                                <div className="
-                                                flex justify-start items-center w-full
-                                                bg-white hover:bg-gray-100 cursor-pointer transition duration-200
+                                <div className={`flex justify-start items-center w-full
                                                 indent-1 text-base font-body
-                                                border-b-2 border-x-2 border-my-purple"
+                                                border-b-2 border-x-2 border-my-purple
+                                                cursor-pointer transition duration-300 `+(filter.type==='multi' ? 'bg-my-purple text-white' : 'bg-white hover:bg-gray-100')}
+                                    onClick={()=>setFilter({...filter, type: 'multi'})}
                                 >Multi</div>
-                                <div className="
-                                                flex justify-start items-center w-full
-                                                bg-white hover:bg-gray-100 cursor-pointer transition duration-200
+                                <div className={`flex justify-start items-center w-full
                                                 indent-1 text-base font-body
-                                                border-b-2 border-x-2 border-my-purple"
+                                                border-b-2 border-x-2 border-my-purple
+                                                cursor-pointer transition duration-300 `+(filter.type==='onesies' ? 'bg-my-purple text-white' : 'bg-white hover:bg-gray-100')}
+                                    onClick={()=>setFilter({...filter, type: 'onesies'})}
                                 >Onesies</div>
                             </div>
                         </div>
@@ -137,6 +142,42 @@ const outfits = () => {
                         <button className="w-full py-1 sm:w-12 rounded-3xl bg-my-pink1" style={{maxWidth: '150px'}}>
                             <p className="text-md md:text-xl font-display text-white text-center">AI</p>
                         </button>
+                    </div>
+                </div>
+
+                {/* List of Outfits  */}
+                <div className="flex flex-col justify-center items-center rounded-b-3xl bg-soft-pink w-full z-50">
+                    <div className={"flex flex-col justify-center items-center rounded px-4 my-4 " +styles.boxshadow}>
+                        <h3 className="font-title font-bold text-4xl drop-shadow-lg text-black    my-4">Choose the best</h3>
+                        <h3 className="font-title font-bold text-4xl drop-shadow-lg text-my-pink2 mb-4">Outfit</h3>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 justify-items-center gap-4">
+
+                            <div onClick={()=>setTest(prev=>!prev)} className="relative rounded-3xl w-72 h-96 cursor-pointer">
+                                <img className='block object-cover w-72 h-96 object-cover rounded-3xl' src="https://cdn.myanimelist.net/images/characters/9/66231.jpg" alt="" />
+                                <HiOutlineStar color='white' className={'absolute h-8 w-8 transition duration-200 top-0 right-0 m-2 '+(test && 'animate-pingonce fill-white')} />
+                            </div>
+                            
+                            <div onClick={()=>setTest(prev=>!prev)} className="relative rounded-3xl w-72 h-96 cursor-pointer">
+                                <img className='block object-cover w-72 h-96 object-cover rounded-3xl' src="https://cdn.myanimelist.net/images/characters/6/241415.jpg" alt="" />
+                                <HiOutlineStar color='white' className={'absolute h-8 w-8 transition duration-200 top-0 right-0 m-2 '+(test && 'animate-pingonce fill-white')} />
+                            </div>
+                            
+                            <div onClick={()=>setTest(prev=>!prev)} className="relative rounded-3xl w-72 h-96 cursor-pointer">
+                                <img className='block object-cover w-72 h-96 object-cover rounded-3xl' src="https://cdn.myanimelist.net/images/characters/16/288705.jpg" alt="" />
+                                <HiOutlineStar color='white' className={'absolute h-8 w-8 transition duration-200 top-0 right-0 m-2 '+(test && 'animate-pingonce fill-white')} />
+                            </div>
+                            
+                            <div onClick={()=>setTest(prev=>!prev)} className="relative rounded-3xl w-72 h-96 cursor-pointer">
+                                <img className='block object-cover w-72 h-96 object-cover rounded-3xl' src="https://cdn.myanimelist.net/images/characters/11/290052.jpg" alt="" />
+                                <HiOutlineStar color='white' className={'absolute h-8 w-8 transition duration-200 top-0 right-0 m-2 '+(test && 'animate-pingonce fill-white')} />
+                            </div>
+                            
+                        </div>
+                        <div className="flex justify-center items-center my-4">
+                            <button className="h-12 w-44 text-center bg-my-purple rounded-3xl">
+                                <p className="font-display text-white text-xl">Rate</p>
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
