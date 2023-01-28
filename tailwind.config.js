@@ -7,21 +7,19 @@ module.exports = {
   theme: {
     extend: {
       animation: {
-        'pingonce': 'ping 0.3s ease-in-out',
+        'pingonce': 'ping 0.5s ease-in',
       },
       keyframes: {
           ping: {
-            '50%, 75%': {
+            '75%, 100%': {
               transform: 'scale(5)',
               opacity: '0'
             },
-            '75%, 100%': {
-              transform: 'scale(0.5)',
-              opacity: '0'
-            }
-            // '75%, 100%': {
-            //   transform: 'scale(2)',
-            //   opacity: '0'
+            // 'from': {
+            //   transform: 'scale(1)'
+            // },
+            // 'to': {
+            //   transform: 'scale(5)'
             // }
           }
       },
