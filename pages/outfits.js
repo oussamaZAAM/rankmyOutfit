@@ -147,28 +147,28 @@ const outfits = () => {
 
                 {/* List of Outfits  */}
                 <div className="flex flex-col justify-center items-center rounded-b-3xl bg-soft-pink w-full z-50">
-                    <div className={"flex flex-col justify-center items-center rounded px-4 my-4 " +styles.boxshadow}>
+                    <div className={"flex flex-col justify-center items-center rounded px-4 my-4 fold:w-full mobile:w-10/12 " +styles.boxshadow}>
                         <h3 className="font-title font-bold text-4xl drop-shadow-lg text-black    my-4">Choose the best</h3>
                         <h3 className="font-title font-bold text-4xl drop-shadow-lg text-my-pink2 mb-4">Outfit</h3>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 justify-items-center gap-4">
+                        <div className="grid grid-cols-1 md:grid-cols-2 justify-items-center gap-4">
 
-                            <div onClick={()=>setTest(prev=>!prev)} className="relative rounded-3xl w-72 h-96 cursor-pointer">
-                                <img className='block object-cover w-72 h-96 object-cover rounded-3xl' src="https://cdn.myanimelist.net/images/characters/9/66231.jpg" alt="" />
+                            <div onClick={()=>setTest(prev=>!prev)} className="relative rounded-3xl mobile:w-72 mobile:h-96 cursor-pointer">
+                                <img className='block object-cover w-full h-full object-cover rounded-3xl' src="https://cdn.myanimelist.net/images/characters/9/66231.jpg" alt="" />
+                                <HiOutlineStar color='white' className={'absolute h-8 w-8 transition duration-200 top-0 right-0 m-2 '+(test && 'animate-pingonce fill-white')} />
+                            </div>
+
+                            <div onClick={()=>setTest(prev=>!prev)} className="relative rounded-3xl mobile:w-72 mobile:h-96 cursor-pointer">
+                                <img className='block object-cover w-full h-full object-cover rounded-3xl' src="https://cdn.myanimelist.net/images/characters/6/241415.jpg" alt="" />
+                                <HiOutlineStar color='white' className={'absolute h-8 w-8 transition duration-200 top-0 right-0 m-2 '+(test && 'animate-pingonce fill-white')} />
+                            </div>
+
+                            <div onClick={()=>setTest(prev=>!prev)} className="relative rounded-3xl mobile:w-72 mobile:h-96 cursor-pointer">
+                                <img className='block object-cover w-full h-full object-cover rounded-3xl' src="https://cdn.myanimelist.net/images/characters/16/288705.jpg" alt="" />
                                 <HiOutlineStar color='white' className={'absolute h-8 w-8 transition duration-200 top-0 right-0 m-2 '+(test && 'animate-pingonce fill-white')} />
                             </div>
                             
-                            <div onClick={()=>setTest(prev=>!prev)} className="relative rounded-3xl w-72 h-96 cursor-pointer">
-                                <img className='block object-cover w-72 h-96 object-cover rounded-3xl' src="https://cdn.myanimelist.net/images/characters/6/241415.jpg" alt="" />
-                                <HiOutlineStar color='white' className={'absolute h-8 w-8 transition duration-200 top-0 right-0 m-2 '+(test && 'animate-pingonce fill-white')} />
-                            </div>
-                            
-                            <div onClick={()=>setTest(prev=>!prev)} className="relative rounded-3xl w-72 h-96 cursor-pointer">
-                                <img className='block object-cover w-72 h-96 object-cover rounded-3xl' src="https://cdn.myanimelist.net/images/characters/16/288705.jpg" alt="" />
-                                <HiOutlineStar color='white' className={'absolute h-8 w-8 transition duration-200 top-0 right-0 m-2 '+(test && 'animate-pingonce fill-white')} />
-                            </div>
-                            
-                            <div onClick={()=>setTest(prev=>!prev)} className="relative rounded-3xl w-72 h-96 cursor-pointer">
-                                <img className='block object-cover w-72 h-96 object-cover rounded-3xl' src="https://cdn.myanimelist.net/images/characters/11/290052.jpg" alt="" />
+                            <div onClick={()=>setTest(prev=>!prev)} className="relative rounded-3xl mobile:w-72 mobile:h-96 cursor-pointer">
+                                <img className='block object-cover w-full h-full object-cover rounded-3xl' src="https://cdn.myanimelist.net/images/characters/11/290052.jpg" alt="" />
                                 <HiOutlineStar color='white' className={'absolute h-8 w-8 transition duration-200 top-0 right-0 m-2 '+(test && 'animate-pingonce fill-white')} />
                             </div>
                             
@@ -179,6 +179,25 @@ const outfits = () => {
                             </button>
                         </div>
                     </div>
+                    
+                    <div className={"flex flex-col justify-center items-center rounded px-4 my-4 fold:w-full mobile:w-10/12 " +styles.boxshadow}>
+                        <h3 className="font-title font-bold text-4xl drop-shadow-lg text-black    my-4">Rate this</h3>
+                        <h3 className="font-title font-bold text-4xl drop-shadow-lg text-my-pink2 mb-4">Outfit</h3>
+                        <div className="flex justify-center items-center">
+
+                            <div onClick={()=>setTest(prev=>!prev)} className="relative rounded-3xl w-full h-full cursor-pointer">
+                                <img className='block object-cover w-full h-full rounded-3xl' src="https://i.pinimg.com/564x/53/a7/b8/53a7b8e3508afa5e20a9f4c3bbc385d2.jpg" alt="" />
+                                <HiOutlineStar color='white' className={'absolute h-8 w-8 transition duration-200 top-0 right-0 m-2 '+(test && 'animate-pingonce fill-white')} />
+                            </div>
+                            
+                        </div>
+                        <div className="flex justify-center items-center my-4">
+                            <button className="h-12 w-44 text-center bg-my-purple rounded-3xl">
+                                <p className="font-display text-white text-xl">Rate</p>
+                            </button>
+                        </div>
+                    </div>
+                    
                 </div>
             </div>
         </div>
