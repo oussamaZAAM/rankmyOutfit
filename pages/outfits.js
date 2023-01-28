@@ -3,8 +3,9 @@ import { useState } from "react";
 import { MdOutlineAddCircle, MdOutlineArrowDropDown } from "react-icons/md";
 import { HiOutlineStar, HiStar } from "react-icons/hi";
 import styles from "../styles/Home.module.css";
+import server from "../config";
 
-const outfits = () => {
+const outfits = ({ outfits }) => {
   const [sort, setSort] = useState({
     state: false,
     type: "recent",
@@ -18,6 +19,8 @@ const outfits = () => {
   const [rating, setRating] = useState(0);
 
   const [test, setTest] = useState(false);
+
+  console.log(outfits)
 
   return (
     <>
@@ -427,3 +430,14 @@ const outfits = () => {
 };
 
 export default outfits;
+
+export const getStaticProps = async () => {
+    const res = await fetch(`${server}/api/outfits`);
+    const outfits = await res.json();
+    return {
+      props: {
+        outfits,
+      },
+    };
+  };
+  
