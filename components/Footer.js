@@ -24,7 +24,7 @@ const Footer = () => {
               <div className="flex flex-col justify-center items-center space-y-4 my-4">
                 <div className="grid grid-cols-6 w-48 cursor-pointer">
                   <div className="flex justify-center items-center col-span-2">
-                    <AiFillGoogleCircle size={30} color="#EE88EE" />
+                    <img src="/favicon.ico" alt="" width={30} />
                   </div>
                   <div className="flex justify-center items-center col-start-3 col-span-4">
                     <span
@@ -37,16 +37,16 @@ const Footer = () => {
                 </div>
                 <div className="grid grid-cols-6 w-48">
                   <div className="col-span-2 hidden"></div>
-                  <div className="flex justify-center items-center col-start-3 | cursor-pointer | hover:scale-125 duration-150 ease-out">
+                  <div className="flex justify-center items-center col-start-3 | cursor-pointer | hover:scale-125 duration-200 ease-out">
                     <AiFillGoogleCircle color="#EE88EE" />
                   </div>
-                  <div className="flex justify-center items-center col-start-4 | cursor-pointer | hover:scale-125 duration-150 ease-out">
+                  <div className="flex justify-center items-center col-start-4 | cursor-pointer | hover:scale-125 duration-200 ease-out">
                     <AiFillGithub color="#EE88EE" />
                   </div>
-                  <div className="flex justify-center items-center col-start-5 | cursor-pointer | hover:scale-125 duration-150 ease-out">
+                  <div className="flex justify-center items-center col-start-5 | cursor-pointer | hover:scale-125 duration-200 ease-out">
                     <AiFillInstagram color="#EE88EE" />
                   </div>
-                  <div className="flex justify-center items-center col-start-6 | cursor-pointer | hover:scale-125 duration-150 ease-out">
+                  <div className="flex justify-center items-center col-start-6 | cursor-pointer | hover:scale-125 duration-200 ease-out">
                     <AiFillTwitterCircle color="#EE88EE" />
                   </div>
                 </div>

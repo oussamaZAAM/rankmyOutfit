@@ -5,6 +5,7 @@ import { MdOutlineDoubleArrow } from "react-icons/md";
 import subBackground1 from "../public/images/sub-background1.png";
 import subBackground2 from "../public/images/sub-background2.png";
 import loading from "../public/images/loading.png";
+import Link from "next/link";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -16,23 +17,6 @@ export default function Home() {
         <meta name="description" content="Make sure you look your Best" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
-        {/* Importing Google Fonts */}
-        <link
-          href="https://fonts.googleapis.com/css?family=Poppins"
-          rel="stylesheet"
-        />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Oswald&display=swap"
-          rel="stylesheet"
-        />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Alumni+Sans&display=swap"
-          rel="stylesheet"
-        />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Alice&display=swap"
-          rel="stylesheet"
-        />
       </Head>
 
       <div className="flex flex-col justify-center items-center | w-full">
@@ -56,12 +40,12 @@ export default function Home() {
               </span>
             </h1>
           </div>
-          <div className="flex justify-center items-center | w-48 sm:w-64 h-12 my-4 rounded-3xl bg-neutral-800">
+          <Link href='/outfits' className="flex justify-center items-center | w-48 sm:w-64 h-12 my-4 rounded-3xl bg-neutral-800">
             <button className="flex justify-evenly items-center | w-8/12 h-full">
               <b className="text-white">Get Started</b>
               <MdOutlineDoubleArrow color="white" size={35} />
             </button>
-          </div>
+          </Link>
         </div>
 
         {/* Brief Description of the Applicaiton */}
