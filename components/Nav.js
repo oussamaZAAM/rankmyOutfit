@@ -1,6 +1,5 @@
 import Link from 'next/link'
 import React from 'react'
-import {MdOutlineImageSearch} from 'react-icons/md'
 
 const Nav = () => {
   return (

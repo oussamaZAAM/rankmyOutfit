@@ -4,6 +4,7 @@ import { MdOutlineAddCircle, MdOutlineArrowDropDown } from "react-icons/md";
 import { HiOutlineStar, HiStar } from "react-icons/hi";
 import styles from "../styles/Home.module.css";
 import server from "../config";
+import Link from "next/link";
 
 const outfits = ({ outfitsData }) => {
   const [sort, setSort] = useState({
@@ -228,7 +229,9 @@ const outfits = ({ outfitsData }) => {
 
       <div className="grid grid-cols-8 w-full">
         <div className="lg:col-start-2 col-span-8 lg:col-span-6 flex flex-col justify-center items-center">
-          {/* Adding a new Outfit */}
+
+          {/*-------------------------------------------| Adding a new Outfit |------------------------------------------ */}
+
           <div
             className="
                                 flex justify-around items-center w-full h-32
@@ -409,9 +412,9 @@ const outfits = ({ outfitsData }) => {
               </div>
             </div>
 
-            <div className="flex sm:mx-8 md:mx-14 lg:mx-20 justify-center items-center">
+            <Link href='/new-outfit' className="flex sm:mx-8 md:mx-14 lg:mx-20 justify-center items-center">
               <MdOutlineAddCircle className="fill-my-pink1 w-20 sm:w-24 h-20 sm:h-24 cursor-pointer" />
-            </div>
+            </Link>
 
             <div className="flex flex-col-reverse sm:flex-row justify-around items-center w-full h-full">
               <button
@@ -442,7 +445,7 @@ const outfits = ({ outfitsData }) => {
             </div>
           </div>
 
-          {/* List of Outfits  */}
+          {/* --------------------------------------| List of Outfits |------------------------------------------------  */}
           <div className="flex flex-col justify-center items-center rounded-b-3xl bg-soft-pink w-full z-10">
             {outfits}
           </div>
