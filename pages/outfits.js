@@ -5,7 +5,7 @@ import { HiOutlineStar, HiStar } from "react-icons/hi";
 import styles from "../styles/Home.module.css";
 import server from "../config";
 
-const outfits = ({ outfits }) => {
+const outfits = ({ outfitsData }) => {
   const [sort, setSort] = useState({
     state: false,
     type: "recent",
@@ -19,8 +19,166 @@ const outfits = ({ outfits }) => {
   const [rating, setRating] = useState(0);
 
   const [test, setTest] = useState(false);
+  const mockUser = 17;
 
-  console.log(outfits)
+  const [outfitsList, setOutfitsList] = useState(outfitsData);
+
+
+  const editOutfitsRate = (outfitIndex, imageIndex, user) => {
+    setOutfitsList(prevList => {
+      const prevOutfit = prevList[outfitIndex];
+      var isExist = false;
+      for (let i=0;i<prevOutfit.raters.length;i++) {
+        if (prevOutfit.raters[i].id === user) {
+          prevOutfit.raters[i].best = imageIndex;
+          isExist = true;
+        }
+      }
+      !isExist && prevOutfit.raters.push({id: user, best: imageIndex});
+      prevList[outfitIndex] = prevOutfit;
+      return [...prevList];
+    })
+  }
+  const outfits = outfitsList.map((outfit, outfitIndex) => {
+    if (outfit.type === "multi") {
+      var rated;
+      for (let i=0;i<outfit.raters.length;i++) {
+        if (outfit.raters[i].id === mockUser) {
+          rated = outfit.raters[i].best;
+        }
+      }
+      const images = outfit.images.map((image, imageIndex) => {
+        return (
+          <div
+            onClick={() => editOutfitsRate(outfitIndex, imageIndex, mockUser)}
+            className="relative rounded-3xl mobile:w-72 mobile:h-96 cursor-pointer transition duration-300 hover:opacity-75"
+          >
+            <img
+              className="block object-cover w-full h-full object-cover rounded-3xl"
+              src={image.src}
+              alt=""
+            />
+            <img
+              src="https://i.ibb.co/pv7hfh8/badge.png"
+              alt="NextGen"
+              className={
+                "absolute h-8 w-8 transition duration-200 top-0 right-0 m-2 " +
+                (imageIndex === rated ? "opacity-100 scale-[2.5]" : " scale-0")
+              }
+            />
+          </div>
+        )
+      });
+      return (
+        <div
+          className={
+            "flex flex-col justify-center items-center rounded px-4 my-4 fold:w-full mobile:w-10/12 " +
+            styles.boxshadow
+          }
+        >
+          <h3 className="font-title font-bold text-4xl drop-shadow-lg text-black    my-4">
+            Choose the best
+          </h3>
+          <h3 className="font-title font-bold text-4xl drop-shadow-lg text-my-pink2 mb-4">
+            Outfit
+          </h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 justify-items-center gap-4">
+
+            {images}
+
+          </div>
+          <div className="flex justify-center items-center my-4">
+            <button className="h-12 w-44 text-center bg-my-purple rounded-3xl">
+              <p className="font-display text-white text-xl">Rate</p>
+            </button>
+          </div>
+        </div>
+      );
+    } else {
+      return (
+        <div
+          className={
+            "flex flex-col justify-center items-center rounded px-4 my-4 fold:w-full mobile:w-10/12 " +
+            styles.boxshadow
+          }
+        >
+          <h3 className="font-title font-bold text-4xl drop-shadow-lg text-black    my-4">
+            Rate this
+          </h3>
+          <h3 className="font-title font-bold text-4xl drop-shadow-lg text-my-pink2 mb-4">
+            Outfit
+          </h3>
+          <div className="flex justify-center items-center">
+            <div
+              onClick={() => setTest((prev) => !prev)}
+              className="relative rounded-3xl w-full h-full cursor-pointer group"
+            >
+              <img
+                className="block object-cover w-full h-full rounded-3xl group-hover:opacity-75 transition duration-300"
+                src="https://i.pinimg.com/564x/53/a7/b8/53a7b8e3508afa5e20a9f4c3bbc385d2.jpg"
+                alt=""
+              />
+              <div className="absolute inset-y-2/4 w-full opacity-0 group-hover:opacity-100 transition duration-300">
+                <div className="flex justify-center items-center">
+                  <HiOutlineStar
+                    onClick={() => setRating(1)}
+                    color="black"
+                    className={
+                      `m-1 h-6 w-6 transition duration-100 ` +
+                      (rating >= 1 ? "fill-black" : "fill-transparent")
+                    }
+                  />
+                  <HiOutlineStar
+                    onClick={() => setRating(2)}
+                    color="black"
+                    className={
+                      `m-1 h-6 w-6 ` +
+                      (rating >= 2
+                        ? "transition duration-150 fill-black"
+                        : "transition duration-300 fill-transparent")
+                    }
+                  />
+                  <HiOutlineStar
+                    onClick={() => setRating(3)}
+                    color="black"
+                    className={
+                      `m-1 h-6 w-6 transition duration-200 ` +
+                      (rating >= 3 ? "fill-black" : "fill-transparent")
+                    }
+                  />
+                  <HiOutlineStar
+                    onClick={() => setRating(4)}
+                    color="black"
+                    className={
+                      `m-1 h-6 w-6 ` +
+                      (rating >= 4
+                        ? "transition duration-300 fill-black"
+                        : "transition duration-150 fill-transparent")
+                    }
+                  />
+                  <HiOutlineStar
+                    onClick={() => setRating(5)}
+                    color="black"
+                    className={
+                      `m-1 h-6 w-6 ` +
+                      (rating >= 5
+                        ? "transition duration-500 fill-black"
+                        : "transition duration-100 fill-transparent")
+                    }
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="flex justify-center items-center my-4">
+            <button className="h-12 w-44 text-center bg-my-purple rounded-3xl">
+              <p className="font-display text-white text-xl">Rate</p>
+            </button>
+          </div>
+        </div>
+      );
+    }
+  });
 
   return (
     <>
@@ -202,13 +360,13 @@ const outfits = ({ outfits }) => {
                                                 indent-1 text-base font-body
                                                 border-b-2 border-x-2 border-my-purple
                                                 cursor-pointer transition duration-300 ` +
-                      (filter.type === "onesies"
+                      (filter.type === "single"
                         ? "bg-my-purple text-white"
                         : "bg-white hover:bg-gray-100")
                     }
-                    onClick={() => setFilter({ ...filter, type: "onesies" })}
+                    onClick={() => setFilter({ ...filter, type: "single" })}
                   >
-                    Onesies
+                    Single
                   </div>
                 </div>
               </div>
@@ -249,99 +407,8 @@ const outfits = ({ outfits }) => {
 
           {/* List of Outfits  */}
           <div className="flex flex-col justify-center items-center rounded-b-3xl bg-soft-pink w-full z-10">
-            <div
-              className={
-                "flex flex-col justify-center items-center rounded px-4 my-4 fold:w-full mobile:w-10/12 " +
-                styles.boxshadow
-              }
-            >
-              <h3 className="font-title font-bold text-4xl drop-shadow-lg text-black    my-4">
-                Choose the best
-              </h3>
-              <h3 className="font-title font-bold text-4xl drop-shadow-lg text-my-pink2 mb-4">
-                Outfit
-              </h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 justify-items-center gap-4">
-                <div
-                  onClick={() => setTest((prev) => !prev)}
-                  className="relative rounded-3xl mobile:w-72 mobile:h-96 cursor-pointer transition duration-300 hover:opacity-75"
-                >
-                  <img
-                    className="block object-cover w-full h-full object-cover rounded-3xl"
-                    src="https://cdn.myanimelist.net/images/characters/9/66231.jpg"
-                    alt=""
-                  />
-                  <img
-                    src="https://i.ibb.co/pv7hfh8/badge.png"
-                    alt="NextGen"
-                    className={
-                      "absolute h-8 w-8 transition duration-200 top-0 right-0 m-2 " +
-                      (test ? "opacity-100 scale-[2.5]" : " scale-0")
-                    }
-                  />
-                </div>
-
-                <div
-                  onClick={() => setTest((prev) => !prev)}
-                  className="relative rounded-3xl mobile:w-72 mobile:h-96 cursor-pointer"
-                >
-                  <img
-                    className="block object-cover w-full h-full object-cover rounded-3xl"
-                    src="https://cdn.myanimelist.net/images/characters/6/241415.jpg"
-                    alt=""
-                  />
-                  <HiOutlineStar
-                    color="white"
-                    className={
-                      "absolute h-8 w-8 transition duration-200 top-0 right-0 m-2 " +
-                      (test ? "opacity-100 scale-[2.5]" : " scale-0")
-                    }
-                  />
-                </div>
-
-                <div
-                  onClick={() => setTest((prev) => !prev)}
-                  className="relative rounded-3xl mobile:w-72 mobile:h-96 cursor-pointer"
-                >
-                  <img
-                    className="block object-cover w-full h-full object-cover rounded-3xl"
-                    src="https://cdn.myanimelist.net/images/characters/16/288705.jpg"
-                    alt=""
-                  />
-                  <HiOutlineStar
-                    color="white"
-                    className={
-                      "absolute h-8 w-8 transition duration-200 top-0 right-0 m-2 " +
-                      (test ? "opacity-100 scale-[2.5]" : " scale-0")
-                    }
-                  />
-                </div>
-
-                <div
-                  onClick={() => setTest((prev) => !prev)}
-                  className="relative rounded-3xl mobile:w-72 mobile:h-96 cursor-pointer"
-                >
-                  <img
-                    className="block object-cover w-full h-full object-cover rounded-3xl"
-                    src="https://cdn.myanimelist.net/images/characters/11/290052.jpg"
-                    alt=""
-                  />
-                  <HiOutlineStar
-                    color="white"
-                    className={
-                      "absolute h-8 w-8 transition duration-200 top-0 right-0 m-2 " +
-                      (test ? "opacity-100 scale-[2.5]" : " scale-0")
-                    }
-                  />
-                </div>
-              </div>
-              <div className="flex justify-center items-center my-4">
-                <button className="h-12 w-44 text-center bg-my-purple rounded-3xl">
-                  <p className="font-display text-white text-xl">Rate</p>
-                </button>
-              </div>
-            </div>
-
+            {outfits}
+            
             <div
               className={
                 "flex flex-col justify-center items-center rounded px-4 my-4 fold:w-full mobile:w-10/12 " +
@@ -432,12 +499,11 @@ const outfits = ({ outfits }) => {
 export default outfits;
 
 export const getStaticProps = async () => {
-    const res = await fetch(`${server}/api/outfits`);
-    const outfits = await res.json();
-    return {
-      props: {
-        outfits,
-      },
-    };
+  const res = await fetch(`${server}/api/outfits`);
+  const outfitsData = await res.json();
+  return {
+    props: {
+      outfitsData,
+    },
   };
-  
+};
