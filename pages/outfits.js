@@ -18,12 +18,12 @@ const outfits = ({ outfitsData }) => {
 
   const [rating, setRating] = useState(0);
 
-  const [test, setTest] = useState(false);
   const mockUser = 17;
 
   const [outfitsList, setOutfitsList] = useState(outfitsData);
 
 
+  // Functions
   const editOutfitsRate = (outfitIndex, imageIndex, user) => {
     setOutfitsList(prevList => {
       const prevOutfit = prevList[outfitIndex];
@@ -39,6 +39,32 @@ const outfits = ({ outfitsData }) => {
       return [...prevList];
     })
   }
+
+  console.log(outfitsList)
+
+  const setOutfitRating = (outfitIndex, rate, user) => {
+    setOutfitsList(prevList => {
+      const prevOutfit = prevList[outfitIndex];
+
+      // --------------------------------| Backend or onClick on 'Rate' |--------------------------------
+      // const newRate = ((prevOutfit.rate * prevOutfit.raters.length) + rate) / (prevOutfit.raters.length + 1);
+      // prevOutfit.rate = newRate;
+
+      var isExist = false;
+      for (let i=0;i<prevOutfit.raters.length;i++) {
+        if (prevOutfit.raters[i].id === user) {
+          prevOutfit.raters[i].rating = rate;
+          isExist = true;
+        }
+      }
+      !isExist && prevOutfit.raters.push({id: user, rating: rate});
+
+      prevList[outfitIndex] = prevOutfit;
+      return [...prevList];
+    })
+  }
+
+  // Outfits List
   const outfits = outfitsList.map((outfit, outfitIndex) => {
     if (outfit.type === "multi") {
       var rated;
@@ -95,6 +121,15 @@ const outfits = ({ outfitsData }) => {
         </div>
       );
     } else {
+      var userRating;
+      var isExist = false;
+      for (let i=0;i<outfit.raters.length;i++) {
+        if (outfit.raters[i].id === mockUser) {
+          userRating = outfit.raters[i].rating;
+          isExist = true;
+        }
+      } 
+      !isExist && (userRating = 0);
       return (
         <div
           className={
@@ -110,58 +145,58 @@ const outfits = ({ outfitsData }) => {
           </h3>
           <div className="flex justify-center items-center">
             <div
-              onClick={() => setTest((prev) => !prev)}
+              // onClick={() => setTest((prev) => !prev)}
               className="relative rounded-3xl w-full h-full cursor-pointer group"
             >
               <img
                 className="block object-cover w-full h-full rounded-3xl group-hover:opacity-75 transition duration-300"
-                src="https://i.pinimg.com/564x/53/a7/b8/53a7b8e3508afa5e20a9f4c3bbc385d2.jpg"
+                src={outfit.image}
                 alt=""
               />
               <div className="absolute inset-y-2/4 w-full opacity-0 group-hover:opacity-100 transition duration-300">
                 <div className="flex justify-center items-center">
                   <HiOutlineStar
-                    onClick={() => setRating(1)}
+                    onClick={() => setOutfitRating(outfitIndex, 1, mockUser)}
                     color="black"
                     className={
                       `m-1 h-6 w-6 transition duration-100 ` +
-                      (rating >= 1 ? "fill-black" : "fill-transparent")
+                      (userRating >= 1 ? "fill-black" : "fill-transparent")
                     }
                   />
                   <HiOutlineStar
-                    onClick={() => setRating(2)}
+                    onClick={() => setOutfitRating(outfitIndex, 2, mockUser)}
                     color="black"
                     className={
                       `m-1 h-6 w-6 ` +
-                      (rating >= 2
+                      (userRating >= 2
                         ? "transition duration-150 fill-black"
                         : "transition duration-300 fill-transparent")
                     }
                   />
                   <HiOutlineStar
-                    onClick={() => setRating(3)}
+                    onClick={() => setOutfitRating(outfitIndex, 3, mockUser)}
                     color="black"
                     className={
                       `m-1 h-6 w-6 transition duration-200 ` +
-                      (rating >= 3 ? "fill-black" : "fill-transparent")
+                      (userRating >= 3 ? "fill-black" : "fill-transparent")
                     }
                   />
                   <HiOutlineStar
-                    onClick={() => setRating(4)}
+                    onClick={() => setOutfitRating(outfitIndex, 4, mockUser)}
                     color="black"
                     className={
                       `m-1 h-6 w-6 ` +
-                      (rating >= 4
+                      (userRating >= 4
                         ? "transition duration-300 fill-black"
                         : "transition duration-150 fill-transparent")
                     }
                   />
                   <HiOutlineStar
-                    onClick={() => setRating(5)}
+                    onClick={() => setOutfitRating(outfitIndex, 5, mockUser)}
                     color="black"
                     className={
                       `m-1 h-6 w-6 ` +
-                      (rating >= 5
+                      (userRating === 5
                         ? "transition duration-500 fill-black"
                         : "transition duration-100 fill-transparent")
                     }
@@ -180,6 +215,8 @@ const outfits = ({ outfitsData }) => {
     }
   });
 
+
+  // ---------------------------------------------| Render |--------------------------------------------------
   return (
     <>
       <Head>
@@ -408,87 +445,6 @@ const outfits = ({ outfitsData }) => {
           {/* List of Outfits  */}
           <div className="flex flex-col justify-center items-center rounded-b-3xl bg-soft-pink w-full z-10">
             {outfits}
-            
-            <div
-              className={
-                "flex flex-col justify-center items-center rounded px-4 my-4 fold:w-full mobile:w-10/12 " +
-                styles.boxshadow
-              }
-            >
-              <h3 className="font-title font-bold text-4xl drop-shadow-lg text-black    my-4">
-                Rate this
-              </h3>
-              <h3 className="font-title font-bold text-4xl drop-shadow-lg text-my-pink2 mb-4">
-                Outfit
-              </h3>
-              <div className="flex justify-center items-center">
-                <div
-                  onClick={() => setTest((prev) => !prev)}
-                  className="relative rounded-3xl w-full h-full cursor-pointer group"
-                >
-                  <img
-                    className="block object-cover w-full h-full rounded-3xl group-hover:opacity-75 transition duration-300"
-                    src="https://i.pinimg.com/564x/53/a7/b8/53a7b8e3508afa5e20a9f4c3bbc385d2.jpg"
-                    alt=""
-                  />
-                  <div className="absolute inset-y-2/4 w-full opacity-0 group-hover:opacity-100 transition duration-300">
-                    <div className="flex justify-center items-center">
-                      <HiOutlineStar
-                        onClick={() => setRating(1)}
-                        color="black"
-                        className={
-                          `m-1 h-6 w-6 transition duration-100 ` +
-                          (rating >= 1 ? "fill-black" : "fill-transparent")
-                        }
-                      />
-                      <HiOutlineStar
-                        onClick={() => setRating(2)}
-                        color="black"
-                        className={
-                          `m-1 h-6 w-6 ` +
-                          (rating >= 2
-                            ? "transition duration-150 fill-black"
-                            : "transition duration-300 fill-transparent")
-                        }
-                      />
-                      <HiOutlineStar
-                        onClick={() => setRating(3)}
-                        color="black"
-                        className={
-                          `m-1 h-6 w-6 transition duration-200 ` +
-                          (rating >= 3 ? "fill-black" : "fill-transparent")
-                        }
-                      />
-                      <HiOutlineStar
-                        onClick={() => setRating(4)}
-                        color="black"
-                        className={
-                          `m-1 h-6 w-6 ` +
-                          (rating >= 4
-                            ? "transition duration-300 fill-black"
-                            : "transition duration-150 fill-transparent")
-                        }
-                      />
-                      <HiOutlineStar
-                        onClick={() => setRating(5)}
-                        color="black"
-                        className={
-                          `m-1 h-6 w-6 ` +
-                          (rating >= 5
-                            ? "transition duration-500 fill-black"
-                            : "transition duration-100 fill-transparent")
-                        }
-                      />
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className="flex justify-center items-center my-4">
-                <button className="h-12 w-44 text-center bg-my-purple rounded-3xl">
-                  <p className="font-display text-white text-xl">Rate</p>
-                </button>
-              </div>
-            </div>
           </div>
         </div>
       </div>
