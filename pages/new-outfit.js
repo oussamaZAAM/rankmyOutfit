@@ -1,3 +1,6 @@
+import server from "@/config";
+import axios from "axios";
+import FormData from 'form-data';
 import Head from "next/head";
 import { useState } from "react";
 
@@ -8,18 +11,25 @@ import { TiCancel } from "react-icons/ti";
 import styles from "../styles/Home.module.css";
 
 const newOutfit = () => {
-  const [images, setImages] = useState(["", "", "", ""]);
+  const [images, setImages] = useState([{}, {}, {}, {}]);
 
   //Functions
   const handleChange = async (e, index) => {
     const file = e.target.files[0];
-    console.log(index);
+
+    // Cloud
+    const formData = new FormData();
+    formData.append('image', file)
+
+    // Local
     const base64 = await convertToBase64(file);
+
     setImages((prevImages) => {
       const newImages = [...prevImages];
-      newImages[index] = base64;
+      newImages[index] = {local: base64, cloud: formData};
       return newImages;
     });
+    
     e.target.value = "";
   };
 
@@ -43,14 +53,27 @@ const newOutfit = () => {
   const deleteImage = (e, index) => {
     e.preventDefault();
     setImages((prevImages) => {
-      // const newImages = prevImages.filter(
-      //   (image) => prevImages.indexOf(image) !== index
-      // );
       var newImages = [...prevImages];
-      newImages[index] = '';
+      newImages[index] = {};
       return newImages;
     });
   };
+
+  const addOutfit = async () => {
+    const filteredImages = images.filter((image) => image.local && image.cloud);
+    if (filteredImages.length === 0) {
+      alert('Please import at least one image')
+    }
+    filteredImages.forEach(async (image) => {
+      await axios.post(`${server}/api/upload`, {data: image.cloud})
+        .then(function (response) {
+          console.log(response);
+        })
+        .catch(function (error) {
+          alert(error.message)
+        });
+    })
+  }
 
   return (
     <>
@@ -80,10 +103,10 @@ const newOutfit = () => {
               <div className="grid grid-cols-1 md:grid-cols-2 justify-items-center gap-4">
                 {/* Image 1  */}
                 <div className="relative rounded-3xl mobile:w-72 mobile:h-96 cursor-pointer transition duration-300 group hover:opacity-75 transition duration-200">
-                  {images[0] ? (
+                  {images[0].local ? (
                     <img
                       className="block object-cover w-full h-full rounded-3xl bg-gray-500"
-                      src={images[0]}
+                      src={images[0].local}
                     />
                   ) : (
                     <div className="block object-cover w-full h-full rounded-3xl bg-gray-500">
@@ -98,7 +121,7 @@ const newOutfit = () => {
                   )}
                   <div className="absolute inset-y-2/4 w-full h-6 bg-black scale-x-0 group-hover:scale-x-100 transition duration-200">
                     <div className="flex justify-center items-center h-full w-full">
-                      {!images[0] ? (
+                      {!images[0].local ? (
                         <label htmlFor="upload0">
                           <MdAdd size={30} color="white" />
                           <input
@@ -134,10 +157,10 @@ const newOutfit = () => {
 
                 {/* Image 2 */}
                 <div className="relative rounded-3xl mobile:w-72 mobile:h-96 cursor-pointer transition duration-300 group hover:opacity-75 transition duration-200">
-                  {images[1] ? (
+                  {images[1].local ? (
                     <img
                       className="block object-cover w-full h-full rounded-3xl bg-gray-500"
-                      src={images[1]}
+                      src={images[1].local}
                     />
                   ) : (
                     <div className="block object-cover w-full h-full rounded-3xl bg-gray-500">
@@ -152,7 +175,7 @@ const newOutfit = () => {
                   )}
                   <div className="absolute inset-y-2/4 w-full h-6 bg-black scale-x-0 group-hover:scale-x-100 transition duration-200">
                     <div className="flex justify-center items-center h-full w-full">
-                      {!images[1] ? (
+                      {!images[1].local ? (
                         <label htmlFor="upload1">
                           <MdAdd size={30} color="white" />
                           <input
@@ -188,10 +211,10 @@ const newOutfit = () => {
 
                 {/* Image 3 */}
                 <div className="relative rounded-3xl mobile:w-72 mobile:h-96 cursor-pointer transition duration-300 group hover:opacity-75 transition duration-200">
-                  {images[2] ? (
+                  {images[2].local ? (
                     <img
                       className="block object-cover w-full h-full rounded-3xl bg-gray-500"
-                      src={images[2]}
+                      src={images[2].local}
                     />
                   ) : (
                     <div className="block object-cover w-full h-full rounded-3xl bg-gray-500">
@@ -206,7 +229,7 @@ const newOutfit = () => {
                   )}
                   <div className="absolute inset-y-2/4 w-full h-6 bg-black scale-x-0 group-hover:scale-x-100 transition duration-200">
                     <div className="flex justify-center items-center h-full w-full">
-                      {!images[2] ? (
+                      {!images[2].local ? (
                         <label htmlFor="upload2">
                           <MdAdd size={30} color="white" />
                           <input
@@ -242,10 +265,10 @@ const newOutfit = () => {
 
                 {/* Image 4 */}
                 <div className="relative rounded-3xl mobile:w-72 mobile:h-96 cursor-pointer transition duration-300 group hover:opacity-75 transition duration-200">
-                  {images[3] ? (
+                  {images[3].local ? (
                     <img
                       className="block object-cover w-full h-full rounded-3xl bg-gray-500"
-                      src={images[3]}
+                      src={images[3].local}
                     />
                   ) : (
                     <div className="block object-cover w-full h-full rounded-3xl bg-gray-500">
@@ -260,7 +283,7 @@ const newOutfit = () => {
                   )}
                   <div className="absolute inset-y-2/4 w-full h-6 bg-black scale-x-0 group-hover:scale-x-100 transition duration-200">
                     <div className="flex justify-center items-center h-full w-full">
-                      {!images[3] ? (
+                      {!images[3].local ? (
                         <label htmlFor="upload3">
                           <MdAdd size={30} color="white" />
                           <input
@@ -296,7 +319,7 @@ const newOutfit = () => {
               </div>
 
               <div className="flex justify-center items-center my-4">
-                <button className="h-12 w-44 text-center bg-my-purple rounded-3xl">
+                <button onClick={addOutfit} className="h-12 w-44 text-center bg-my-purple rounded-3xl">
                   <p className="font-display text-white text-xl">Add</p>
                 </button>
               </div>

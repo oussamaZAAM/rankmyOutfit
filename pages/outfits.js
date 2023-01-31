@@ -5,6 +5,7 @@ import { HiOutlineStar, HiStar } from "react-icons/hi";
 import styles from "../styles/Home.module.css";
 import server from "../config";
 import Link from "next/link";
+import badge from "../public/images/badge.png";
 
 const outfits = ({ outfitsData }) => {
   const [sort, setSort] = useState({
@@ -40,8 +41,6 @@ const outfits = ({ outfitsData }) => {
       return [...prevList];
     })
   }
-
-  console.log(outfitsList)
 
   const setOutfitRating = (outfitIndex, rate, user) => {
     setOutfitsList(prevList => {
@@ -86,7 +85,7 @@ const outfits = ({ outfitsData }) => {
               alt=""
             />
             <img
-              src="https://i.ibb.co/pv7hfh8/badge.png"
+              src={badge.src}
               alt="NextGen"
               className={
                 "absolute h-8 w-8 transition duration-200 top-0 right-0 m-2 " +
