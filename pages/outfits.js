@@ -82,6 +82,9 @@ const outfits = ({ outfitsData }) => {
             <img
               className="block object-cover w-full h-full object-cover rounded-3xl"
               src={image.src}
+              style={image.position && {
+                objectPosition: (image.position.left)+'% '+ (image.position.top)+'%',
+              }}
               alt=""
             />
             <img
