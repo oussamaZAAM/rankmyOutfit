@@ -79,7 +79,7 @@ const newOutfit = () => {
   const enableCropImage = (index, boolean) => {
     setImages(prevList => {
       const newList = [...prevList]
-      newList[0] = {...newList[index], crop: boolean}
+      newList[index] = {...newList[index], crop: boolean}
       return newList;
     })
   }
@@ -90,17 +90,11 @@ const newOutfit = () => {
       alert('Please import at least one image')
     }
     filteredImages.forEach(async (image) => {
-      await axios.post(`${server}/api/upload`, {data: image.cloud})
-        .then(function (response) {
-          console.log(response);
-        })
-        .catch(function (error) {
-          alert(error.message)
-        });
+      await axios.post('http://localhost:5000/api/upload', image.cloud)
+        .then((response) => console.log(response))
+        .catch((error) => console.log(error))
     })
   }
-
-  console.log(images)
 
   return (
     <>
@@ -196,7 +190,7 @@ const newOutfit = () => {
                               size={25}
                               color="white"
                             />
-                            }
+                          }
 
                           {!images[0].crop && <TiCancel
                             onClick={(e) => deleteImage(e, 0)}
@@ -211,11 +205,24 @@ const newOutfit = () => {
 
                 {/* Image 2 */}
                 <div className="relative rounded-3xl mobile:w-72 mobile:h-96 cursor-pointer transition duration-300 group hover:opacity-75 transition duration-200">
-                  {images[1].local ? (
-                    <img
-                      className="block object-cover w-full h-full rounded-3xl bg-gray-500"
-                      src={images[1].local}
-                    />
+                  {images[1].local 
+                  ? (
+                    images[1].crop
+                    ? <Cropper
+                        image={images[1].local}
+                        crop={crop}
+                        aspect={4.5 / 6}
+                        onCropChange={setCrop}
+                        onCropComplete={(croppedArea, croppedAreaPixels)=>onCropComplete(croppedArea, croppedAreaPixels,  1)}
+                        showGrid={false}
+                      />
+                    : <img
+                        className="block object-cover w-full h-full rounded-3xl bg-gray-500"
+                        style={images[1].position && {
+                          objectPosition: (images[1].position.left)+'% '+ (images[1].position.top)+'%',
+                        }}
+                        src={images[1].local}
+                      />
                   ) : (
                     <div className="block object-cover w-full h-full rounded-3xl bg-gray-500">
                       <div className="absolute inset-y-2/4 w-full h-6 bg-black scale-x-100 group-hover:scale-x-[0.25] transition duration-100">
@@ -242,21 +249,35 @@ const newOutfit = () => {
                         </label>
                       ) : (
                         <div className="flex justify-center items-center space-x-8">
-                          <label htmlFor="reupload1">
-                            <RiImageEditLine size={25} color="white" />
-                            <input
-                              onChange={(e) => handleChange(e, 1)}
-                              type="file"
-                              id="reupload1"
-                              accept="image/*"
-                              style={{ display: "none" }}
+                          {!images[1].crop && 
+                            <label htmlFor="reupload1">
+                              <RiImageEditLine size={25} color="white" />
+                              <input
+                                onChange={(e) => handleChange(e, 1)}
+                                type="file"
+                                id="reupload1"
+                                accept="image/*"
+                                style={{ display: "none" }}
+                              />
+                            </label>}
+                            {!images[1].crop 
+                            ? <MdOutlineCrop
+                              onClick={() => enableCropImage(1, true)}
+                              size={25}
+                              color="white"
                             />
-                          </label>
-                          <TiCancel
+                            : <MdDoneOutline
+                              onClick={() => enableCropImage(1, false)}
+                              size={25}
+                              color="white"
+                            />
+                            }
+
+                          {!images[1].crop && <TiCancel
                             onClick={(e) => deleteImage(e, 1)}
                             size={25}
                             color="white"
-                          />
+                          />}
                         </div>
                       )}
                     </div>
@@ -265,11 +286,24 @@ const newOutfit = () => {
 
                 {/* Image 3 */}
                 <div className="relative rounded-3xl mobile:w-72 mobile:h-96 cursor-pointer transition duration-300 group hover:opacity-75 transition duration-200">
-                  {images[2].local ? (
-                    <img
-                      className="block object-cover w-full h-full rounded-3xl bg-gray-500"
-                      src={images[2].local}
-                    />
+                  {images[2].local 
+                  ? (
+                    images[2].crop
+                    ? <Cropper
+                        image={images[2].local}
+                        crop={crop}
+                        aspect={4.5 / 6}
+                        onCropChange={setCrop}
+                        onCropComplete={(croppedArea, croppedAreaPixels)=>onCropComplete(croppedArea, croppedAreaPixels,  2)}
+                        showGrid={false}
+                      />
+                    : <img
+                        className="block object-cover w-full h-full rounded-3xl bg-gray-500"
+                        style={images[2].position && {
+                          objectPosition: (images[2].position.left)+'% '+ (images[2].position.top)+'%',
+                        }}
+                        src={images[2].local}
+                      />
                   ) : (
                     <div className="block object-cover w-full h-full rounded-3xl bg-gray-500">
                       <div className="absolute inset-y-2/4 w-full h-6 bg-black scale-x-100 group-hover:scale-x-[0.25] transition duration-100">
@@ -296,21 +330,35 @@ const newOutfit = () => {
                         </label>
                       ) : (
                         <div className="flex justify-center items-center space-x-8">
-                          <label htmlFor="reupload2">
-                            <RiImageEditLine size={25} color="white" />
-                            <input
-                              onChange={(e) => handleChange(e, 2)}
-                              type="file"
-                              id="reupload2"
-                              accept="image/*"
-                              style={{ display: "none" }}
+                          {!images[2].crop && 
+                            <label htmlFor="reupload2">
+                              <RiImageEditLine size={25} color="white" />
+                              <input
+                                onChange={(e) => handleChange(e, 2)}
+                                type="file"
+                                id="reupload2"
+                                accept="image/*"
+                                style={{ display: "none" }}
+                              />
+                            </label>}
+                          {!images[2].crop 
+                            ? <MdOutlineCrop
+                              onClick={() => enableCropImage(2, true)}
+                              size={25}
+                              color="white"
                             />
-                          </label>
-                          <TiCancel
+                            : <MdDoneOutline
+                              onClick={() => enableCropImage(2, false)}
+                              size={25}
+                              color="white"
+                            />
+                            }
+
+                          {!images[2].crop && <TiCancel
                             onClick={(e) => deleteImage(e, 2)}
                             size={25}
                             color="white"
-                          />
+                          />}
                         </div>
                       )}
                     </div>
@@ -319,11 +367,24 @@ const newOutfit = () => {
 
                 {/* Image 4 */}
                 <div className="relative rounded-3xl mobile:w-72 mobile:h-96 cursor-pointer transition duration-300 group hover:opacity-75 transition duration-200">
-                  {images[3].local ? (
-                    <img
-                      className="block object-cover w-full h-full rounded-3xl bg-gray-500"
-                      src={images[3].local}
-                    />
+                  {images[3].local 
+                  ? (
+                    images[3].crop
+                    ? <Cropper
+                        image={images[3].local}
+                        crop={crop}
+                        aspect={4.5 / 6}
+                        onCropChange={setCrop}
+                        onCropComplete={(croppedArea, croppedAreaPixels)=>onCropComplete(croppedArea, croppedAreaPixels,  3)}
+                        showGrid={false}
+                      />
+                    : <img
+                        className="block object-cover w-full h-full rounded-3xl bg-gray-500"
+                        style={images[3].position && {
+                          objectPosition: (images[3].position.left)+'% '+ (images[3].position.top)+'%',
+                        }}
+                        src={images[3].local}
+                      />
                   ) : (
                     <div className="block object-cover w-full h-full rounded-3xl bg-gray-500">
                       <div className="absolute inset-y-2/4 w-full h-6 bg-black scale-x-100 group-hover:scale-x-[0.25] transition duration-100">
@@ -350,21 +411,35 @@ const newOutfit = () => {
                         </label>
                       ) : (
                         <div className="flex justify-center items-center space-x-8">
-                          <label htmlFor="reupload3">
-                            <RiImageEditLine size={25} color="white" />
-                            <input
-                              onChange={(e) => handleChange(e, 3)}
-                              type="file"
-                              id="reupload3"
-                              accept="image/*"
-                              style={{ display: "none" }}
+                          {!images[3].crop && 
+                            <label htmlFor="reupload3">
+                              <RiImageEditLine size={25} color="white" />
+                              <input
+                                onChange={(e) => handleChange(e, 3)}
+                                type="file"
+                                id="reupload3"
+                                accept="image/*"
+                                style={{ display: "none" }}
+                              />
+                            </label>}
+                          {!images[3].crop 
+                            ? <MdOutlineCrop
+                              onClick={() => enableCropImage(3, true)}
+                              size={25}
+                              color="white"
                             />
-                          </label>
-                          <TiCancel
+                            : <MdDoneOutline
+                              onClick={() => enableCropImage(3, false)}
+                              size={25}
+                              color="white"
+                            />
+                          }
+
+                          {!images[3].crop && <TiCancel
                             onClick={(e) => deleteImage(e, 3)}
                             size={25}
                             color="white"
-                          />
+                          />}
                         </div>
                       )}
                     </div>
