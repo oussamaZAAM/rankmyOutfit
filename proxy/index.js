@@ -3,9 +3,11 @@ const imgbbUploader = require("imgbb-uploader");
 var express = require('express')
 var multer  = require('multer')
 var dotenv  = require('dotenv')
+var cors  = require('cors')
 
 var app = express()
 dotenv.config();
+app.use(cors())
 var port = 5000;
 
 var storage = multer.diskStorage({
@@ -31,7 +33,5 @@ app.post('/api/upload', upload.single('image'), async function (req, res, next) 
         .then((response) => res.status(200).json(response))
         .catch((error) => res.status(409).json({message: error}));
   })
-
-var upload = multer({ storage: storage })
 
 app.listen(port,() => console.log(`Server running on port ${port}!`))
