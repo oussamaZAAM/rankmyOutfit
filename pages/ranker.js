@@ -35,7 +35,7 @@ const Ranker = () => {
             </p>
           </div>
 
-          <div className="flex justify-start items-center w-full max-w-sm sm:max-w-md mx-2 mb-8">
+          <div className="flex justify-start items-center w-full max-w-sm sm:max-w-md px-2 mb-8">
             <li className="text-white text-xs font-medium font-display">
               To protect your privacy, the images are processed in your browser
               side, so the operation may take some while.
@@ -46,7 +46,7 @@ const Ranker = () => {
             <p className="font-display text-white text-xl">Process</p>
           </button>
 
-          <div className="flex justify-start items-center w-full max-w-sm sm:max-w-md mx-2 mb-8">
+          <div className="flex justify-start items-center w-full max-w-sm sm:max-w-md px-2 mb-8">
             <li className="text-white text-xs font-medium font-display">
               While waiting, you can vote other people’s outfits.
             </li>
