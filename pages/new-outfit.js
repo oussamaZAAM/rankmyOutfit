@@ -149,7 +149,7 @@ const newOutfit = () => {
                 styles.boxshadow
               }
             >
-              <h3 className="font-title font-bold text-4xl drop-shadow-lg text-black    my-4">
+              <h3 className="font-title font-bold text-4xl drop-shadow-lg text-black my-4">
                 Add a New
               </h3>
               <h3 className="font-title font-bold text-4xl drop-shadow-lg text-my-pink2 mb-4">

@@ -15,12 +15,6 @@ module.exports = {
               transform: 'scale(5)',
               opacity: '0'
             },
-            // 'from': {
-            //   transform: 'scale(1)'
-            // },
-            // 'to': {
-            //   transform: 'scale(5)'
-            // }
           }
       },
       colors: {

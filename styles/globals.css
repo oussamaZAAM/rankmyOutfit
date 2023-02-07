@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+.background-image{
+  background-image: url('../public/images/sun-tornado1.png');
+}
+
 ::-webkit-scrollbar {
   width: 5px;
 }
