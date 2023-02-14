@@ -124,10 +124,10 @@ const Signin = () => {
               </div>
               <div className="flex items-center justify-between">
                   <div className={"flex items-center justify-center mobile:w-20 mobile:h-20 rounded-2xl drop-shadow-xl border border-my-pink1 cursor-pointer group "+styles.boxshadow}>
-                      <FcGoogle onClick={()=>signIn()} className="w-12 mobile:w-14 h-12 mobile:h-14 group-hover:animate-wiggle" />
+                      <FcGoogle onClick={()=>signIn("google")} className="w-12 mobile:w-14 h-12 mobile:h-14 group-hover:animate-wiggle" />
                   </div>
                   <div className={"flex items-center justify-center mobile:w-20 mobile:h-20 rounded-2xl drop-shadow-xl border border-my-pink1 cursor-pointer group "+styles.boxshadow}>
-                      <FaFacebook color='#1877F2' className="w-12 mobile:w-14 h-12 mobile:h-14 group-hover:animate-wiggle" />
+                      <FaFacebook onClick={()=>signIn("facebook")} color='#1877F2' className="w-12 mobile:w-14 h-12 mobile:h-14 group-hover:animate-wiggle" />
                   </div>
                   <div className={"flex items-center justify-center mobile:w-20 mobile:h-20 rounded-2xl drop-shadow-xl border border-my-pink1 cursor-pointer group "+styles.boxshadow}>
                       <FaTwitter color='#55ACEE' className="w-12 mobile:w-14 h-12 mobile:h-14 group-hover:animate-wiggle" />
