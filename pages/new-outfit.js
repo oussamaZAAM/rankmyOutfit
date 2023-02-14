@@ -543,7 +543,7 @@ export const getServerSideProps = async (context) => {
   if (!session) {
       return {
           redirect: {
-              destination: '/signin'
+              destination: '/signin#form'
           }
       }
   }

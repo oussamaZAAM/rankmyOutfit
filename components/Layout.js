@@ -17,7 +17,7 @@ const Layout = ({children}) => {
               {children}
           </main>
       </div>
-      {(asPath!=="/signin" && asPath!=="/signup") && <Footer />}
+      {(!asPath.includes("/signin", 0) && !asPath.includes("/signup", 0)) && <Footer />}
     </>
   )
 }
