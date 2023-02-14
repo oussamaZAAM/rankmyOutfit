@@ -17,7 +17,7 @@ const Meta = ({ title, keywords, description }) => {
 };
 
 Meta.defaultProps = {
-    title: 'WebDev',
+    title: 'rankMyOutfit',
     keywords: 'web developement, programming',
     description: 'We keep track of every nook and cranny of WebDev',
 }
