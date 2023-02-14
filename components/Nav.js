@@ -16,7 +16,7 @@ const Nav = () => {
             </div>
             <div className='flex justify-center items-center col-span-3 sm:col-span-2'>
                 <div className='rounded-full w-24 sm:w-32 h-10 flex justify-center items-center' style={{backgroundColor: '#6F1AB6'}}>
-                    <h5 className='font-display font-bold text-white text-sm'>Sign in</h5>
+                    <Link href='/signin'><h5 className='font-display font-bold text-white text-sm'>Sign in</h5></Link>
                 </div>
             </div>
         </div>

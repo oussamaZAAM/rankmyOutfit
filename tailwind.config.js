@@ -66,5 +66,5 @@ module.exports = {
     }
   },
   plugins: [],
-  // darkMode: 'false',
+  darkMode: 'false',
 }
