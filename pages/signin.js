@@ -1,8 +1,8 @@
-import Link from "next/link";
 import Head from "next/head";
+import { useSession, signIn, signOut, getSession } from "next-auth/react";
+import Link from "next/link";
 import Image from "next/image";
 
-import { useSession, signIn, signOut, getSession } from "next-auth/react";
 import { useFormik } from 'formik';
 
 import { FcGoogle } from "react-icons/fc"
@@ -12,11 +12,33 @@ import styles from "/styles/Home.module.css"
 const Signin = () => {
   const {data: session} = useSession();
 
+  const validate = values => {
+    const errors = {};
+
+    if (!values.email) {
+      errors.email = 'Required';
+    } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
+      errors.email = 'Invalid email address';
+    }
+
+    if (!values.password) {
+      errors.password = 'Required';
+    } else if (values.password.length < 8) {
+      errors.password = 'Must be 8 characters or more';
+    } else if (values.password.includes(" ")) {
+      errors.password = 'Invalid Password';
+    }
+  
+    return errors;
+  };
+
+  
   const formik = useFormik({
     initialValues: {
       email: '',
       password: ''
     },
+    validate,
     onSubmit
   });
   async function onSubmit(values) {
@@ -63,10 +85,11 @@ const Signin = () => {
                     name="email"
                     {...formik.getFieldProps('email')}
                     id="email"
-                    className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    className={"bg-gray-50 border text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 "+(formik.errors.email && formik.touched.email ? "border-red-500" : "border-gray-300")}
                     placeholder="Enter your email address"
                     required
                   />
+                  {formik.errors.email && formik.touched.email && <span className="text-sm text-red-500">{formik.errors.email}</span>}
                 </div>
                 <div>
                   <label
@@ -81,9 +104,10 @@ const Signin = () => {
                     {...formik.getFieldProps('password')}
                     id="password"
                     placeholder="••••••••"
-                    className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    className={"bg-gray-50 border text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 "+(formik.errors.password && formik.touched.password ? " border-red-500" : " border-gray-300")}
                     required
                   />
+                  {formik.errors.password && formik.touched.password && <span className="text-sm text-red-500">{formik.errors.password}</span>}
                 </div>
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between">
                   <div className="flex items-start">
@@ -119,8 +143,8 @@ const Signin = () => {
                               text-black hover:text-white text-xl font-bold
                               bg-white hover:bg-my-pink1
                               rounded-lg px-5 py-2.5 border-2 border-black duration-300 transition
-                              focus:ring-4 focus:outline-none focus:ring-my-pink1
-                              dark:bg-gray-700 dark:text-white dark:focus:ring-my-pink2"
+                              focus:outline-none 
+                              dark:bg-gray-700 dark:text-white"
                 >
                   Sign in
                 </button>

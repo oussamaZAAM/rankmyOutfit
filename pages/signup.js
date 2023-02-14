@@ -1,13 +1,27 @@
+import Head from "next/head";
+import { getSession } from "next-auth/react";
+import Link from "next/link";
 import Image from "next/image";
+
+import { useFormik } from 'formik';
 
 import { FcGoogle } from "react-icons/fc";
 import { FaFacebook, FaTwitter } from "react-icons/fa";
 import styles from "/styles/Home.module.css";
-import Link from "next/link";
-import Head from "next/head";
-import { getSession } from "next-auth/react";
 
 const Signup = () => {
+  const formik = useFormik({
+    initialValues: {
+      username: '',
+      email: '',
+      password: '',
+      repassword: ''
+    },
+    onSubmit
+  });
+  async function onSubmit(values) {
+    console.log(values)
+  };
   return (
     <>
       <Head>
@@ -35,7 +49,24 @@ const Signup = () => {
               <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
                 Sign in to your account
               </h1>
-              <form className="space-y-4 md:space-y-6" action="#">
+              <form className="space-y-4 md:space-y-6" onSubmit={formik.handleSubmit}>
+                <div>
+                  <label
+                    htmlFor="email"
+                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                  >
+                    Username
+                  </label>
+                  <input
+                    type="username"
+                    name="username"
+                    {...formik.getFieldProps('username')}
+                    id="username"
+                    className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    placeholder="Enter your username"
+                    required
+                  />
+                </div>
                 <div>
                   <label
                     htmlFor="email"
@@ -46,6 +77,7 @@ const Signup = () => {
                   <input
                     type="email"
                     name="email"
+                    {...formik.getFieldProps('email')}
                     id="email"
                     className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                     placeholder="Enter your email address"
@@ -62,6 +94,7 @@ const Signup = () => {
                   <input
                     type="password"
                     name="password"
+                    {...formik.getFieldProps('password')}
                     id="password"
                     placeholder="••••••••"
                     className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
@@ -78,6 +111,7 @@ const Signup = () => {
                   <input
                     type="password"
                     name="repassword"
+                    {...formik.getFieldProps('repassword')}
                     id="repassword"
                     placeholder="••••••••"
                     className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
@@ -118,58 +152,21 @@ const Signup = () => {
                               text-black hover:text-white text-xl font-bold
                               bg-white hover:bg-my-purple
                               rounded-lg px-5 py-2.5 border-2 border-black duration-300 transition
-                              focus:ring-4 focus:outline-none focus:ring-my-purple
-                              dark:bg-gray-700 dark:text-white dark:hover:bg-primary-700 dark:focus:ring-my-pink2"
+                              focus:outline-none
+                              dark:bg-gray-700 dark:text-white dark:hover:bg-primary-700"
                 >
                   Sign up
                 </button>
                 <p className="text-sm font-light text-gray-500 dark:text-gray-400">
                   already signed up?{" "}
                   <Link
-                    href="/signin#form"
+                    href="/signin#form" 
                     className="font-medium text-my-purple underline"
                   >
                     Sign in
                   </Link>
                 </p>
               </form>
-              <div className="flex items-center justify-between">
-                <div className="w-5/12 border-b border-black"></div>
-                <div className="w-2/12 text-center">or</div>
-                <div className="w-5/12 border-b border-black"></div>
-              </div>
-              <div className="flex items-center justify-between">
-                <div
-                  className={
-                    "flex items-center justify-center mobile:w-20 mobile:h-20 rounded-2xl drop-shadow-xl border border-my-purple cursor-pointer group " +
-                    styles.boxshadow
-                  }
-                >
-                  <FcGoogle className="w-12 mobile:w-14 h-12 mobile:h-14 group-hover:animate-wiggle" />
-                </div>
-                <div
-                  className={
-                    "flex items-center justify-center mobile:w-20 mobile:h-20 rounded-2xl drop-shadow-xl border border-my-purple cursor-pointer group " +
-                    styles.boxshadow
-                  }
-                >
-                  <FaFacebook
-                    color="#1877F2"
-                    className="w-12 mobile:w-14 h-12 mobile:h-14 group-hover:animate-wiggle"
-                  />
-                </div>
-                <div
-                  className={
-                    "flex items-center justify-center mobile:w-20 mobile:h-20 rounded-2xl drop-shadow-xl border border-my-purple cursor-pointer group " +
-                    styles.boxshadow
-                  }
-                >
-                  <FaTwitter
-                    color="#55ACEE"
-                    className="w-12 mobile:w-14 h-12 mobile:h-14 group-hover:animate-wiggle"
-                  />
-                </div>
-              </div>
             </div>
           </div>
         </div>
