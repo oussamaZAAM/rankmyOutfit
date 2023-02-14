@@ -1,15 +1,27 @@
+import Link from "next/link";
+import Head from "next/head";
 import Image from "next/image";
 
 import { useSession, signIn, signOut, getSession } from "next-auth/react";
+import { useFormik } from 'formik';
 
 import { FcGoogle } from "react-icons/fc"
 import { FaFacebook, FaTwitter } from "react-icons/fa"
 import styles from "/styles/Home.module.css"
-import Link from "next/link";
-import Head from "next/head";
 
 const Signin = () => {
   const {data: session} = useSession();
+
+  const formik = useFormik({
+    initialValues: {
+      email: '',
+      password: ''
+    },
+    onSubmit
+  });
+  async function onSubmit(values) {
+    console.log(values)
+  };
 
   return ( 
     <>
@@ -33,12 +45,12 @@ const Signin = () => {
               rateMyOutfit
             </span>
           </div>
-          <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700 my-4">
+          <div id="form" className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700 my-4">
             <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
               <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
                 Sign in to your account
               </h1>
-              <form className="space-y-4 md:space-y-6" action="#">
+              <form className="space-y-4 md:space-y-6" onSubmit={formik.handleSubmit}>
                 <div>
                   <label
                     htmlFor="email"
@@ -49,9 +61,10 @@ const Signin = () => {
                   <input
                     type="email"
                     name="email"
+                    {...formik.getFieldProps('email')}
                     id="email"
                     className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    placeholder="name@company.com"
+                    placeholder="Enter your email address"
                     required
                   />
                 </div>
@@ -65,6 +78,7 @@ const Signin = () => {
                   <input
                     type="password"
                     name="password"
+                    {...formik.getFieldProps('password')}
                     id="password"
                     placeholder="••••••••"
                     className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
@@ -112,7 +126,7 @@ const Signin = () => {
                 </button>
                 <div className="text-sm font-light text-gray-500 dark:text-gray-400">
                   new user?{" "}
-                  <Link href="/signup" className="font-medium text-my-pink1 underline">
+                  <Link href="/signup#form" className="font-medium text-my-pink1 underline">
                     Sign up
                   </Link>
                 </div>
