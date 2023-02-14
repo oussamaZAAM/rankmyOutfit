@@ -1,5 +1,7 @@
 import Image from "next/image";
 
+import { useSession, signIn, signOut, getSession } from "next-auth/react";
+
 import { FcGoogle } from "react-icons/fc"
 import { FaFacebook, FaTwitter } from "react-icons/fa"
 import styles from "/styles/Home.module.css"
@@ -7,6 +9,8 @@ import Link from "next/link";
 import Head from "next/head";
 
 const Signin = () => {
+  const {data: session} = useSession();
+
   return ( 
     <>
       <Head>
@@ -23,6 +27,7 @@ const Signin = () => {
               height={100}
               src="/images/logo-purple.png"
               className="w-16 h-16 mr-2"
+              alt="Logo"
             />
             <span className="font-display font-black text-4xl text-my-purple">
               rateMyOutfit
@@ -36,7 +41,7 @@ const Signin = () => {
               <form className="space-y-4 md:space-y-6" action="#">
                 <div>
                   <label
-                    for="email"
+                    htmlFor="email"
                     className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                   >
                     Your email
@@ -52,7 +57,7 @@ const Signin = () => {
                 </div>
                 <div>
                   <label
-                    for="password"
+                    htmlFor="password"
                     className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                   >
                     Password
@@ -79,7 +84,7 @@ const Signin = () => {
                     </div>
                     <div className="ml-3 text-sm">
                       <label
-                        for="remember"
+                        htmlFor="remember"
                         className="text-gray-500 dark:text-gray-300"
                       >
                         Remember me
@@ -105,12 +110,12 @@ const Signin = () => {
                 >
                   Sign in
                 </button>
-                <p className="text-sm font-light text-gray-500 dark:text-gray-400">
+                <div className="text-sm font-light text-gray-500 dark:text-gray-400">
                   new user?{" "}
                   <Link href="/signup" className="font-medium text-my-pink1 underline">
                     Sign up
                   </Link>
-                </p>
+                </div>
               </form>
               <div className="flex items-center justify-between">
                   <div className="w-5/12 border-b border-black"></div>
@@ -119,7 +124,7 @@ const Signin = () => {
               </div>
               <div className="flex items-center justify-between">
                   <div className={"flex items-center justify-center mobile:w-20 mobile:h-20 rounded-2xl drop-shadow-xl border border-my-pink1 cursor-pointer group "+styles.boxshadow}>
-                      <FcGoogle className="w-12 mobile:w-14 h-12 mobile:h-14 group-hover:animate-wiggle" />
+                      <FcGoogle onClick={()=>signIn()} className="w-12 mobile:w-14 h-12 mobile:h-14 group-hover:animate-wiggle" />
                   </div>
                   <div className={"flex items-center justify-center mobile:w-20 mobile:h-20 rounded-2xl drop-shadow-xl border border-my-pink1 cursor-pointer group "+styles.boxshadow}>
                       <FaFacebook color='#1877F2' className="w-12 mobile:w-14 h-12 mobile:h-14 group-hover:animate-wiggle" />
@@ -137,3 +142,21 @@ const Signin = () => {
 };
 
 export default Signin;
+
+export const getServerSideProps = async (context) => {
+  const session = await getSession(context);
+
+  if (session) {
+      return {
+          redirect: {
+              destination: '/outfits'
+          }
+      }
+  }
+
+  return {
+      props: {
+          session
+      }
+  }
+}

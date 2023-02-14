@@ -5,6 +5,7 @@ import { FaFacebook, FaTwitter } from "react-icons/fa";
 import styles from "/styles/Home.module.css";
 import Link from "next/link";
 import Head from "next/head";
+import { getSession } from "next-auth/react";
 
 const Signup = () => {
   return (
@@ -23,6 +24,7 @@ const Signup = () => {
               height={100}
               src="/images/logo.png"
               className="w-16 h-16 mr-2"
+              alt="Logo"
             />
             <span className="font-display font-black text-4xl text-my-pink1">
               rateMyOutfit
@@ -36,7 +38,7 @@ const Signup = () => {
               <form className="space-y-4 md:space-y-6" action="#">
                 <div>
                   <label
-                    for="email"
+                    htmlFor="email"
                     className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                   >
                     Your email
@@ -52,7 +54,7 @@ const Signup = () => {
                 </div>
                 <div>
                   <label
-                    for="password"
+                    htmlFor="password"
                     className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                   >
                     Password
@@ -79,7 +81,7 @@ const Signup = () => {
                     </div>
                     <div className="ml-3 text-sm">
                       <label
-                        for="terms"
+                        htmlFor="terms"
                         className="text-gray-500 dark:text-gray-300"
                       >
                         I accept the{" "}
@@ -161,3 +163,21 @@ const Signup = () => {
 };
 
 export default Signup;
+
+export const getServerSideProps = async (context) => {
+  const session = await getSession(context);
+
+  if (session) {
+      return {
+          redirect: {
+              destination: '/outfits'
+          }
+      }
+  }
+
+  return {
+      props: {
+          session
+      }
+  }
+}
