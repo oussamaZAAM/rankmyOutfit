@@ -8,6 +8,7 @@ module.exports = {
     extend: {
       animation: {
         'pingonce': 'ping 0.5s ease-in',
+        'wiggle': 'wiggle 0.45s ease-in',
       },
       keyframes: {
           ping: {
@@ -15,6 +16,11 @@ module.exports = {
               transform: 'scale(5)',
               opacity: '0'
             },
+          },
+          wiggle: {
+            '0%': { transform: 'rotate(0deg)' },
+            '50%': { transform: 'rotate(-25deg) scale(1.15)' },
+            '100%': { transform: 'rotate(0deg)' },
           }
       },
       colors: {
@@ -60,4 +66,5 @@ module.exports = {
     }
   },
   plugins: [],
+  // darkMode: 'false',
 }
