@@ -1,6 +1,7 @@
 import server from "@/config";
 import axios from "axios";
 import FormData from 'form-data';
+import { getSession } from "next-auth/react";
 import Head from "next/head";
 import { useCallback, useState } from "react";
 import Cropper from 'react-easy-crop'
@@ -535,3 +536,21 @@ const newOutfit = () => {
 };
 
 export default newOutfit;
+
+export const getServerSideProps = async (context) => {
+  const session = await getSession(context);
+
+  if (!session) {
+      return {
+          redirect: {
+              destination: '/signin'
+          }
+      }
+  }
+
+  return {
+      props: {
+          session
+      }
+  }
+}
