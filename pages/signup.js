@@ -10,6 +10,43 @@ import { FaFacebook, FaTwitter } from "react-icons/fa";
 import styles from "/styles/Home.module.css";
 
 const Signup = () => {
+  //Sign up Validation Form
+  const validate = values => {
+    const errors = {};
+
+    if (!values.username) {
+      errors.username = 'Required';
+    } else if (values.username.length < 6) {
+      errors.username = 'Username must have at least 6 characters';
+    } else if (values.username.includes(" ")) {
+      errors.username = 'Invalid Username';
+    }
+
+    if (!values.email) {
+      errors.email = 'Required';
+    } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
+      errors.email = 'Invalid email address';
+    }
+
+    if (!values.password) {
+      errors.password = 'Required';
+    } else if (values.password.length < 8 || values.password.length > 20) {
+      errors.password = 'Must be greater than 8 and less than 20 characters';
+    } else if (values.password.includes(" ")) {
+      errors.password = 'Invalid Password';
+    }
+
+    if (!values.repassword) {
+      errors.repassword = 'Required';
+    } else if (values.password !== values.repassword) {
+      errors.repassword = 'Passwords do not match';
+    } else if (values.repassword.includes(" ")) {
+      errors.repassword = 'Invalid Password';
+    }
+    
+    return errors;
+  };
+
   const formik = useFormik({
     initialValues: {
       username: '',
@@ -17,6 +54,7 @@ const Signup = () => {
       password: '',
       repassword: ''
     },
+    validate,
     onSubmit
   });
   async function onSubmit(values) {
@@ -62,10 +100,11 @@ const Signup = () => {
                     name="username"
                     {...formik.getFieldProps('username')}
                     id="username"
-                    className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    className={"bg-gray-50 border text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 "+(formik.errors.username && formik.touched.username ? " border-red-500" : " border-gray-300")}
                     placeholder="Enter your username"
                     required
                   />
+                  {formik.errors.username && formik.touched.username && <span className="text-sm text-red-500">{formik.errors.username}</span>}
                 </div>
                 <div>
                   <label
@@ -79,10 +118,11 @@ const Signup = () => {
                     name="email"
                     {...formik.getFieldProps('email')}
                     id="email"
-                    className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    className={"bg-gray-50 border text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 "+(formik.errors.email && formik.touched.email ? " border-red-500" : " border-gray-300")}
                     placeholder="Enter your email address"
                     required
                   />
+                  {formik.errors.email && formik.touched.email && <span className="text-sm text-red-500">{formik.errors.email}</span>}
                 </div>
                 <div>
                   <label
@@ -97,9 +137,10 @@ const Signup = () => {
                     {...formik.getFieldProps('password')}
                     id="password"
                     placeholder="••••••••"
-                    className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    className={"bg-gray-50 border text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 "+(formik.errors.password && formik.touched.password ? " border-red-500" : " border-gray-300")}
                     required
                   />
+                  {formik.errors.password && formik.touched.password && <span className="text-sm text-red-500">{formik.errors.password}</span>}
                 </div>
                 <div>
                   <label
@@ -114,9 +155,10 @@ const Signup = () => {
                     {...formik.getFieldProps('repassword')}
                     id="repassword"
                     placeholder="••••••••"
-                    className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    className={"bg-gray-50 border text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 "+(formik.errors.repassword && formik.touched.repassword ? " border-red-500" : " border-gray-300")}
                     required
                   />
+                  {formik.errors.repassword && formik.touched.repassword && <span className="text-sm text-red-500">{formik.errors.repassword}</span>}
                 </div>
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between">
                   <div className="flex items-start">

@@ -12,6 +12,7 @@ import styles from "/styles/Home.module.css"
 const Signin = () => {
   const {data: session} = useSession();
 
+  //Sign in Validation Form
   const validate = values => {
     const errors = {};
 
@@ -23,8 +24,8 @@ const Signin = () => {
 
     if (!values.password) {
       errors.password = 'Required';
-    } else if (values.password.length < 8) {
-      errors.password = 'Must be 8 characters or more';
+    } else if (values.password.length < 8 || values.password.length > 20) {
+      errors.password = 'Must be greater than 8 and less than 20 characters';
     } else if (values.password.includes(" ")) {
       errors.password = 'Invalid Password';
     }
