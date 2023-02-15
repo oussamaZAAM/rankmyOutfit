@@ -8,8 +8,10 @@ import { useFormik } from 'formik';
 import { FcGoogle } from "react-icons/fc"
 import { FaFacebook, FaTwitter } from "react-icons/fa"
 import styles from "/styles/Home.module.css"
+import { useRouter } from "next/router";
 
 const Signin = () => {
+  const router = useRouter();
   const {data: session} = useSession();
 
   //Sign in Validation Form
@@ -32,7 +34,6 @@ const Signin = () => {
   
     return errors;
   };
-
   
   const formik = useFormik({
     initialValues: {
@@ -42,8 +43,16 @@ const Signin = () => {
     validate,
     onSubmit
   });
+  
   async function onSubmit(values) {
-    console.log(values)
+    const status = await signIn('credentials', {
+      redirect: false,
+      email: values.email,
+      password: values.password,
+      callbackUrl: "/outfits"
+    })
+
+    if (status.ok) router.push(status.url);
   };
 
   return ( 

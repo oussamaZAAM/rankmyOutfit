@@ -31,7 +31,7 @@ const Nav = () => {
                         <div className="relative z-50">
                             <button onClick={toggleDropdown} className="flex mx-3 text-sm bg-gray-800 rounded-full md:mr-0 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600" type="button">
                                 <span className="sr-only">Open user menu</span>
-                                <Image height={50} width={50} className="w-8 h-8 rounded-full" src={session.user.image} alt="user photo" />
+                                <Image height={50} width={50} className="w-8 h-8 rounded-full" src={session.user.image || "/images/user.png"} alt="user photo" />
                             </button>
                             <div className={"z-10 bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600 "+(isOpen ? '' : 'hidden')}>
                                 <div className="px-4 py-3 text-sm text-gray-900 dark:text-white">
