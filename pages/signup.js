@@ -3,63 +3,77 @@ import { getSession } from "next-auth/react";
 import Link from "next/link";
 import Image from "next/image";
 
-import { useFormik } from 'formik';
+import { useFormik } from "formik";
 
 import { FcGoogle } from "react-icons/fc";
 import { FaFacebook, FaTwitter } from "react-icons/fa";
 import styles from "/styles/Home.module.css";
+import { useRouter } from "next/router";
 
 const Signup = () => {
+  const router = useRouter();
   //Sign up Validation Form
-  const validate = values => {
+  const validate = (values) => {
     const errors = {};
 
-    if (!values.username) {
-      errors.username = 'Required';
-    } else if (values.username.length < 6) {
-      errors.username = 'Username must have at least 6 characters';
-    } else if (values.username.includes(" ")) {
-      errors.username = 'Invalid Username';
+    if (!values.name) {
+      errors.name = "Required";
+    } else if (values.name.length < 6) {
+      errors.name = "Username must have at least 6 characters";
+    } else if (values.name.includes(" ")) {
+      errors.name = "Invalid Username";
     }
 
     if (!values.email) {
-      errors.email = 'Required';
-    } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
-      errors.email = 'Invalid email address';
+      errors.email = "Required";
+    } else if (
+      !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)
+    ) {
+      errors.email = "Invalid email address";
     }
 
     if (!values.password) {
-      errors.password = 'Required';
+      errors.password = "Required";
     } else if (values.password.length < 8 || values.password.length > 20) {
-      errors.password = 'Must be greater than 8 and less than 20 characters';
+      errors.password = "Must be greater than 8 and less than 20 characters";
     } else if (values.password.includes(" ")) {
-      errors.password = 'Invalid Password';
+      errors.password = "Invalid Password";
     }
 
     if (!values.repassword) {
-      errors.repassword = 'Required';
+      errors.repassword = "Required";
     } else if (values.password !== values.repassword) {
-      errors.repassword = 'Passwords do not match';
+      errors.repassword = "Passwords do not match";
     } else if (values.repassword.includes(" ")) {
-      errors.repassword = 'Invalid Password';
+      errors.repassword = "Invalid Password";
     }
-    
+
     return errors;
   };
 
   const formik = useFormik({
     initialValues: {
-      username: '',
-      email: '',
-      password: '',
-      repassword: ''
+      name: "",
+      email: "",
+      password: "",
+      repassword: "",
     },
     validate,
-    onSubmit
+    onSubmit,
   });
   async function onSubmit(values) {
-    console.log(values)
-  };
+    const options = {
+      method: "post",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(values),
+    };
+
+    await fetch("http://localhost:3000/api/auth/signup", options)
+      .then((res) => res.json())
+      .then((data) => {
+          if (data) router.push('http://localhost:3000/signin')
+      });
+  }
   return (
     <>
       <Head>
@@ -82,12 +96,18 @@ const Signup = () => {
               rateMyOutfit
             </span>
           </div>
-          <div id="form" className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700 my-4">
+          <div
+            id="form"
+            className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700 my-4"
+          >
             <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
               <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
                 Sign in to your account
               </h1>
-              <form className="space-y-4 md:space-y-6" onSubmit={formik.handleSubmit}>
+              <form
+                className="space-y-4 md:space-y-6"
+                onSubmit={formik.handleSubmit}
+              >
                 <div>
                   <label
                     htmlFor="email"
@@ -96,33 +116,51 @@ const Signup = () => {
                     Username
                   </label>
                   <input
-                    type="username"
-                    name="username"
-                    {...formik.getFieldProps('username')}
-                    id="username"
-                    className={"bg-gray-50 border text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 "+(formik.errors.username && formik.touched.username ? " border-red-500" : " border-gray-300")}
+                    type="text"
+                    name="name"
+                    {...formik.getFieldProps("name")}
+                    id="name"
+                    className={
+                      "bg-gray-50 border text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 " +
+                      (formik.errors.name && formik.touched.name
+                        ? " border-red-500"
+                        : " border-gray-300")
+                    }
                     placeholder="Enter your username"
                     required
                   />
-                  {formik.errors.username && formik.touched.username && <span className="text-sm text-red-500">{formik.errors.username}</span>}
+                  {formik.errors.name && formik.touched.name && (
+                    <span className="text-sm text-red-500">
+                      {formik.errors.name}
+                    </span>
+                  )}
                 </div>
                 <div>
                   <label
                     htmlFor="email"
                     className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                   >
-                    Your email
+                    Your Email
                   </label>
                   <input
                     type="email"
                     name="email"
-                    {...formik.getFieldProps('email')}
+                    {...formik.getFieldProps("email")}
                     id="email"
-                    className={"bg-gray-50 border text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 "+(formik.errors.email && formik.touched.email ? " border-red-500" : " border-gray-300")}
+                    className={
+                      "bg-gray-50 border text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 " +
+                      (formik.errors.email && formik.touched.email
+                        ? " border-red-500"
+                        : " border-gray-300")
+                    }
                     placeholder="Enter your email address"
                     required
                   />
-                  {formik.errors.email && formik.touched.email && <span className="text-sm text-red-500">{formik.errors.email}</span>}
+                  {formik.errors.email && formik.touched.email && (
+                    <span className="text-sm text-red-500">
+                      {formik.errors.email}
+                    </span>
+                  )}
                 </div>
                 <div>
                   <label
@@ -134,13 +172,22 @@ const Signup = () => {
                   <input
                     type="password"
                     name="password"
-                    {...formik.getFieldProps('password')}
+                    {...formik.getFieldProps("password")}
                     id="password"
                     placeholder="••••••••"
-                    className={"bg-gray-50 border text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 "+(formik.errors.password && formik.touched.password ? " border-red-500" : " border-gray-300")}
+                    className={
+                      "bg-gray-50 border text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 " +
+                      (formik.errors.password && formik.touched.password
+                        ? " border-red-500"
+                        : " border-gray-300")
+                    }
                     required
                   />
-                  {formik.errors.password && formik.touched.password && <span className="text-sm text-red-500">{formik.errors.password}</span>}
+                  {formik.errors.password && formik.touched.password && (
+                    <span className="text-sm text-red-500">
+                      {formik.errors.password}
+                    </span>
+                  )}
                 </div>
                 <div>
                   <label
@@ -152,13 +199,22 @@ const Signup = () => {
                   <input
                     type="password"
                     name="repassword"
-                    {...formik.getFieldProps('repassword')}
+                    {...formik.getFieldProps("repassword")}
                     id="repassword"
                     placeholder="••••••••"
-                    className={"bg-gray-50 border text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 "+(formik.errors.repassword && formik.touched.repassword ? " border-red-500" : " border-gray-300")}
+                    className={
+                      "bg-gray-50 border text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 " +
+                      (formik.errors.repassword && formik.touched.repassword
+                        ? " border-red-500"
+                        : " border-gray-300")
+                    }
                     required
                   />
-                  {formik.errors.repassword && formik.touched.repassword && <span className="text-sm text-red-500">{formik.errors.repassword}</span>}
+                  {formik.errors.repassword && formik.touched.repassword && (
+                    <span className="text-sm text-red-500">
+                      {formik.errors.repassword}
+                    </span>
+                  )}
                 </div>
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between">
                   <div className="flex items-start">
@@ -202,7 +258,7 @@ const Signup = () => {
                 <p className="text-sm font-light text-gray-500 dark:text-gray-400">
                   already signed up?{" "}
                   <Link
-                    href="/signin#form" 
+                    href="/signin#form"
                     className="font-medium text-my-purple underline"
                   >
                     Sign in
@@ -223,16 +279,16 @@ export const getServerSideProps = async (context) => {
   const session = await getSession(context);
 
   if (session) {
-      return {
-          redirect: {
-              destination: '/outfits'
-          }
-      }
+    return {
+      redirect: {
+        destination: "/outfits",
+      },
+    };
   }
 
   return {
-      props: {
-          session
-      }
-  }
-}
+    props: {
+      session,
+    },
+  };
+};
