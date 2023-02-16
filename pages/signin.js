@@ -213,9 +213,9 @@ export default Signin;
 
 export const getServerSideProps = async (context) => {
   const session = await getSession(context);
-  const user = nookies.get("user");
+  const isUser = nookies.get("user");
 
-  if (session || user) {
+  if (session || isUser) {
       return {
           redirect: {
               destination: '/outfits'
