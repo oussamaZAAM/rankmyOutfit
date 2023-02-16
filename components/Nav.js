@@ -1,15 +1,28 @@
 import Link from 'next/link'
 
 import { useSession, signIn, signOut, getSession } from "next-auth/react";
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Image from 'next/image';
+import axios from 'axios';
 
 
 const Nav = () => {
-  const [isOpen, setIsOpen] = useState(false)
+  const [user, setUser] = useState();
+  const [isOpen, setIsOpen] = useState(false);
   const toggleDropdown = () => setIsOpen(!isOpen)
   
+  useEffect(()=>{
+      const current_user = localStorage.getItem("user");
+      setUser(current_user);
+  },[])
+
   const {data: session, status} = useSession();
+
+  const handleSignOut = async() => {
+    if (status === 'authenticated') signOut();
+    // await axios.get("/api/logout").catch((error) => {alert(error)});
+  }
+
   return (
     <div className='grid grid-cols-8 w-full h-16'>
         <div className="grid grid-cols-8 justify-center items-center h-full col-start-0 col-span-8 lg:col-start-2 lg:col-span-6">
@@ -24,9 +37,11 @@ const Nav = () => {
             </div>
             <div className='flex justify-center items-center col-span-3 sm:col-span-2'>
                 {status !== 'authenticated'
-                    ? <div className='rounded-full w-24 sm:w-32 h-10 flex justify-center items-center' style={{backgroundColor: '#6F1AB6'}}>
-                        <Link href='/signin#form'><h5 className='font-display font-bold text-white text-sm'>Sign in</h5></Link>
-                    </div>
+                    ? (!user)
+                        ? <div className='rounded-full w-24 sm:w-32 h-10 flex justify-center items-center' style={{backgroundColor: '#6F1AB6'}}>
+                            <Link href='/signin#form'><h5 className='font-display font-bold text-white text-sm'>Sign in</h5></Link>
+                        </div>
+                        : <div>user</div>
                     : <div className='rounded-full w-24 sm:w-32 h-10 flex'>
                         <div className="relative z-50">
                             <button onClick={toggleDropdown} className="flex mx-3 text-sm bg-gray-800 rounded-full md:mr-0 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600" type="button">
@@ -50,7 +65,7 @@ const Nav = () => {
                                 </li>
                                 </ul>
                                 <div className="py-2">
-                                <button onClick={()=>signOut()} className="w-full text-left block px-4 py-2 text-sm text-gray-700 hover:text-red-500 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Sign out</button>
+                                <button onClick={handleSignOut} className="w-full text-left block px-4 py-2 text-sm text-gray-700 hover:text-red-500 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Sign out</button>
                                 </div>
                             </div>
                         </div>
