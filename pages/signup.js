@@ -2,6 +2,7 @@ import Head from "next/head";
 import { getSession } from "next-auth/react";
 import Link from "next/link";
 import Image from "next/image";
+import nookies from 'nookies';
 
 import { useFormik } from "formik";
 
@@ -277,8 +278,9 @@ export default Signup;
 
 export const getServerSideProps = async (context) => {
   const session = await getSession(context);
+  const isUser = nookies.get(context);
 
-  if (session) {
+  if (session || (isUser.authentication && isUser.authentication!=="")) {
     return {
       redirect: {
         destination: "/outfits",

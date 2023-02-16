@@ -2,7 +2,7 @@ import Head from "next/head";
 import { useSession, signIn, signOut, getSession } from "next-auth/react";
 import Link from "next/link";
 import Image from "next/image";
-import nookies from 'nookies'
+import nookies from 'nookies';
 
 import { useFormik } from 'formik';
 
@@ -12,7 +12,7 @@ import styles from "/styles/Home.module.css"
 import { useRouter } from "next/router";
 import axios from "axios";
 
-const Signin = () => {
+const Signin = ({context}) => {
   const router = useRouter();
   const {data: session} = useSession();
 
@@ -66,7 +66,6 @@ const Signin = () => {
     })
     .then((response) => {
       localStorage.setItem("user", JSON.stringify(response.data));
-      nookies.set("user", JSON.stringify(response.data))
       router.reload();
     })
     .catch((error) => {
@@ -213,9 +212,9 @@ export default Signin;
 
 export const getServerSideProps = async (context) => {
   const session = await getSession(context);
-  const isUser = nookies.get("user");
+  const isUser = nookies.get(context);
 
-  if (session || isUser) {
+  if (session || (isUser.authentication && isUser.authentication!=="")) {
       return {
           redirect: {
               destination: '/outfits'
