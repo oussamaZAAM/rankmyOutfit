@@ -88,13 +88,14 @@ const Profile = () => {
 
     if (image.length > 0) {
         console.log("YEAH")
-        console.log(profile)
         await axios.post('http://localhost:5000/api/upload', profile)
-            .then((response) => {
-                console.log(response);
+            .then(async(response) => {
+                await axios.put('/api/users', {email: user.email, image: response.data.display_url});
+                setUser({...user, image: response.data.display_url});
+                localStorage.setItem("user", JSON.stringify({...user, image: response.data.display_url}));
             })
     } else {
-        console.log("NAH")
+        await axios.put('/api/users', {email: user.email, image: ""});
     }
 
     setLoading(false);
@@ -143,13 +144,13 @@ const Profile = () => {
 
             <div className="absolute inset-y-2/4 w-full h-6 bg-black scale-x-0 group-hover:scale-x-100 transition duration-200">
               <div className="flex justify-center items-center h-full w-full">
-                {!user.image ? (
-                  <label htmlFor="upload1">
+                {!image ? (
+                  <label htmlFor="upload">
                     <MdAdd size={30} color="white" />
                     <input
-                      //   onChange={(e) => handleChange(e, 1)}
+                      onChange={(e) => handleUpload(e)}
                       type="file"
-                      id="upload1"
+                      id="upload"
                       accept="image/*"
                       style={{ display: "none" }}
                     />
@@ -157,12 +158,12 @@ const Profile = () => {
                 ) : (
                   <div className="flex justify-center items-center space-x-8">
                     {!edit && (
-                      <label htmlFor="reupload1">
+                      <label htmlFor="reupload">
                         <RiImageEditLine size={25} color="white" />
                         <input
                           onChange={(e) => handleUpload(e)}
                           type="file"
-                          id="reupload1"
+                          id="reupload"
                           accept="image/*"
                           style={{ display: "none" }}
                         />
