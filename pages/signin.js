@@ -2,6 +2,7 @@ import Head from "next/head";
 import { useSession, signIn, signOut, getSession } from "next-auth/react";
 import Link from "next/link";
 import Image from "next/image";
+import nookies from 'nookies'
 
 import { useFormik } from 'formik';
 
@@ -9,6 +10,7 @@ import { FcGoogle } from "react-icons/fc"
 import { FaFacebook, FaTwitter } from "react-icons/fa"
 import styles from "/styles/Home.module.css"
 import { useRouter } from "next/router";
+import axios from "axios";
 
 const Signin = () => {
   const router = useRouter();
@@ -45,14 +47,32 @@ const Signin = () => {
   });
   
   async function onSubmit(values) {
-    const status = await signIn('credentials', {
-      redirect: false,
+    // const status = await signIn('credentials', {
+    //   redirect: false,
+    //   email: values.email,
+    //   password: values.password,
+    //   callbackUrl: "/outfits"
+    // })
+
+    const data = {
       email: values.email,
       password: values.password,
-      callbackUrl: "/outfits"
-    })
+    }
 
-    if (status.ok) router.push(status.url);
+    await axios.post("/api/auth/signin", data, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+    .then((response) => {
+      localStorage.setItem("user", JSON.stringify(response.data));
+      nookies.set("user", JSON.stringify(response.data))
+      router.reload();
+    })
+    .catch((error) => {
+      alert(error)
+    });
+
   };
 
   return ( 
@@ -193,8 +213,9 @@ export default Signin;
 
 export const getServerSideProps = async (context) => {
   const session = await getSession(context);
+  const user = nookies.get("user");
 
-  if (session) {
+  if (session || user) {
       return {
           redirect: {
               destination: '/outfits'
