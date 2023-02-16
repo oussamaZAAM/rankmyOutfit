@@ -35,7 +35,14 @@ export default async function signin(req, res) {
     });
     res.setHeader("Set-Cookie", serialized);
 
-    res.status(200).json({token, user});
+    const data = {
+      token, 
+      user: {
+        name: user.name,
+        email: user.email,
+      }
+    }
+    res.status(200).json(data);
   } catch (e) {
     res.status(401).json({ message: e.message });
   }

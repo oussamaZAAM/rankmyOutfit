@@ -18,7 +18,7 @@ const Nav = () => {
   
   useEffect(()=>{
       const user_token = localStorage.getItem("authentication");
-      const user = localStorage.getItem("user");
+      const user = JSON.parse(localStorage.getItem("user"));
       setIsUser(user_token);
       setUser(user);
   },[])
@@ -39,8 +39,6 @@ const Nav = () => {
         .catch((error) => {alert(error)});
     }
   } 
-
-  console.log(user)
 
   return (
     <div className='grid grid-cols-8 w-full h-16'>
@@ -69,8 +67,8 @@ const Nav = () => {
                             </button>
                             <div className={"z-10 bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600 "+(isOpen ? '' : 'hidden')}>
                                 <div className="px-4 py-3 text-sm text-gray-900 dark:text-white">
-                                <div>session.user.name</div>
-                                <div className="font-medium truncate">session.user.email</div>
+                                <div>{user.name}</div>
+                                <div className="font-medium truncate">{user.email}</div>
                                 </div>
                                 <ul className="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownInformationButton">
                                 <li>
