@@ -40,6 +40,7 @@ export default async function signin(req, res) {
       user: {
         name: user.name,
         email: user.email,
+        image: user.toJSON().image
       }
     }
     res.status(200).json(data);
