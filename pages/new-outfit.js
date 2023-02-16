@@ -1,9 +1,11 @@
 import server from "@/config";
 import axios from "axios";
-import FormData from 'form-data';
+import nookies from 'nookies';
 import { getSession } from "next-auth/react";
-import Head from "next/head";
 import { useCallback, useState } from "react";
+import Head from "next/head";
+
+import FormData from 'form-data';
 import Cropper from 'react-easy-crop'
 
 import { MdAdd, MdOutlineCrop, MdDoneOutline } from "react-icons/md";
@@ -541,11 +543,15 @@ export default newOutfit;
 
 export const getServerSideProps = async (context) => {
   const session = await getSession(context);
+  const isUser = nookies.get(context);
 
-  if (!session) {
+  const url = context.req.headers.referer;
+  const query = (url && url.split('?')[1]) || '';
+
+  if (!(session || (isUser.authentication && isUser.authentication!==""))) {
       return {
           redirect: {
-              destination: '/signin#form'
+              destination: `/signin#form?from=${encodeURIComponent()}`
           }
       }
   }
