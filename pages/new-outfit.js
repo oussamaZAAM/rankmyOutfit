@@ -546,13 +546,11 @@ export const getServerSideProps = async (context) => {
   const isUser = nookies.get(context);
 
   if (!(session || (isUser.authentication && isUser.authentication!==""))) {
-    // if (query) {
       return {
           redirect: {
               destination: `/signin?from=new-outfit#form`
           }
       }
-    // }
   }
 
   return {
