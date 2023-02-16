@@ -1,3 +1,4 @@
+import axios from "axios";
 import { getSession } from "next-auth/react";
 import nookies from "nookies";
 
@@ -64,7 +65,7 @@ const Profile = () => {
 
     // Cloud
     const formData = new FormData();
-    formData.append("profile", file);
+    formData.append("image", file);
 
     // Local
     const base64 = await convertToBase64(file);
@@ -82,10 +83,19 @@ const Profile = () => {
     }
     e.target.value = "";
   };
-  const editProfileImage = () => {
+  const editProfileImage = async() => {
     setLoading(true);
 
-
+    if (image.length > 0) {
+        console.log("YEAH")
+        console.log(profile)
+        await axios.post('http://localhost:5000/api/upload', profile)
+            .then((response) => {
+                console.log(response);
+            })
+    } else {
+        console.log("NAH")
+    }
 
     setLoading(false);
   };
@@ -228,7 +238,7 @@ export const getServerSideProps = async (context) => {
   const session = await getSession(context);
   const isUser = nookies.get(context);
 
-  if (!(session || (isUser.authentication && isUser.authentication !== ""))) {
+  if (!(isUser.authentication && isUser.authentication !== "")) {
     return {
       redirect: {
         destination: `/signin?from=profile#form`,
