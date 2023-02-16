@@ -545,15 +545,14 @@ export const getServerSideProps = async (context) => {
   const session = await getSession(context);
   const isUser = nookies.get(context);
 
-  const url = context.req.headers.referer;
-  const query = (url && url.split('?')[1]) || '';
-
   if (!(session || (isUser.authentication && isUser.authentication!==""))) {
+    // if (query) {
       return {
           redirect: {
-              destination: `/signin#form?from=${encodeURIComponent()}`
+              destination: `/signin?from=new-outfit#form`
           }
       }
+    // }
   }
 
   return {

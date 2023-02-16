@@ -215,10 +215,13 @@ export const getServerSideProps = async (context) => {
   const session = await getSession(context);
   const isUser = nookies.get(context);
 
+  const url = context.req.headers.referer;
+  const query = (url && url.split('?from=')[1]);
+
   if (session || (isUser.authentication && isUser.authentication!=="")) {
       return {
           redirect: {
-              destination: '/outfits'
+              destination: (query ? `/${query}` : '/outfits')
           }
       }
   }
