@@ -4,7 +4,7 @@ import { useSession, signIn, signOut, getSession } from "next-auth/react";
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import axios from 'axios';
-import nookies from 'nookies';
+import nookies, { parseCookies } from 'nookies';
 import { useRouter } from 'next/router';
 
 
@@ -12,12 +12,15 @@ const Nav = () => {
   const router = useRouter();
 
   const [isUser, setIsUser] = useState();
+  const [user, setUser] = useState();
   const [isOpen, setIsOpen] = useState(false);
   const toggleDropdown = () => setIsOpen(!isOpen)
   
   useEffect(()=>{
-      const current_user = localStorage.getItem("user");
-      setIsUser(current_user);
+      const user_token = localStorage.getItem("authentication");
+      const user = localStorage.getItem("user");
+      setIsUser(user_token);
+      setUser(user);
   },[])
 
   const {data: session, status} = useSession();
@@ -30,12 +33,14 @@ const Nav = () => {
     if (isUser){
         await axios.get("/api/auth/logout")
         .then(async (response) => {
-            localStorage.removeItem("user");
+            localStorage.removeItem("authentication");
             router.reload();
         })
         .catch((error) => {alert(error)});
     }
   } 
+
+  console.log(user)
 
   return (
     <div className='grid grid-cols-8 w-full h-16'>

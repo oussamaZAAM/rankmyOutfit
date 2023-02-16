@@ -6,7 +6,6 @@ export default async function Handler(req, res) {
   connectMongo().catch((error) => res.json({ error: "Connection Failed" }));
 
   if (req.method === "POST") {
-    console.log(req.body)
     if (!req.body) {
       return res.status(404).json({ error: "Empty Form" });
     }

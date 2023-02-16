@@ -65,7 +65,8 @@ const Signin = ({context}) => {
       },
     })
     .then((response) => {
-      localStorage.setItem("user", JSON.stringify(response.data));
+      localStorage.setItem("authentication", JSON.stringify(response.data.token));
+      localStorage.setItem("user", JSON.stringify(response.data.user));
       router.reload();
     })
     .catch((error) => {

@@ -131,6 +131,8 @@ const newOutfit = () => {
     }
   }
 
+  console.log(savedImages);
+
 
   return (
     <>
