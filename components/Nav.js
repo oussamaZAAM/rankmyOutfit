@@ -30,7 +30,6 @@ const Nav = () => {
     if (isUser){
         await axios.get("/api/auth/logout")
         .then(async (response) => {
-            nookies.destroy(undefined, "user");
             localStorage.removeItem("user");
             router.reload();
         })
