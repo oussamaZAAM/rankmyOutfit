@@ -90,7 +90,7 @@ const Profile = () => {
         console.log("YEAH")
         await axios.post('http://localhost:5000/api/upload', profile)
             .then(async(response) => {
-                await axios.put('/api/users', {email: user.email, image: response.data.display_url});
+                await axios.put('/api/users', {email: user.email, image: response.data.display_url, delete_url: response.data.delete_url});
                 setUser({...user, image: response.data.display_url});
                 localStorage.setItem("user", JSON.stringify({...user, image: response.data.display_url}));
             })

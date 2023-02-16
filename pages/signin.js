@@ -56,7 +56,7 @@ const Signin = ({context}) => {
 
     const data = {
       email: values.email,
-      password: values.password,
+      password: values.password
     }
 
     await axios.post("/api/auth/signin", data, {
