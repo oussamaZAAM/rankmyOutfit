@@ -26,7 +26,19 @@ export default async function Handler(req, res) {
         if (req.method === 'POST') {
             const user = await Users.findOne({email: req.body.email});
 
-            if (!user) return res.status(404).json({message: 'User not found'});
+            console.log(user)
+
+            if (!user._id) {
+                const serialised = serialize("authentication", null, {
+                    httpOnly: true,
+                    secure: process.env.NEXT_ENV !== "dev",
+                    sameSite: "strict",
+                    maxAge: -1,
+                    path: "/",
+                });
+                res.setHeader("Set-Cookie", serialised);
+                return res.status(404).json({message: 'User not found'})
+            }
 
             const requestData = {
                 name: user.name,
