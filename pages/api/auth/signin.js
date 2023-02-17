@@ -26,8 +26,6 @@ export default async function signin(req, res) {
     
     const token = jwt.sign(user.toJSON(), process.env.JWT_SECRET);
 
-    console.log(token)
-
     const serialized = serialize("authentication", token, {
         httpOnly: true,
         secure: process.env.NEXT_ENV !== "dev",

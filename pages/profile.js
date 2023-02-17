@@ -24,7 +24,7 @@ const Profile = () => {
 
   //Image Treating
   const [crop, setCrop] = useState({ x: 0, y: 0 });
-  const [position, setPosition] = useState();
+  const [position, setPosition] = useState({left: 50, top: 50});
   const [edit, setEdit] = useState(false);
 
   const onCropComplete = useCallback(
@@ -87,10 +87,20 @@ const Profile = () => {
     setLoading(true);
 
     if (image.length > 0) {
-        console.log("YEAH")
         await axios.post('http://localhost:5000/api/upload', profile)
             .then(async(response) => {
-                await axios.put('/api/users', {email: user.email, image: response.data.display_url, delete_url: response.data.delete_url});
+                const options = {
+                  headers: {
+                    "Authorization": `Bearer ${isUser}`
+                  }
+                }
+                console.log(position)
+                const imageData = {
+                  url: response.data.display_url,
+                  delete: response.data.delete_url,
+                  position
+                }
+                await axios.put('/api/users', {email: user.email, image: imageData}, options);
                 setUser({...user, image: response.data.display_url});
                 localStorage.setItem("user", JSON.stringify({...user, image: response.data.display_url}));
             })
