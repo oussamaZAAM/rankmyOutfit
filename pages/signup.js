@@ -2,7 +2,7 @@ import Head from "next/head";
 import { getSession } from "next-auth/react";
 import Link from "next/link";
 import Image from "next/image";
-import nookies from 'nookies';
+import nookies from "nookies";
 
 import { useFormik } from "formik";
 
@@ -10,8 +10,10 @@ import { FcGoogle } from "react-icons/fc";
 import { FaFacebook, FaTwitter } from "react-icons/fa";
 import styles from "/styles/Home.module.css";
 import { useRouter } from "next/router";
+import { useState } from "react";
 
 const Signup = () => {
+  const [error, setError] = useState('');
   const router = useRouter();
   //Sign up Validation Form
   const validate = (values) => {
@@ -69,11 +71,15 @@ const Signup = () => {
       body: JSON.stringify(values),
     };
 
-    await fetch("http://localhost:3000/api/auth/signup", options)
-      .then((res) => res.json())
-      .then((data) => {
-          if (data) router.push('http://localhost:3000/signin')
-      });
+    await fetch("http://localhost:3000/api/auth/signup", options).then(
+      (res) => {
+        if (res.ok) {
+          router.push("http://localhost:3000/signin");
+        } else {
+          setError("This email is already in use");
+        }
+      }
+    );
   }
   return (
     <>
@@ -163,6 +169,30 @@ const Signup = () => {
                     </span>
                   )}
                 </div>
+                {error!=='' && (
+                  <div
+                    className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative"
+                    role="alert"
+                  >
+                    <strong className="font-bold">Error! </strong>
+                    <span className="block sm:inline">
+                      This email is already in use.
+                    </span>
+                    <button onClick={()=>setError('')}>
+                      <span className="absolute top-0 bottom-0 right-0 px-4 py-3" >
+                        <svg
+                          className="fill-current h-6 w-6 text-red-500"
+                          role="button"
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 20 20"
+                        >
+                          <title>Close</title>
+                          <path d="M14.348 14.849a1.2 1.2 0 0 1-1.697 0L10 11.819l-2.651 3.029a1.2 1.2 0 1 1-1.697-1.697l2.758-3.15-2.759-3.152a1.2 1.2 0 1 1 1.697-1.697L10 8.183l2.651-3.031a1.2 1.2 0 1 1 1.697 1.697l-2.758 3.152 2.758 3.15a1.2 1.2 0 0 1 0 1.698z" />
+                        </svg>
+                      </span>
+                    </button>
+                  </div>
+                )}
                 <div>
                   <label
                     htmlFor="password"
@@ -280,7 +310,7 @@ export const getServerSideProps = async (context) => {
   const session = await getSession(context);
   const isUser = nookies.get(context);
 
-  if (session || (isUser.authentication && isUser.authentication!=="")) {
+  if (session || (isUser.authentication && isUser.authentication !== "")) {
     return {
       redirect: {
         destination: "/outfits",
