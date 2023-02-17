@@ -11,12 +11,20 @@ import { FaFacebook, FaTwitter } from "react-icons/fa"
 import styles from "/styles/Home.module.css"
 import { useRouter } from "next/router";
 import axios from "axios";
+import { useState } from "react";
 
 const Signin = ({context}) => {
+  //-----------------------Handle Errors-----------------------
+  const [error, setError] = useState('');
+
+  //-----------------------Handle Routing-----------------------
   const router = useRouter();
+  const { from } = router.query;
+
+  //-----------------------Google/Facebook-----------------------
   const {data: session} = useSession();
 
-  //Sign in Validation Form
+  //-----------------------Sign in Validation Form-----------------------
   const validate = values => {
     const errors = {};
 
@@ -47,13 +55,7 @@ const Signin = ({context}) => {
   });
   
   async function onSubmit(values) {
-    // const status = await signIn('credentials', {
-    //   redirect: false,
-    //   email: values.email,
-    //   password: values.password,
-    //   callbackUrl: "/outfits"
-    // })
-
+    setError('')
     const data = {
       email: values.email,
       password: values.password
@@ -70,11 +72,10 @@ const Signin = ({context}) => {
       router.reload();
     })
     .catch((error) => {
-      alert(error)
+      setError(error.response.data.message);
     });
 
   };
-  const { from } = router.query;
 
 
   return ( 
@@ -168,6 +169,7 @@ const Signin = ({context}) => {
                     Forgot password?
                   </a>
                 </div>
+                <p className="text-red-500 font-bold">{error}</p>
                 <button
                   type="submit"
                   className="

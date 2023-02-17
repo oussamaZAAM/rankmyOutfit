@@ -13,7 +13,7 @@ export default async function signin(req, res) {
     //Check if User Exists
     const user = await Users.findOne({email: credentials.email});
     if(!user) {
-        throw new Error("No User is signed up with this email");
+        throw new Error("Email not found");
     }
 
     //Compare Passwords
@@ -21,7 +21,7 @@ export default async function signin(req, res) {
 
     //Incorrect Credentials
     if (!checkPassword || credentials.email !== user.email) {
-        throw new Error("Email or password mismatch")
+        throw new Error("Wrong password, try again")
     }
     
     const token = jwt.sign(user.toJSON(), process.env.JWT_SECRET);

@@ -23,8 +23,6 @@ const Signup = () => {
       errors.name = "Required";
     } else if (values.name.length < 6) {
       errors.name = "Username must have at least 6 characters";
-    } else if (values.name.includes(" ")) {
-      errors.name = "Invalid Username";
     }
 
     if (!values.email) {
