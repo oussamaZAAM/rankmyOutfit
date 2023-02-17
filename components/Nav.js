@@ -4,7 +4,6 @@ import { useSession, signIn, signOut, getSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import axios from "axios";
-import nookies, { parseCookies } from "nookies";
 import { useRouter } from "next/router";
 
 const Nav = () => {
@@ -19,11 +18,17 @@ const Nav = () => {
     const user_token = localStorage.getItem("authentication");
     const user = JSON.parse(localStorage.getItem("user"));
     const fetchUser = async () => {
-        const res = await axios.post('/api/profile', {email: user.email});
-        setIsUser(user_token);
-        setUser(res.data);
+        await axios.post('/api/profile', {email: user.email})
+          .then(response => {
+            setIsUser(user_token);
+            setUser(response.data);
+          })
+          .catch((err) => {
+            localStorage.removeItem('authentication');
+            localStorage.removeItem('user');
+          });
     }
-    user_token && fetchUser();
+   user_token && fetchUser();
   }, []);
 
   const { data: session, status } = useSession();
@@ -140,12 +145,12 @@ const Nav = () => {
                       aria-labelledby="dropdownInformationButton"
                     >
                       <li>
-                        <a
-                          href="#"
+                        <Link
+                          href="/profile"
                           className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                         >
-                          Dashboard
-                        </a>
+                          Profile
+                        </Link>
                       </li>
                       <li>
                         <a
@@ -215,14 +220,6 @@ const Nav = () => {
                         href="#"
                         className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                       >
-                        Dashboard
-                      </a>
-                    </li>
-                    <li>
-                      <a
-                        href="#"
-                        className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                      >
                         Settings
                       </a>
                     </li>
@@ -256,11 +253,12 @@ const Nav = () => {
 export default Nav;
 
 export const getServerSideProps = async (context) => {
+
   const session = await getSession(context);
 
   return {
     props: {
-      session,
+      session
     },
   };
 };

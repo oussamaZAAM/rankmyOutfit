@@ -1,4 +1,5 @@
 import Users from "@/model/Schema";
+import { serialize } from "cookie";
 import { verify } from "jsonwebtoken";
 
 export default async function Handler(req, res) {
@@ -38,6 +39,14 @@ export default async function Handler(req, res) {
 
 
     } catch (e) {
+        const serialised = serialize("authentication", null, {
+            httpOnly: true,
+            secure: process.env.NEXT_ENV !== "dev",
+            sameSite: "strict",
+            maxAge: -1,
+            path: "/",
+        });
+        res.setHeader("Set-Cookie", serialised);
         return res.status(501).json({message: "Invalid Token"});
     }
 }
