@@ -16,8 +16,18 @@ export default async function Handler(req, res) {
     const checkExisting = await Users.findOne({email});
     if (checkExisting) return res.status(406).send("Email already in use");
 
+    //Create image parameters
+    const image = {
+      url: '',
+      delete: '',
+      position: {
+        left: 50,
+        top: 50
+      }
+    }
+
     //Store Data after Hashing the password
-    Users.create({name, email, password: await hash(password, parseInt(process.env.SALT))}, function(error, data) {
+    Users.create({name, email, password: await hash(password, parseInt(process.env.SALT)), image}, function(error, data) {
         if (error) return res.status(404).json({error});
         res.status(201).json({status: true, user: data});
     })

@@ -44,7 +44,7 @@ const Nav = () => {
   const [sessionSrc, setSessionSrc] = useState("/images/user.png");
   useEffect(() => {
     (status === 'authenticated') && setSessionSrc(session.user.image);
-    isUser && setSrc(user.image)
+    isUser && setSrc(user.image.url)
   }, [status, isUser]);
 
   return (

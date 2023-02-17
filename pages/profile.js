@@ -19,7 +19,7 @@ const Profile = () => {
     const user = JSON.parse(localStorage.getItem("user"));
     setIsUser(user_token);
     setUser(user);
-    setImage(user.image);
+    setImage(user.image.url);
   }, []);
 
   //Image Treating
@@ -105,7 +105,7 @@ const Profile = () => {
                 localStorage.setItem("user", JSON.stringify({...user, image: response.data.display_url}));
             })
     } else {
-        await axios.put('/api/users', {email: user.email, image: ""});
+        await axios.put('/api/users', {email: user.email, image: {}});
     }
 
     setLoading(false);

@@ -5,12 +5,11 @@ export default async function Handler(req, res) {
         const user = await Users.findOne({email: req.body.email});
 
         if (!user) return res.status(404).json({message: 'User not found'});
-        console.log(req.body)
 
         const edit = await Users.updateOne(
             {email: req.body.email},
-            { $set: {"image.url": req.body.image.url}}
-        );
+            { $set: {"image.url": req.body.image.url, "image.delete": req.body.image.url, "image.position": req.body.image.position}}
+        )
 
         if (!(edit && edit.matchedCount)) return res.status(503).json({message: 'Database Error'});
 
