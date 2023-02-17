@@ -18,7 +18,7 @@ const Nav = () => {
   useEffect(() => {
     const user_token = localStorage.getItem("authentication");
     const user = JSON.parse(localStorage.getItem("user"));
-    async function fetchUser() {
+    const fetchUser = async () => {
         const res = await axios.post('/api/profile', {email: user.email});
         setIsUser(user_token);
         setUser(res.data);

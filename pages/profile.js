@@ -1,5 +1,6 @@
 import axios from "axios";
 import { getSession } from "next-auth/react";
+import { useRouter } from "next/router";
 import nookies from "nookies";
 
 import React, { useCallback, useEffect, useState } from "react";
@@ -10,19 +11,22 @@ import { RiImageEditLine } from "react-icons/ri";
 import { TiCancel } from "react-icons/ti";
 
 const Profile = () => {
-  //Error Handling
+  //-----------------Router Handling---------------------
+  const router = useRouter();
+  //---------------------Error Handling---------------------
   const [error, setError] = useState('');
 
-  //User Authentication
+  //---------------------User Authentication---------------------
   const [isUser, setIsUser] = useState();
   const [user, setUser] = useState();
 
-  useEffect(async () => {
+  useEffect(() => {
     const user_token = localStorage.getItem("authentication");
+    setIsUser(user_token);
     const user = JSON.parse(localStorage.getItem("user"));
-    async function fetchUser() {
+
+    const fetchUser = async () => {
       const res = await axios.post('/api/profile', {email: user.email});
-      setIsUser(user_token);
       setUser(res.data);
       setImage(res.data.image.url);
       setPosition(res.data.image.position);
@@ -30,7 +34,7 @@ const Profile = () => {
     fetchUser();
   }, []);
 
-  //Image Treating
+  //---------------------Image Treating---------------------
   const [crop, setCrop] = useState({ x: 0, y: 0 });
   const [position, setPosition] = useState({left: 50, top: 50});
   const [edit, setEdit] = useState(false);
@@ -46,7 +50,7 @@ const Profile = () => {
     []
   );
 
-  //Handle Uploading the Image
+  //---------------------Handle Uploading the Image---------------------
   const [loading, setLoading] = useState(false);
   const [image, setImage] = useState('');
   const [profile, setProfile] = useState();
@@ -91,8 +95,6 @@ const Profile = () => {
     }
     e.target.value = "";
   };
-
-  console.log(user)
 
   const editProfileImage = async() => {
     setLoading(true);
@@ -141,6 +143,7 @@ const Profile = () => {
     }
 
     setLoading(false);
+    router.reload();
   };
 
   return (
@@ -173,7 +176,7 @@ const Profile = () => {
                 />
               )
             ) : (
-              <div className="block object-cover w-full h-full rounded-3xl bg-gray-500">
+              <div className="block object-cover w-full h-full rounded-full bg-gray-500">
                 <div className="absolute inset-y-2/4 w-full h-6 bg-black scale-x-100 group-hover:scale-x-[0.25] transition duration-100">
                   {/* <div className="flex justify-center items-center h-full w-full"> */}
                   <p className="font-title font-bold text-white text-base text-center">
@@ -236,14 +239,16 @@ const Profile = () => {
                 )}
               </div>
             </div>
-          </div>
+          </div> 
           <div className="flex justify-center items-center my-4">
             <button
               onClick={editProfileImage}
-              className="h-12 w-44 text-center bg-my-purple rounded-3xl"
+              className={"h-12 w-44 text-center bg-my-purple rounded-3xl "+(edit ? 'cursor-not-allowed' : 'cursor-pointer')}
+              disabled={edit}
+
             >
               {!loading ? (
-                <p className="font-display text-white text-xl">Edit</p>
+                <p className="font-display text-white text-xl">Edit</p> 
               ) : (
                 <div className="text-center">
                   <div role="status">
