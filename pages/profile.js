@@ -20,6 +20,7 @@ const Profile = () => {
     setIsUser(user_token);
     setUser(user);
     setImage(user.image.url);
+    setPosition(user.image.position);
   }, []);
 
   //Image Treating
@@ -83,10 +84,12 @@ const Profile = () => {
     }
     e.target.value = "";
   };
+
   const editProfileImage = async() => {
     setLoading(true);
 
     if (image.length > 0) {
+      if (profile){
         await axios.post('http://localhost:5000/api/upload', profile)
             .then(async(response) => {
                 const options = {
@@ -94,18 +97,32 @@ const Profile = () => {
                     "Authorization": `Bearer ${isUser}`
                   }
                 }
-                console.log(position)
                 const imageData = {
                   url: response.data.display_url,
                   delete: response.data.delete_url,
                   position
                 }
                 await axios.put('/api/users', {email: user.email, image: imageData}, options);
-                setUser({...user, image: response.data.display_url});
-                localStorage.setItem("user", JSON.stringify({...user, image: response.data.display_url}));
+                setUser({...user, image: {...user.image, url: response.data.display_url, position}});
+                localStorage.setItem("user", JSON.stringify({...user, image: {...user.image, url: response.data.display_url, position}}));
             })
+      } else {
+        const options = {
+          headers: {
+            "Authorization": `Bearer ${isUser}`
+          }
+        }
+        const imageData = {
+          position
+        }
+        await axios.put('/api/users', {email: user.email, image: imageData}, options);
+        setUser({...user, image: {...user.image, position}});
+        localStorage.setItem("user", JSON.stringify({...user, image: {...user.image, position}}));
+      }
     } else {
         await axios.put('/api/users', {email: user.email, image: {}});
+        setUser({...user, image: {}});
+        localStorage.setItem("user", JSON.stringify({...user, image: {}}));
     }
 
     setLoading(false);
