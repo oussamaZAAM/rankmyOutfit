@@ -14,7 +14,7 @@ const Profile = () => {
   //-----------------Router Handling---------------------
   const router = useRouter();
   //---------------------Error Handling---------------------
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
 
   //---------------------User Authentication---------------------
   const [isUser, setIsUser] = useState();
@@ -22,21 +22,28 @@ const Profile = () => {
 
   useEffect(() => {
     const user_token = localStorage.getItem("authentication");
-    setIsUser(user_token);
     const user = JSON.parse(localStorage.getItem("user"));
 
     const fetchUser = async () => {
-      const res = await axios.post('/api/profile', {email: user.email});
-      setUser(res.data);
-      setImage(res.data.image.url);
-      setPosition(res.data.image.position);
-    }
+      await axios
+        .post("/api/profile", { email: user.email })
+        .then((response) => {
+          setIsUser(user_token);
+          setUser(response.data);
+          setImage(response.data.image.url);
+          setPosition(response.data.image.position);
+        })
+        .catch((err) => {
+          localStorage.removeItem("authentication");
+          localStorage.removeItem("user");
+        });
+    };
     fetchUser();
   }, []);
 
   //---------------------Image Treating---------------------
   const [crop, setCrop] = useState({ x: 0, y: 0 });
-  const [position, setPosition] = useState({left: 50, top: 50});
+  const [position, setPosition] = useState({ left: 50, top: 50 });
   const [edit, setEdit] = useState(false);
 
   const onCropComplete = useCallback(
@@ -52,7 +59,7 @@ const Profile = () => {
 
   //---------------------Handle Uploading the Image---------------------
   const [loading, setLoading] = useState(false);
-  const [image, setImage] = useState('');
+  const [image, setImage] = useState("");
   const [profile, setProfile] = useState();
 
   const convertToBase64 = (file) => {
@@ -96,53 +103,83 @@ const Profile = () => {
     e.target.value = "";
   };
 
-  const editProfileImage = async() => {
+  const editProfileImage = async () => {
     setLoading(true);
     if (image && image.length > 0) {
-      if (profile){
-        await axios.post('http://localhost:5000/api/upload', profile)
-            .then(async(response) => {
-                const imageData = {
-                  url: response.data.display_url,
-                  delete: response.data.delete_url,
-                  position
-                }
-                await axios.put('/api/profile', {email: user.email, image: imageData})
-                  .then((response)=> {
-                    setUser({...user, image: {...user.image, url: response.data.display_url, position}});
-                    localStorage.setItem("user", JSON.stringify({...user, image: {...user.image, url: response.data.display_url, position}}));
+      if (profile) {
+        await axios
+          .post("http://localhost:5000/api/upload", profile)
+          .then(async (response) => {
+            const imageData = {
+              url: response.data.display_url,
+              delete: response.data.delete_url,
+              position,
+            };
+            await axios
+              .put("/api/profile", { email: user.email, image: imageData })
+              .then((response) => {
+                setUser({
+                  ...user,
+                  image: {
+                    ...user.image,
+                    url: response.data.display_url,
+                    position,
+                  },
+                });
+                localStorage.setItem(
+                  "user",
+                  JSON.stringify({
+                    ...user,
+                    image: {
+                      ...user.image,
+                      url: response.data.display_url,
+                      position,
+                    },
                   })
-                  .catch(err => {setError(err.response.data.message)});
-                  router.reload();
-            })
+                );
+              })
+              .catch((err) => {
+                setError(err.response.data.message);
+              });
+            router.reload();
+          });
       } else {
         const imageData = {
-          position
-        }
-        await axios.put('/api/profile', {email: user.email, image: imageData})
-          .then((response)=> {
-            setUser({...user, image: {...user.image, position}});
-            localStorage.setItem("user", JSON.stringify({...user, image: {...user.image, position}}));
+          position,
+        };
+        await axios
+          .put("/api/profile", { email: user.email, image: imageData })
+          .then((response) => {
+            setUser({ ...user, image: { ...user.image, position } });
+            localStorage.setItem(
+              "user",
+              JSON.stringify({ ...user, image: { ...user.image, position } })
+            );
             router.reload();
           })
-          .catch(err => {setError(err.response.data.message)});
+          .catch((err) => {
+            setError(err.response.data.message);
+          });
       }
     } else {
-        const imageData = {
-          url: '',
-          delete: '',
-          position: {
-            left: 50,
-            top: 50
-          }
-        }
-        await axios.put('/api/profile', {email: user.email, image: imageData})
-          .then((response)=> {
-            setUser({...user, image: {}});
-            localStorage.setItem("user", JSON.stringify({...user, image: {}}));
-            router.reload();
-          })
-          .catch(err => {setError(err.response.data.message)});
+      const imageData = {
+        url: "",
+        delete: "",
+        position: {
+          left: 50,
+          top: 50,
+        },
+      };
+      await axios
+        .put("/api/profile", { email: user.email, image: imageData })
+        .then((response) => {
+          setUser({ ...user, image: {} });
+          localStorage.setItem("user", JSON.stringify({ ...user, image: {} }));
+          router.reload();
+        })
+        .catch((err) => {
+          setError(err.response.data.message);
+        });
     }
     setLoading(false);
   };
@@ -154,7 +191,12 @@ const Profile = () => {
   return (
     isUser && (
       <div className="flex flex-col justify-center items-center w-full">
-        <div className={"flex flex-col justify-center items-center max-w-sm "+ (error && 'blur-lg')}>
+        <div
+          className={
+            "flex flex-col justify-center items-center max-w-sm " +
+            (error && "blur-lg")
+          }
+        >
           <div className="relative rounded-full mobile:w-72 mobile:h-72 cursor-pointer transition duration-300 group hover:opacity-75">
             {image !== "" ? (
               edit ? (
@@ -198,7 +240,7 @@ const Profile = () => {
                   <label htmlFor="upload">
                     <MdAdd size={30} color="white" />
                     <input
-                      onChange={(e) => error==='' && handleUpload(e)}
+                      onChange={(e) => error === "" && handleUpload(e)}
                       type="file"
                       id="upload"
                       accept="image/*"
@@ -211,7 +253,7 @@ const Profile = () => {
                       <label htmlFor="reupload">
                         <RiImageEditLine size={25} color="white" />
                         <input
-                          onChange={(e) => error==='' && handleUpload(e)}
+                          onChange={(e) => error === "" && handleUpload(e)}
                           type="file"
                           id="reupload"
                           accept="image/*"
@@ -221,13 +263,13 @@ const Profile = () => {
                     )}
                     {!edit ? (
                       <MdOutlineCrop
-                        onClick={() => error==='' && setEdit(true)}
+                        onClick={() => error === "" && setEdit(true)}
                         size={25}
                         color="white"
                       />
                     ) : (
                       <MdDoneOutline
-                        onClick={() => error==='' && setEdit(false)}
+                        onClick={() => error === "" && setEdit(false)}
                         size={25}
                         color="white"
                       />
@@ -235,7 +277,7 @@ const Profile = () => {
 
                     {!edit && (
                       <TiCancel
-                        onClick={() => error==='' && setImage("")}
+                        onClick={() => error === "" && setImage("")}
                         size={25}
                         color="white"
                       />
@@ -244,16 +286,18 @@ const Profile = () => {
                 )}
               </div>
             </div>
-          </div> 
+          </div>
           <div className="flex justify-center items-center my-4">
             <button
               onClick={editProfileImage}
-              className={"h-12 w-44 text-center bg-my-purple rounded-3xl "+((edit || error) ? 'cursor-not-allowed' : 'cursor-pointer')}
+              className={
+                "h-12 w-44 text-center bg-my-purple rounded-3xl " +
+                (edit || error ? "cursor-not-allowed" : "cursor-pointer")
+              }
               disabled={edit || error}
-
             >
               {!loading ? (
-                <p className="font-display text-white text-xl">Edit</p> 
+                <p className="font-display text-white text-xl">Edit</p>
               ) : (
                 <div className="text-center">
                   <div role="status">
@@ -280,15 +324,25 @@ const Profile = () => {
             </button>
           </div>
         </div>
-          {error !== '' && <div className="fixed top-1/3 bg-orange-100 border-l-4 border-orange-500 text-orange-700 p-4" role="alert">
+        {error !== "" && (
+          <div
+            className="fixed top-1/3 bg-orange-100 border-l-4 border-orange-500 text-orange-700 p-4"
+            role="alert"
+          >
             <div className="h-full flex flex-col justify-center">
               <p className="font-bold">{"error"}</p>
               <p>Your token is lost. Please : </p>
             </div>
             <div className="flex justify-center items-center my-4">
-              <button onClick={restoreSession} className="h-8 w-32 font-bold text-center border-2 border-my-purple  hover:bg-my-purple rounded-3xl text-my-purple hover:text-white">Sign in</button>
+              <button
+                onClick={restoreSession}
+                className="h-8 w-32 font-bold text-center border-2 border-my-purple  hover:bg-my-purple rounded-3xl text-my-purple hover:text-white"
+              >
+                Sign in
+              </button>
             </div>
-          </div>}
+          </div>
+        )}
       </div>
     )
   );
@@ -297,10 +351,17 @@ const Profile = () => {
 export default Profile;
 
 export const getServerSideProps = async (context) => {
+  var redirection;
   const session = await getSession(context);
   const isUser = nookies.get(context);
+  const res = await axios
+    .post("http://localhost:3000/api/verify", { token: isUser.authentication })
+    .then((response) => console.log(response.data.message))
+    .catch((err) => {
+      redirection = true;
+    });
 
-  if (!(isUser.authentication && isUser.authentication !== "")) {
+  if (redirection) {
     return {
       redirect: {
         destination: `/signin?from=profile#form`,
