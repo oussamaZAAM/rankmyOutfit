@@ -132,14 +132,14 @@ const Profile = () => {
     isUser && (
       <div className=" flex justify-center items-center w-full">
         <div className="flex flex-col justify-center items-center max-w-sm">
-          <div className="relative rounded-3xl mobile:w-72 mobile:h-96 cursor-pointer transition duration-300 group hover:opacity-75">
+          <div className="relative rounded-full mobile:w-72 mobile:h-72 cursor-pointer transition duration-300 group hover:opacity-75">
             {image !== "" ? (
               edit ? (
                 <Cropper
                   className="w-20"
                   image={image}
                   crop={crop}
-                  aspect={4.5 / 6}
+                  aspect={6 / 6}
                   onCropChange={setCrop}
                   onCropComplete={(croppedArea, croppedAreaPixels) =>
                     onCropComplete(croppedArea, croppedAreaPixels, 1)
@@ -148,7 +148,7 @@ const Profile = () => {
                 />
               ) : (
                 <img
-                  className="block object-cover w-full h-full rounded-3xl bg-gray-500"
+                  className="block object-cover w-full h-full rounded-full bg-gray-500"
                   style={
                     position && {
                       objectPosition: position.left + "% " + position.top + "%",
