@@ -10,6 +10,9 @@ import { RiImageEditLine } from "react-icons/ri";
 import { TiCancel } from "react-icons/ti";
 
 const Profile = () => {
+  //Error Handling
+  const [error, setError] = useState('');
+
   //User Authentication
   const [isUser, setIsUser] = useState();
   const [user, setUser] = useState();
@@ -102,9 +105,12 @@ const Profile = () => {
                   delete: response.data.delete_url,
                   position
                 }
-                await axios.put('/api/users', {email: user.email, image: imageData}, options);
-                setUser({...user, image: {...user.image, url: response.data.display_url, position}});
-                localStorage.setItem("user", JSON.stringify({...user, image: {...user.image, url: response.data.display_url, position}}));
+                await axios.put('/api/users', {email: user.email, image: imageData}, options)
+                  .then((response)=> {
+                    setUser({...user, image: {...user.image, url: response.data.display_url, position}});
+                    localStorage.setItem("user", JSON.stringify({...user, image: {...user.image, url: response.data.display_url, position}}));
+                  })
+                  .catch(err => {setError(err.response.data.message)});
             })
       } else {
         const options = {
@@ -115,14 +121,20 @@ const Profile = () => {
         const imageData = {
           position
         }
-        await axios.put('/api/users', {email: user.email, image: imageData}, options);
-        setUser({...user, image: {...user.image, position}});
-        localStorage.setItem("user", JSON.stringify({...user, image: {...user.image, position}}));
+        await axios.put('/api/users', {email: user.email, image: imageData}, options)
+          .then((response)=> {
+            setUser({...user, image: {...user.image, position}});
+            localStorage.setItem("user", JSON.stringify({...user, image: {...user.image, position}}));
+          })
+          .catch(err => {setError(err.response.data.message)});
       }
     } else {
-        await axios.put('/api/users', {email: user.email, image: {}});
-        setUser({...user, image: {}});
-        localStorage.setItem("user", JSON.stringify({...user, image: {}}));
+        await axios.put('/api/users', {email: user.email, image: {}})
+          .then((response)=> {
+            setUser({...user, image: {}});
+            localStorage.setItem("user", JSON.stringify({...user, image: {}}));
+          })
+          .catch(err => {setError(err.response.data.message)});
     }
 
     setLoading(false);
@@ -253,6 +265,7 @@ const Profile = () => {
                 </div>
               )}
             </button>
+                {error}
           </div>
         </div>
       </div>
