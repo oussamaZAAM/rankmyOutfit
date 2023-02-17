@@ -7,6 +7,6 @@ const nextConfig = {
 // module.exports = nextConfig
 module.exports = {
   images: {
-    domains: ['lh3.googleusercontent.com', 'platform-lookaside.fbsbx.com', 'i.ibb.co'],
+    domains: ['lh3.googleusercontent.com', 'platform-lookaside.fbsbx.com', 'i.ibb.co', 'cdn.myanimelist.net'],
   },
 }

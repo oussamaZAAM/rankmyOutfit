@@ -17,13 +17,17 @@ const Profile = () => {
   const [isUser, setIsUser] = useState();
   const [user, setUser] = useState();
 
-  useEffect(() => {
+  useEffect(async () => {
     const user_token = localStorage.getItem("authentication");
     const user = JSON.parse(localStorage.getItem("user"));
-    setIsUser(user_token);
-    setUser(user);
-    setImage(user.image.url);
-    setPosition(user.image.position);
+    async function fetchUser() {
+      const res = await axios.post('/api/profile', {email: user.email});
+      setIsUser(user_token);
+      setUser(res.data);
+      setImage(res.data.image.url);
+      setPosition(res.data.image.position);
+    }
+    fetchUser();
   }, []);
 
   //Image Treating
@@ -44,7 +48,7 @@ const Profile = () => {
 
   //Handle Uploading the Image
   const [loading, setLoading] = useState(false);
-  const [image, setImage] = useState();
+  const [image, setImage] = useState('');
   const [profile, setProfile] = useState();
 
   const convertToBase64 = (file) => {
@@ -88,24 +92,20 @@ const Profile = () => {
     e.target.value = "";
   };
 
+  console.log(user)
+
   const editProfileImage = async() => {
     setLoading(true);
-
-    if (image.length > 0) {
+    if (image && image.length > 0) {
       if (profile){
         await axios.post('http://localhost:5000/api/upload', profile)
             .then(async(response) => {
-                const options = {
-                  headers: {
-                    "Authorization": `Bearer ${isUser}`
-                  }
-                }
                 const imageData = {
                   url: response.data.display_url,
                   delete: response.data.delete_url,
                   position
                 }
-                await axios.put('/api/users', {email: user.email, image: imageData}, options)
+                await axios.put('/api/profile', {email: user.email, image: imageData})
                   .then((response)=> {
                     setUser({...user, image: {...user.image, url: response.data.display_url, position}});
                     localStorage.setItem("user", JSON.stringify({...user, image: {...user.image, url: response.data.display_url, position}}));
@@ -113,15 +113,10 @@ const Profile = () => {
                   .catch(err => {setError(err.response.data.message)});
             })
       } else {
-        const options = {
-          headers: {
-            "Authorization": `Bearer ${isUser}`
-          }
-        }
         const imageData = {
           position
         }
-        await axios.put('/api/users', {email: user.email, image: imageData}, options)
+        await axios.put('/api/profile', {email: user.email, image: imageData})
           .then((response)=> {
             setUser({...user, image: {...user.image, position}});
             localStorage.setItem("user", JSON.stringify({...user, image: {...user.image, position}}));
@@ -129,7 +124,15 @@ const Profile = () => {
           .catch(err => {setError(err.response.data.message)});
       }
     } else {
-        await axios.put('/api/users', {email: user.email, image: {}})
+        const imageData = {
+          url: '',
+          delete: '',
+          position: {
+            left: 50,
+            top: 50
+          }
+        }
+        await axios.put('/api/profile', {email: user.email, image: imageData})
           .then((response)=> {
             setUser({...user, image: {}});
             localStorage.setItem("user", JSON.stringify({...user, image: {}}));
@@ -265,7 +268,13 @@ const Profile = () => {
                 </div>
               )}
             </button>
-                {error}
+            {error !== '' && <div className="bg-orange-100 border-l-4 border-orange-500 text-orange-700 p-4" role="alert">
+              <p className="font-bold">{error}</p>
+              <p>Something not ideal might be happening.</p>
+              <span className="absolute top-0 bottom-0 right-0 px-4 py-3" onClick={()=>setError('')}>
+                <svg className="fill-current h-6 w-6 text-red-500" role="button" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><title>Close</title><path d="M14.348 14.849a1.2 1.2 0 0 1-1.697 0L10 11.819l-2.651 3.029a1.2 1.2 0 1 1-1.697-1.697l2.758-3.15-2.759-3.152a1.2 1.2 0 1 1 1.697-1.697L10 8.183l2.651-3.031a1.2 1.2 0 1 1 1.697 1.697l-2.758 3.152 2.758 3.15a1.2 1.2 0 0 1 0 1.698z"/></svg>
+              </span>
+            </div>}
           </div>
         </div>
       </div>

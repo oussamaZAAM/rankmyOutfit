@@ -18,11 +18,13 @@ const Nav = () => {
   useEffect(() => {
     const user_token = localStorage.getItem("authentication");
     const user = JSON.parse(localStorage.getItem("user"));
-    setIsUser(user_token);
-    setUser(user);
+    async function fetchUser() {
+        const res = await axios.post('/api/profile', {email: user.email});
+        setIsUser(user_token);
+        setUser(res.data);
+    }
+    user_token && fetchUser();
   }, []);
-
-  console.log(user)
 
   const { data: session, status } = useSession();
 
@@ -112,6 +114,7 @@ const Nav = () => {
                       height={50}
                       width={50}
                       className="w-8 h-8 rounded-full block object-cover w-full h-full rounded-3xl bg-gray-500"
+                      priority={true}
                       src={src}
                       onError={() => setSrc("/images/user.png")}
                       alt="user photo"

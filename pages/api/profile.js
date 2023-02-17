@@ -21,6 +21,22 @@ export default async function Handler(req, res) {
 
             return res.status(200).json({message: 'Image updated successfully'});
         }
+
+        if (req.method === 'POST') {
+            const user = await Users.findOne({email: req.body.email});
+
+            if (!user) return res.status(404).json({message: 'User not found'});
+
+            const requestData = {
+                name: user.name,
+                email: user.email,
+                image: user.image
+            }
+
+            res.status(200).json(requestData);
+        }
+
+
     } catch (e) {
         return res.status(501).json({message: "Invalid Token"});
     }
