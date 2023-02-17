@@ -143,13 +143,17 @@ const Profile = () => {
     }
 
     setLoading(false);
-    router.reload();
+    error==='' && router.reload();
   };
+
+  function restoreSession() {
+    router.reload();
+  }
 
   return (
     isUser && (
-      <div className=" flex justify-center items-center w-full">
-        <div className="flex flex-col justify-center items-center max-w-sm">
+      <div className="flex flex-col justify-center items-center w-full">
+        <div className={"flex flex-col justify-center items-center max-w-sm "+ (error && 'blur-lg')}>
           <div className="relative rounded-full mobile:w-72 mobile:h-72 cursor-pointer transition duration-300 group hover:opacity-75">
             {image !== "" ? (
               edit ? (
@@ -193,7 +197,7 @@ const Profile = () => {
                   <label htmlFor="upload">
                     <MdAdd size={30} color="white" />
                     <input
-                      onChange={(e) => handleUpload(e)}
+                      onChange={(e) => error==='' && handleUpload(e)}
                       type="file"
                       id="upload"
                       accept="image/*"
@@ -206,7 +210,7 @@ const Profile = () => {
                       <label htmlFor="reupload">
                         <RiImageEditLine size={25} color="white" />
                         <input
-                          onChange={(e) => handleUpload(e)}
+                          onChange={(e) => error==='' && handleUpload(e)}
                           type="file"
                           id="reupload"
                           accept="image/*"
@@ -216,13 +220,13 @@ const Profile = () => {
                     )}
                     {!edit ? (
                       <MdOutlineCrop
-                        onClick={() => setEdit(true)}
+                        onClick={() => error==='' && setEdit(true)}
                         size={25}
                         color="white"
                       />
                     ) : (
                       <MdDoneOutline
-                        onClick={() => setEdit(false)}
+                        onClick={() => error==='' && setEdit(false)}
                         size={25}
                         color="white"
                       />
@@ -230,7 +234,7 @@ const Profile = () => {
 
                     {!edit && (
                       <TiCancel
-                        onClick={() => setImage("")}
+                        onClick={() => error==='' && setImage("")}
                         size={25}
                         color="white"
                       />
@@ -243,8 +247,8 @@ const Profile = () => {
           <div className="flex justify-center items-center my-4">
             <button
               onClick={editProfileImage}
-              className={"h-12 w-44 text-center bg-my-purple rounded-3xl "+(edit ? 'cursor-not-allowed' : 'cursor-pointer')}
-              disabled={edit}
+              className={"h-12 w-44 text-center bg-my-purple rounded-3xl "+((edit || error) ? 'cursor-not-allowed' : 'cursor-pointer')}
+              disabled={edit || error}
 
             >
               {!loading ? (
@@ -273,15 +277,17 @@ const Profile = () => {
                 </div>
               )}
             </button>
-            {error !== '' && <div className="bg-orange-100 border-l-4 border-orange-500 text-orange-700 p-4" role="alert">
-              <p className="font-bold">{error}</p>
-              <p>Something not ideal might be happening.</p>
-              <span className="absolute top-0 bottom-0 right-0 px-4 py-3" onClick={()=>setError('')}>
-                <svg className="fill-current h-6 w-6 text-red-500" role="button" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><title>Close</title><path d="M14.348 14.849a1.2 1.2 0 0 1-1.697 0L10 11.819l-2.651 3.029a1.2 1.2 0 1 1-1.697-1.697l2.758-3.15-2.759-3.152a1.2 1.2 0 1 1 1.697-1.697L10 8.183l2.651-3.031a1.2 1.2 0 1 1 1.697 1.697l-2.758 3.152 2.758 3.15a1.2 1.2 0 0 1 0 1.698z"/></svg>
-              </span>
-            </div>}
           </div>
         </div>
+          {error !== '' && <div className="fixed top-1/3 bg-orange-100 border-l-4 border-orange-500 text-orange-700 p-4" role="alert">
+            <div className="h-full flex flex-col justify-center">
+              <p className="font-bold">{"error"}</p>
+              <p>Your token is lost. Please : </p>
+            </div>
+            <div className="flex justify-center items-center my-4">
+              <button onClick={restoreSession} className="h-8 w-32 font-bold text-center border-2 border-my-purple  hover:bg-my-purple rounded-3xl text-my-purple hover:text-white">Sign in</button>
+            </div>
+          </div>}
       </div>
     )
   );
