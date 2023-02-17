@@ -97,7 +97,7 @@ const Signin = ({context}) => {
               alt="Logo"
             />
             <span className="font-display font-black text-4xl text-my-purple">
-              rateMyOutfit
+              rankmyOutfit
             </span>
           </div>
           <div id="form" className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700 my-4">
@@ -196,14 +196,10 @@ const Signin = ({context}) => {
               </div>
               <div className="flex items-center justify-between">
                   <div className={"flex items-center justify-center mobile:w-20 mobile:h-20 rounded-2xl drop-shadow-xl border border-my-pink1 cursor-pointer group "+styles.boxshadow}>
-                      <FcGoogle onClick={()=>signIn("google", {
-                        callbackUrl: `${window.location.origin}/${from}`
-                      })} className="w-12 mobile:w-14 h-12 mobile:h-14 group-hover:animate-wiggle" />
+                      <FcGoogle onClick={()=>signIn("google")} className="w-12 mobile:w-14 h-12 mobile:h-14 group-hover:animate-wiggle" />
                   </div>
                   <div className={"flex items-center justify-center mobile:w-20 mobile:h-20 rounded-2xl drop-shadow-xl border border-my-pink1 cursor-pointer group "+styles.boxshadow}>
-                      <FaFacebook onClick={()=>signIn("facebook", {
-                        callbackUrl: `${window.location.origin}/${from}`
-                      })} color='#1877F2' className="w-12 mobile:w-14 h-12 mobile:h-14 group-hover:animate-wiggle" />
+                      <FaFacebook onClick={()=>signIn("facebook")} color='#1877F2' className="w-12 mobile:w-14 h-12 mobile:h-14 group-hover:animate-wiggle" />
                   </div>
                   <div className={"flex items-center justify-center mobile:w-20 mobile:h-20 rounded-2xl drop-shadow-xl border border-my-pink1 cursor-pointer group "+styles.boxshadow}>
                       <FaTwitter color='#55ACEE' className="w-12 mobile:w-14 h-12 mobile:h-14 group-hover:animate-wiggle" />

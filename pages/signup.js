@@ -98,7 +98,7 @@ const Signup = () => {
               alt="Logo"
             />
             <span className="font-display font-black text-4xl text-my-pink1">
-              rateMyOutfit
+              rankmyOutfit
             </span>
           </div>
           <div
