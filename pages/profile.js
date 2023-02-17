@@ -324,25 +324,23 @@ const Profile = () => {
             </button>
           </div>
         </div>
-        {error !== "" && (
-          <div
-            className="fixed top-1/3 bg-orange-100 border-l-4 border-orange-500 text-orange-700 p-4"
-            role="alert"
-          >
-            <div className="h-full flex flex-col justify-center">
-              <p className="font-bold">{"error"}</p>
-              <p>Your token is lost. Please : </p>
-            </div>
-            <div className="flex justify-center items-center my-4">
-              <button
-                onClick={restoreSession}
-                className="h-8 w-32 font-bold text-center border-2 border-my-purple  hover:bg-my-purple rounded-3xl text-my-purple hover:text-white"
-              >
-                Sign in
-              </button>
-            </div>
+        <div
+          className={"fixed top-1/3 bg-orange-100 border-l-4 border-orange-500 text-orange-700 p-4 transition duration-300  "+(error !== "" ? 'visible scale-150' : 'invisible scale-0')}
+          role="alert"
+        >
+          <div className="h-full flex flex-col justify-center">
+            <p className="font-bold">{"error"}</p>
+            <p>Your token is lost. Please : </p>
           </div>
-        )}
+          <div className="flex justify-center items-center my-4">
+            <button
+              onClick={restoreSession}
+              className="h-8 w-32 font-bold text-center border-2 border-my-purple  hover:bg-my-purple rounded-3xl text-my-purple hover:text-white"
+            >
+              Sign in
+            </button>
+          </div>
+        </div>
       </div>
     )
   );

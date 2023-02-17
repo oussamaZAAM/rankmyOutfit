@@ -6,9 +6,6 @@ export default async function Handler(req, res) {
     if (req.method === 'POST') {
         try {
             const jwt = req.body.token;
-            // const { cookies } = req;
-            // const isJwt = cookies.authentication;
-            // if (!isJwt) return res.status(501).json({message: "Invalid Token"});
             verify(jwt, process.env.JWT_SECRET);
             return res.status(200).json({message: "Valid Token"});
         } catch (e) {
