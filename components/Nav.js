@@ -15,36 +15,63 @@ const Nav = () => {
   const toggleDropdown = () => setIsOpen(!isOpen);
 
   useEffect(() => {
-    try{
+    try {
       const user_token = localStorage.getItem("authentication");
       const fetchToken = async () => {
-          await axios
-            .post("http://localhost:3000/api/verify", { token: user_token.replace(/['"]+/g, '') })
-            .then((response) => console.log(response.data.message))
-            .catch((err) => {
-              throw new Error('No Token');
-            });
-      }
+        await axios
+          .post("http://localhost:3000/api/verify", {
+            token: user_token.replace(/['"]+/g, ""),
+          })
+          .then((response) => console.log(response.data.message))
+          .catch((err) => {
+            const removeUser = async () => {
+              await axios
+                .get("/api/auth/logout")
+                .then(async (response) => {
+                  localStorage.removeItem("user");
+                  localStorage.removeItem("authentication");
+                  setIsUser(false);
+                })
+                .catch((error) => {
+                  alert(error);
+                });
+            };
+            removeUser();
+          });
+      };
       if (user_token) {
-        fetchToken()
-     } else {
-        throw new Error('No Token');
+        fetchToken();
+      } else {
+        throw new Error("No Token");
       }
       const user = JSON.parse(localStorage.getItem("user"));
       const fetchUser = async () => {
-          await axios.post('/api/profile', {email: user.email})
-            .then(response => {
-              setIsUser(user_token);
-              setUser(response.data);
-            })
-            .catch((err) => {
-              throw new Error('No User');
-            });
-      }
-     if (user) {
-        fetchUser()
-     } else {
-        throw new Error('No User');
+        await axios
+          .post("/api/profile", { email: user.email })
+          .then((response) => {
+            setIsUser(user_token);
+            setUser(response.data);
+          })
+          .catch((err) => {
+            const removeUser = async () => {
+              await axios
+                .get("/api/auth/logout")
+                .then(async (response) => {
+                  localStorage.removeItem("user");
+                  localStorage.removeItem("authentication");
+                  setIsUser(false);
+                })
+                .catch((error) => {
+                  alert(error);
+                });
+            };
+            removeUser();
+          });
+      };
+      if (user) {
+        fetchUser();
+      } else {
+        throw new Error("No User");
       }
     } catch (err) {
       const removeUser = async () => {
@@ -58,7 +85,7 @@ const Nav = () => {
           .catch((error) => {
             alert(error);
           });
-      }
+      };
       removeUser();
     }
   }, [router.asPath]);
@@ -158,7 +185,11 @@ const Nav = () => {
                       alt="user photo"
                       style={
                         user.image.position && {
-                          objectPosition: user.image.position.left + "% " + user.image.position.top + "%",
+                          objectPosition:
+                            user.image.position.left +
+                            "% " +
+                            user.image.position.top +
+                            "%",
                         }
                       }
                     />
@@ -286,12 +317,11 @@ const Nav = () => {
 export default Nav;
 
 export const getServerSideProps = async (context) => {
-
   const session = await getSession(context);
 
   return {
     props: {
-      session
+      session,
     },
   };
 };
