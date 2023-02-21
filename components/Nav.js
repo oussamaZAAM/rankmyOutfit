@@ -12,6 +12,9 @@ const Nav = () => {
   const [isUser, setIsUser] = useState();
   const [user, setUser] = useState();
   const [isOpen, setIsOpen] = useState(false);
+  const [isElementHovered, setIsElementHovered] = useState(false);
+  const [isLogoHovered, setIsLogoHovered] = useState(false);
+  
   const toggleDropdown = () => setIsOpen(!isOpen);
 
   useEffect(() => {
@@ -83,7 +86,6 @@ const Nav = () => {
             localStorage.removeItem("user");
             localStorage.removeItem("authentication");
             setIsUser(false);
-            router.push('/signin')
           })
           .catch((error) => {
             alert(error);
@@ -174,7 +176,9 @@ const Nav = () => {
                 <div className="relative z-50">
                   <button
                     onClick={toggleDropdown}
-                    className="flex mx-3 text-sm bg-gray-800 rounded-full md:mr-0 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
+                    onMouseEnter={() => setIsLogoHovered(true)}
+                    onMouseLeave={() => setIsLogoHovered(false)}
+                    className="px-1 py-1 flex mx-3 text-sm b-gray-800 rounded-full md:mr-0 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
                     type="button"
                   >
                     <span className="sr-only">Open user menu</span>
@@ -198,9 +202,14 @@ const Nav = () => {
                     />
                   </button>
                   <div
+                    onMouseEnter={() => setIsElementHovered(true)}
+                    onMouseLeave={() => {
+                      setIsElementHovered(false)
+                      setIsOpen(false);
+                    }}
                     className={
                       "z-10 bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600 " +
-                      (isOpen ? "" : "hidden")
+                      ((isOpen && (isLogoHovered || isElementHovered)) ? "" : "hidden")
                     }
                   >
                     <div className="px-4 py-3 text-sm text-gray-900 dark:text-white">
