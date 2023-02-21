@@ -26,8 +26,6 @@ export default async function Handler(req, res) {
         if (req.method === 'POST') {
             const user = await Users.findOne({email: req.body.email});
 
-            console.log(user)
-
             if (!user._id) {
                 const serialised = serialize("authentication", null, {
                     httpOnly: true,

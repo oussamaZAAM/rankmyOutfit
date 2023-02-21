@@ -541,21 +541,46 @@ const newOutfit = () => {
 
 export default newOutfit;
 
+// export const getServerSideProps = async (context) => {
+//   const session = await getSession(context);
+//   const isUser = nookies.get(context);
+
+//   if (!(session || (isUser.authentication && isUser.authentication!==""))) {
+//       return {
+//           redirect: {
+//               destination: `/signin?from=new-outfit#form`
+//           }
+//       }
+//   }
+
+//   return {
+//       props: {
+//           session
+//       }
+//   }
+// }
 export const getServerSideProps = async (context) => {
+  var redirection;
   const session = await getSession(context);
   const isUser = nookies.get(context);
+  await axios
+    .post("http://localhost:3000/api/verify", { token: isUser.authentication })
+    .then((response) => console.log(response.data.message))
+    .catch((err) => {
+      redirection = true;
+    }); 
 
-  if (!(session || (isUser.authentication && isUser.authentication!==""))) {
-      return {
-          redirect: {
-              destination: `/signin?from=new-outfit#form`
-          }
-      }
+  if ((!session) && redirection) {
+    return {
+      redirect: {
+        destination: `/signin?from=new-outfit#form`,
+      },
+    };
   }
 
   return {
-      props: {
-          session
-      }
-  }
-}
+    props: {
+      session,
+    },
+  };
+};

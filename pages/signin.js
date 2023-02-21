@@ -216,13 +216,21 @@ const Signin = ({context}) => {
 export default Signin;
 
 export const getServerSideProps = async (context) => {
+  var redirection;
   const session = await getSession(context);
   const isUser = nookies.get(context);
+
+  await axios
+    .post("http://localhost:3000/api/verify", { token: isUser.authentication })
+    .then((response) => {
+      redirection = true;
+    })
+    .catch((err) => console.log(err.data));
 
   const url = context.req.headers.referer;
   const query = (url && url.split('?from=')[1]);
 
-  if (session || (isUser.authentication && isUser.authentication!=="")) {
+  if (session || redirection) {
       return {
           redirect: {
               destination: (query ? `/${query}` : '/outfits')

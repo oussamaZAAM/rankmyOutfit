@@ -15,21 +15,53 @@ const Nav = () => {
   const toggleDropdown = () => setIsOpen(!isOpen);
 
   useEffect(() => {
-    const user_token = localStorage.getItem("authentication");
-    const user = JSON.parse(localStorage.getItem("user"));
-    const fetchUser = async () => {
-        await axios.post('/api/profile', {email: user.email})
-          .then(response => {
-            setIsUser(user_token);
-            setUser(response.data);
+    try{
+      const user_token = localStorage.getItem("authentication");
+      const fetchToken = async () => {
+          await axios
+            .post("http://localhost:3000/api/verify", { token: user_token.replace(/['"]+/g, '') })
+            .then((response) => console.log(response.data.message))
+            .catch((err) => {
+              throw new Error('No Token');
+            });
+      }
+      if (user_token) {
+        fetchToken()
+     } else {
+        throw new Error('No Token');
+      }
+      const user = JSON.parse(localStorage.getItem("user"));
+      const fetchUser = async () => {
+          await axios.post('/api/profile', {email: user.email})
+            .then(response => {
+              setIsUser(user_token);
+              setUser(response.data);
+            })
+            .catch((err) => {
+              throw new Error('No User');
+            });
+      }
+     if (user) {
+        fetchUser()
+     } else {
+        throw new Error('No User');
+      }
+    } catch (err) {
+      const removeUser = async () => {
+        await axios
+          .get("/api/auth/logout")
+          .then(async (response) => {
+            localStorage.removeItem("user");
+            localStorage.removeItem("authentication");
+            setIsUser(false);
           })
-          .catch((err) => {
-            localStorage.removeItem('authentication');
-            localStorage.removeItem('user');
+          .catch((error) => {
+            alert(error);
           });
+      }
+      removeUser();
     }
-   user_token && fetchUser();
-  }, []);
+  }, [router.asPath]);
 
   const { data: session, status } = useSession();
 
@@ -43,6 +75,7 @@ const Nav = () => {
         .get("/api/auth/logout")
         .then(async (response) => {
           localStorage.removeItem("authentication");
+          localStorage.removeItem("user");
           router.reload();
         })
         .catch((error) => {

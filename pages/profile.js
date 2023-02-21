@@ -357,7 +357,7 @@ export const getServerSideProps = async (context) => {
     .then((response) => console.log(response.data.message))
     .catch((err) => {
       redirection = true;
-    });
+    }); 
 
   if (redirection) {
     return {
