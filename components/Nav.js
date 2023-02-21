@@ -31,6 +31,7 @@ const Nav = () => {
                   localStorage.removeItem("user");
                   localStorage.removeItem("authentication");
                   setIsUser(false);
+                  router.push('/signin')
                 })
                 .catch((error) => {
                   alert(error);
@@ -60,6 +61,7 @@ const Nav = () => {
                   localStorage.removeItem("user");
                   localStorage.removeItem("authentication");
                   setIsUser(false);
+                  router.push('/signin')
                 })
                 .catch((error) => {
                   alert(error);
@@ -81,6 +83,7 @@ const Nav = () => {
             localStorage.removeItem("user");
             localStorage.removeItem("authentication");
             setIsUser(false);
+            router.push('/signin')
           })
           .catch((error) => {
             alert(error);
