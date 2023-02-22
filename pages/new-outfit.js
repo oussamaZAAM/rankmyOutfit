@@ -163,6 +163,12 @@ const newOutfit = () => {
     setOutfitState('posted')
   }
 
+  const router = useRouter();
+
+  useEffect(() => {
+    if (outfitState === 'posted') router.push('/outfits');
+  }, [outfitState])
+
   return (
     <>
       <Head>
