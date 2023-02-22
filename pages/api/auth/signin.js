@@ -1,7 +1,7 @@
 import { compare } from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { serialize } from "cookie";
-import Users from "@/model/Schema";
+import Users from "@/model/UserSchema";
 import connectMongo from "@/database/connection";
 
 export default async function signin(req, res) {
