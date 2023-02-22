@@ -146,7 +146,6 @@ const newOutfit = () => {
   }
 
   const addOutfit = () => {
-    console.log(savedImages)
     const sendOutfit = async() => {
       const toSentData = {
         image: savedImages,
@@ -163,8 +162,6 @@ const newOutfit = () => {
     setLoading(false);
     setOutfitState('posted')
   }
-
-  // console.log(outfitState)
 
   return (
     <>
@@ -546,7 +543,7 @@ const newOutfit = () => {
               </div>
 
               <div className="flex justify-center items-center my-4">
-                <button onClick={(outfitState === 'none') ? uploadOutfit : ((outfitState === 'uploaded') ? addOutfit : alert('Already Posted'))} className={"h-12 w-44 text-center rounded-3xl "+(outfitState === 'posted' ? 'bg-green-500' : 'bg-my-purple')}>
+                <button onClick={(outfitState === 'none') ? uploadOutfit : ((outfitState === 'uploaded') ? addOutfit : void(0))} className={"h-12 w-44 text-center rounded-3xl "+(outfitState === 'posted' ? 'bg-green-500 cursor-not-allowed' : 'bg-my-purple')}>
                   {!(loading || upLoading)
                   ? <p className="font-display text-white text-xl">{(outfitState === 'none') ? 'Upload' : ((outfitState === 'uploaded') ? 'Add' : 'Added')}</p>
                   : 
