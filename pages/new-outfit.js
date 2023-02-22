@@ -109,40 +109,41 @@ const newOutfit = () => {
     const filteredImages = images.filter((image) => image.local && image.formData && image.position);
     if (filteredImages.length === 0) {
       alert('Please import at least one image')
-    }
-    filteredImages.forEach((image) => {
-      if (image.crop){
-        setImages(prevList => {
-          const newList = [...prevList]
-          const index = prevList.indexOf(image)
-          newList[index] = {...newList[index], error: true}
-          return newList;
-        })
-      }
-    })
-    if (filteredImages.every((image) => image.error === false)){
-      filteredImages.forEach(async (image, index) => {
-        //Upload to IMGBB
-        setUpLoading(true);
-        await axios.post('http://localhost:5000/api/upload', image.formData)
-          .then((response) => {
-            setSavedImages((prevList) => {
-              const newList = prevList;
-              newList.push({
-                url: response.data.url,
-                delete: response.data.delete_url,
-                position: image.position
-              });
-              return newList;
-            });
+      } else {
+      filteredImages.forEach((image) => {
+        if (image.crop){
+          setImages(prevList => {
+            const newList = [...prevList]
+            const index = prevList.indexOf(image)
+            newList[index] = {...newList[index], error: true}
+            return newList;
           })
-          .catch((error) => alert(error.message))
-        setUpLoading(false);
+        }
       })
-    } else {
-      alert('Please crop your images!')
+      if (filteredImages.every((image) => image.error === false)){
+        filteredImages.forEach(async (image, index) => {
+          //Upload to IMGBB
+          setUpLoading(true);
+          await axios.post('http://localhost:5000/api/upload', image.formData)
+            .then((response) => {
+              setSavedImages((prevList) => {
+                const newList = prevList;
+                newList.push({
+                  url: response.data.url,
+                  delete: response.data.delete_url,
+                  position: image.position
+                });
+                return newList;
+              });
+            })
+            .catch((error) => alert(error.message))
+          setUpLoading(false);
+        })
+      } else {
+        alert('Please crop your images!')
+      }
+      setOutfitState('uploaded')
     }
-    setOutfitState('uploaded')
   }
 
   const addOutfit = () => {
@@ -160,7 +161,8 @@ const newOutfit = () => {
     setLoading(true);
     sendOutfit();
     setLoading(false);
-    setOutfitState('posted')
+    setOutfitState('posted');
+    setSavedImages([]);
   }
 
   const router = useRouter();
@@ -549,7 +551,7 @@ const newOutfit = () => {
               </div>
 
               <div className="flex justify-center items-center my-4">
-                <button onClick={(outfitState === 'none') ? uploadOutfit : ((outfitState === 'uploaded') ? addOutfit : void(0))} className={"h-12 w-44 text-center rounded-3xl "+(outfitState === 'posted' ? 'bg-green-500 cursor-not-allowed' : 'bg-my-purple')}>
+                <button onClick={(outfitState === 'none') ? uploadOutfit : ((outfitState === 'uploaded') ? addOutfit : void(0))} className={"h-12 w-44 text-center rounded-3xl "+(outfitState === 'posted' ? 'bg-green-500 cursor-not-allowed ' : 'bg-my-purple ') + (outfitState === 'none' && 'bg-my-pink1')}>
                   {!(loading || upLoading)
                   ? <p className="font-display text-white text-xl">{(outfitState === 'none') ? 'Upload' : ((outfitState === 'uploaded') ? 'Add' : 'Added')}</p>
                   : 
