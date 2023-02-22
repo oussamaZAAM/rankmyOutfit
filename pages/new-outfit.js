@@ -13,6 +13,7 @@ import { RiImageEditLine } from "react-icons/ri";
 import { TiCancel } from "react-icons/ti";
 
 import styles from "../styles/Home.module.css";
+import { useRouter } from "next/router";
 
 const newOutfit = () => {
   const [loading, setLoading] = useState(false)
@@ -20,12 +21,11 @@ const newOutfit = () => {
 
   const [images, setImages] = useState([{}, {}, {}, {}]);
   const [crop, setCrop] = useState({ x: 0, y: 0 })
-  
   const [savedImages, setSavedImages] = useState([]);
   
   const [isUser, setIsUser] = useState();
 
-  const [sendingFlag, setSendingFlag] = useState(false);
+  const [outfitState, setOutfitState] = useState('none');
 
   useEffect(() => {
     const user_token = localStorage.getItem("authentication");
@@ -105,7 +105,7 @@ const newOutfit = () => {
     })
   }
 
-  const addOutfit = async () => {
+  const uploadOutfit = async () => {
     const filteredImages = images.filter((image) => image.local && image.formData && image.position);
     if (filteredImages.length === 0) {
       alert('Please import at least one image')
@@ -123,7 +123,6 @@ const newOutfit = () => {
     if (filteredImages.every((image) => image.error === false)){
       filteredImages.forEach(async (image, index) => {
         //Upload to IMGBB
-        console.log(filteredImages.length === index + 1)
         setUpLoading(true);
         await axios.post('http://localhost:5000/api/upload', image.formData)
           .then((response) => {
@@ -136,7 +135,6 @@ const newOutfit = () => {
               });
               return newList;
             });
-            (filteredImages.length === index + 1) && setSendingFlag(true);
           })
           .catch((error) => alert(error.message))
         setUpLoading(false);
@@ -144,11 +142,11 @@ const newOutfit = () => {
     } else {
       alert('Please crop your images!')
     }
-    setSavedImages([]);
+    setOutfitState('uploaded')
   }
 
-  useEffect(() => {
-    // Send to backend
+  const addOutfit = () => {
+    console.log(savedImages)
     const sendOutfit = async() => {
       const toSentData = {
         image: savedImages,
@@ -161,9 +159,12 @@ const newOutfit = () => {
       });
     }
     setLoading(true);
-    sendingFlag && sendOutfit();
+    sendOutfit();
     setLoading(false);
-  }, [sendingFlag]);
+    setOutfitState('posted')
+  }
+
+  // console.log(outfitState)
 
   return (
     <>
@@ -545,9 +546,9 @@ const newOutfit = () => {
               </div>
 
               <div className="flex justify-center items-center my-4">
-                <button onClick={addOutfit} className="h-12 w-44 text-center bg-my-purple rounded-3xl">
+                <button onClick={(outfitState === 'none') ? uploadOutfit : ((outfitState === 'uploaded') ? addOutfit : alert('Already Posted'))} className={"h-12 w-44 text-center rounded-3xl "+(outfitState === 'posted' ? 'bg-green-500' : 'bg-my-purple')}>
                   {!(loading || upLoading)
-                  ? <p className="font-display text-white text-xl">Add</p>
+                  ? <p className="font-display text-white text-xl">{(outfitState === 'none') ? 'Upload' : ((outfitState === 'uploaded') ? 'Add' : 'Added')}</p>
                   : 
                   <div className="text-center">
                       <div className="flex justify-center items-center" role="status">
