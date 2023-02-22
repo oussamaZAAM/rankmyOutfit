@@ -21,9 +21,11 @@ const newOutfit = () => {
   const [images, setImages] = useState([{}, {}, {}, {}]);
   const [crop, setCrop] = useState({ x: 0, y: 0 })
   
-  const [savedImages, setSavedImages] = useState();
+  const [savedImages, setSavedImages] = useState([]);
   
   const [isUser, setIsUser] = useState();
+
+  const [sendingFlag, setSendingFlag] = useState(false);
 
   useEffect(() => {
     const user_token = localStorage.getItem("authentication");
@@ -119,44 +121,49 @@ const newOutfit = () => {
       }
     })
     if (filteredImages.every((image) => image.error === false)){
-      filteredImages.forEach(async (image) => {
+      filteredImages.forEach(async (image, index) => {
+        //Upload to IMGBB
+        console.log(filteredImages.length === index + 1)
         setUpLoading(true);
         await axios.post('http://localhost:5000/api/upload', image.formData)
           .then((response) => {
-            const toSentImages = filteredImages.map((image) => {
-              return {
+            setSavedImages((prevList) => {
+              const newList = prevList;
+              newList.push({
                 url: response.data.url,
                 delete: response.data.delete_url,
                 position: image.position
-              }
-            })
-            setSavedImages(toSentImages)
-            const sendOutfit = async() => {
-              const toSentData = {
-                image: toSentImages,
-                token: isUser.replace('"', '')
-              }
-              await axios.post('/api/outfits', JSON.stringify(toSentData), {
-                headers: {
-                  'Content-Type': 'application/json'
-                }
               });
-            }
-            setLoading(true)
-            sendOutfit();
-            setLoading(false)
-
+              return newList;
+            });
+            (filteredImages.length === index + 1) && setSendingFlag(true);
           })
           .catch((error) => alert(error.message))
         setUpLoading(false);
-        })
+      })
     } else {
       alert('Please crop your images!')
     }
+    setSavedImages([]);
   }
 
-  console.log(savedImages);
-
+  useEffect(() => {
+    // Send to backend
+    const sendOutfit = async() => {
+      const toSentData = {
+        image: savedImages,
+        token: isUser.replace('"', '')
+      }
+      await axios.post('/api/outfits', JSON.stringify(toSentData), {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+    }
+    setLoading(true);
+    sendingFlag && sendOutfit();
+    setLoading(false);
+  }, [sendingFlag]);
 
   return (
     <>

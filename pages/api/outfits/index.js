@@ -17,6 +17,7 @@ export default async function Handler(req, res) {
             var decoded = jwt_decode(jwt);
             verify(jwt, process.env.JWT_SECRET);
             const {image} = req.body;
+            console.log(image)
             if (image.length < 1) return res.status(404).json({message: 'Empty data sent to the server'})
             const post = {
                 author: decoded.email,
@@ -30,7 +31,7 @@ export default async function Handler(req, res) {
                 
                 await Users.updateOne(
                     {email: decoded.email},
-                    { $push: {"outfits": data._id.toString()}}
+                    { $push: {"outfits": data._id}}
                 )
                 return res.status(201).json({status: true, outfit: data});
             })
