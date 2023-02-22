@@ -1,5 +1,5 @@
 import connectMongo from "@/database/connection";
-import Users from "@/model/Schema";
+import Users from "@/model/UserSchema";
 import { hash } from "bcryptjs";
 
 export default async function Handler(req, res) {
@@ -26,8 +26,10 @@ export default async function Handler(req, res) {
       }
     }
 
+    const outfits = [];
+
     //Store Data after Hashing the password
-    Users.create({name, email, password: await hash(password, parseInt(process.env.SALT)), image}, function(error, data) {
+    Users.create({name, email, password: await hash(password, parseInt(process.env.SALT)), image, outfits}, function(error, data) {
         if (error) return res.status(404).json({error});
         res.status(201).json({status: true, user: data});
     })

@@ -1,4 +1,4 @@
-import Users from "@/model/Schema";
+import Users from "@/model/UserSchema";
 import { serialize } from "cookie";
 import { verify } from "jsonwebtoken";
 
