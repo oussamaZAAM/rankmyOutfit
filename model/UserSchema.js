@@ -12,6 +12,7 @@ const userSchema = new Schema({
             top: Number
         }
     },
+    outfits: Array,
         
 }, { typeKey: '$type' })
 
