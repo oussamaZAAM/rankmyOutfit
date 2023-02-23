@@ -106,6 +106,7 @@ const newOutfit = () => {
   }
 
   const uploadOutfit = async () => {
+    // Run conditions on the images
     const filteredImages = images.filter((image) => image.local && image.formData && image.position);
     if (filteredImages.length === 0) {
       alert('Please import at least one image')
@@ -121,48 +122,46 @@ const newOutfit = () => {
         }
       })
       if (filteredImages.every((image) => image.error === false)){
-        filteredImages.forEach(async (image, index) => {
-          //Upload to IMGBB
-          setUpLoading(true);
-          await axios.post('http://localhost:5000/api/upload', image.formData)
-            .then((response) => {
-              setSavedImages((prevList) => {
-                const newList = prevList;
-                newList.push({
-                  url: response.data.url,
-                  delete: response.data.delete_url,
-                  position: image.position
-                });
-                return newList;
-              });
-            })
-            .catch((error) => alert(error.message))
-          setUpLoading(false);
-        })
+          for (let i=0; i<filteredImages.length; i++) {
+              // Upload to IMGBB
+              setUpLoading(true);
+              await axios.post('http://localhost:5000/api/upload', filteredImages[i].formData)
+                .then((response) => {
+                  setSavedImages((prevList) => {
+                    const newList = prevList;
+                    newList.push({
+                      url: response.data.url,
+                      delete: response.data.delete_url,
+                      position: filteredImages[i].position
+                    });
+                    return newList;
+                  });
+                })
+                .catch((error) => alert(error.message))
+              setUpLoading(false);
+          }
       } else {
         alert('Please crop your images!')
       }
-      setOutfitState('uploaded')
-    }
-  }
-
-  const addOutfit = () => {
-    const sendOutfit = async() => {
-      const toSentData = {
-        image: savedImages,
-        token: isUser.replace('"', '')
+      // Upload the images' URLs to the DB
+      console.log(savedImages)
+      const sendOutfit = async() => {
+          const toSentData = {
+            image: savedImages,
+            token: isUser.replace('"', '')
+          }
+          await axios.post('/api/outfits', JSON.stringify(toSentData), {
+            headers: {
+              'Content-Type': 'application/json'
+            }
+          });
       }
-      await axios.post('/api/outfits', JSON.stringify(toSentData), {
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      });
+      setLoading(true);
+      sendOutfit();
+      setLoading(false);
+      setSavedImages([]);
+      setOutfitState('posted')
     }
-    setLoading(true);
-    sendOutfit();
-    setLoading(false);
-    setOutfitState('posted');
-    setSavedImages([]);
   }
 
   const router = useRouter();
@@ -198,7 +197,7 @@ const newOutfit = () => {
 
               <div className="grid grid-cols-1 md:grid-cols-2 justify-items-center gap-4">
                 {/* Image 1  */}
-                <div className={"relative mobile:w-72 mobile:h-96 cursor-pointer transition duration-300 group hover:opacity-75 flex justify-center items-center " + (images[0].error && 'border-red-500 border-4')}>
+                <div className={"relative w-56 mobile:w-72 h-72 mobile:h-96 cursor-pointer transition duration-300 group hover:opacity-75 flex justify-center items-center " + (images[0].error && 'border-red-500 border-4')}>
                   {images[0].local 
                   ? (
                     images[0].crop
@@ -219,16 +218,17 @@ const newOutfit = () => {
                       />
                   ) : (
                     <div className="block object-cover w-full h-full rounded-3xl bg-gray-500">
-                      <div className="absolute inset-y-2/4 w-full h-6 bg-black scale-x-100 group-hover:scale-x-[0.25] transition duration-100">
-                        {/* <div className="flex justify-center items-center h-full w-full"> */}
+                      <div className="absolute inset-y-2/4 w-full h-6 bg-black scale-x-0 lg:scale-x-100 group-hover:scale-x-[0.25] transition duration-100">
                         <p className="font-title font-bold text-white text-base text-center">
-                          Empty
+                          
                         </p>
-                        {/* </div> */}
                       </div>
                     </div>
                   )}
-                  <div className="absolute inset-y-2/4 w-full h-6 bg-black scale-x-0 group-hover:scale-x-100 transition duration-200">
+                  <div className="
+                                  absolute inset-y-2/4 w-full h-6 bg-black 
+                                  scale-x-0 group-hover:scale-x-100 transition duration-200"
+                  >
                     <div className="flex justify-center items-center h-full w-full">
                       {!images[0].local ? (
                         <label htmlFor="upload0">
@@ -286,7 +286,7 @@ const newOutfit = () => {
                 </div>
 
                 {/* Image 2 */}
-                <div className="relative rounded-3xl mobile:w-72 mobile:h-96 cursor-pointer transition duration-300 group hover:opacity-75">
+                <div className="relative rounded-3xl w-56 mobile:w-72 h-72 mobile:h-96 cursor-pointer transition duration-300 group hover:opacity-75">
                   {images[1].local 
                   ? (
                     images[1].crop
@@ -374,7 +374,7 @@ const newOutfit = () => {
                 </div>
 
                 {/* Image 3 */}
-                <div className="relative rounded-3xl mobile:w-72 mobile:h-96 cursor-pointer transition duration-300 group hover:opacity-75">
+                <div className="relative rounded-3xl w-56 mobile:w-72 h-72 mobile:h-96 cursor-pointer transition duration-300 group hover:opacity-75">
                   {images[2].local 
                   ? (
                     images[2].crop
@@ -462,7 +462,7 @@ const newOutfit = () => {
                 </div>
 
                 {/* Image 4 */}
-                <div className="relative rounded-3xl mobile:w-72 mobile:h-96 cursor-pointer transition duration-300 group hover:opacity-75">
+                <div className="relative rounded-3xl w-56 mobile:w-72 h-72 mobile:h-96 cursor-pointer transition duration-300 group hover:opacity-75">
                   {images[3].local 
                   ? (
                     images[3].crop
@@ -551,7 +551,8 @@ const newOutfit = () => {
               </div>
 
               <div className="flex justify-center items-center my-4">
-                <button onClick={(outfitState === 'none') ? uploadOutfit : ((outfitState === 'uploaded') ? addOutfit : void(0))} className={"h-12 w-44 text-center rounded-3xl "+(outfitState === 'posted' ? 'bg-green-500 cursor-not-allowed ' : 'bg-my-purple ') + (outfitState === 'none' && 'bg-my-pink1')}>
+                <button onClick={(outfitState === 'none') ? uploadOutfit : void(0)} className={"h-12 w-44 text-center rounded-3xl "+(outfitState === 'posted' ? 'bg-green-500 cursor-not-allowed ' : 'bg-my-purple ')}>
+                {/* <button onClick={uploadOutfit} className={"h-12 w-44 text-center rounded-3xl"}> */}
                   {!(loading || upLoading)
                   ? <p className="font-display text-white text-xl">{(outfitState === 'none') ? 'Upload' : ((outfitState === 'uploaded') ? 'Add' : 'Added')}</p>
                   : 
