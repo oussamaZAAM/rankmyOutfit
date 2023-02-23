@@ -1,6 +1,6 @@
 import Head from "next/head";
 import { useState } from "react";
-import { MdOutlineAddCircle, MdOutlineArrowDropDown } from "react-icons/md";
+import { MdOutlineAddCircle, MdOutlineArrowDropDown, MdRateReview } from "react-icons/md";
 import { HiOutlineStar, HiStar } from "react-icons/hi";
 import styles from "../styles/Home.module.css";
 import server from "../config";
@@ -8,6 +8,7 @@ import Link from "next/link";
 import badge from "../public/images/badge.png";
 
 const outfits = ({ outfitsData }) => {
+  const [rate, setRate] = useState(false);
   const [sort, setSort] = useState({
     state: false,
     type: "recent",
@@ -77,10 +78,10 @@ const outfits = ({ outfitsData }) => {
           <div
             key={image._id}
             onClick={() => editOutfitsRate(outfitIndex, imageIndex, mockUser)}
-            className="relative rounded-3xl mobile:w-72 mobile:h-96 cursor-pointer transition duration-300 hover:opacity-75"
+            className="relative rounded-3xl w-64 h-80 mobile:w-72 mobile:h-96 cursor-pointer transition duration-300 hover:opacity-75"
           >
             <img
-              className="block object-cover w-full h-full object-cover rounded-3xl"
+              className="block object-cover w-full h-full rounded-3xl"
               src={image.url}
               style={image.position && {
                 objectPosition: (image.position.left)+'% '+ (image.position.top)+'%',
@@ -142,7 +143,7 @@ const outfits = ({ outfitsData }) => {
             styles.boxshadow
           }
         >
-          <h3 className="font-title font-bold text-4xl drop-shadow-lg text-black    my-4">
+          <h3 className="font-title font-bold text-4xl drop-shadow-lg text-black my-4">
             Rate this
           </h3>
           <h3 className="font-title font-bold text-4xl drop-shadow-lg text-my-pink2 mb-4">
@@ -150,14 +151,20 @@ const outfits = ({ outfitsData }) => {
           </h3>
           <div className="flex justify-center items-center">
             <div
-              className="relative rounded-3xl w-full h-full cursor-pointer group"
+              className="relative rounded-3xl w-64 h-80 mobile:w-72 mobile:h-96 cursor-pointer group"
             >
               <img
                 className="block object-cover w-full h-full rounded-3xl group-hover:opacity-75 transition duration-300"
                 src={outfit.image[0].url}
+                style={outfit.image[0].position && {
+                  objectPosition: (outfit.image[0].position.left)+'% '+ (outfit.image[0].position.top)+'%',
+                }}
                 alt=""
               />
-              <div className="absolute inset-y-2/4 w-full opacity-0 group-hover:opacity-100 transition duration-300">
+              <div className="absolute justify-center items-center lg:hidden top-0 right-0 m-1 p-0.5 bg-gray-100 rounded-full">
+                  <HiStar onClick={()=>setRate(prev=>!prev)} size={25} className='fill-my-pink1' />
+              </div>
+              <div className={"absolute inset-y-2/4 w-full lg:opacity-0 lg:group-hover:opacity-100 transition duration-300 "+(rate ? 'opacity-100' : 'opacity-0')}>
                 <div className="flex justify-center items-center">
                   <HiOutlineStar
                     onClick={() => setOutfitRating(outfitIndex, 1, mockUser)}
