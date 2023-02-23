@@ -164,7 +164,7 @@ const newOutfit = () => {
         alert('Please crop your images!')
       }
     }
-  }
+  } 
 
   const router = useRouter();
 
