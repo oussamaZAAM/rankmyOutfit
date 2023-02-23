@@ -24,7 +24,7 @@ const newOutfit = () => {
 
   
   const initImage = {x: 0, y: 0};
-  const [crops, setCrops] = useState([initImage, {}, {}, {}]);
+  const [crops, setCrops] = useState([initImage, initImage, initImage, initImage]);
   const [images, setImages] = useState([{}, {}, {}, {}]);
   const [savedImages, setSavedImages] = useState([]);
 
@@ -130,36 +130,63 @@ const newOutfit = () => {
               setUpLoading(true);
               await axios.post('http://localhost:5000/api/upload', filteredImages[i].formData)
                 .then((response) => {
-                  setSavedImages((prevList) => {
-                    const newList = prevList;
-                    newList.push({
+                  if (filteredImages.length > 1) {
+                    setSavedImages((prevList) => {
+                      const newList = prevList;
+                      newList.push({
+                        url: response.data.url,
+                        delete: response.data.delete_url,
+                        position: filteredImages[i].position
+                      });
+                      return newList;
+                    });
+                  } else {
+                    // Upload the images' URLs to the DB
+                    const data = [{
                       url: response.data.url,
                       delete: response.data.delete_url,
                       position: filteredImages[i].position
-                    });
-                    return newList;
-                  });
+                    }]
+                    const sendOutfit = async () => {
+                        const toSentData = {
+                          image: data,
+                          token: isUser.replace('"', ""),
+                        };
+                        await axios.post("/api/outfits", JSON.stringify(toSentData), {
+                          headers: {
+                            "Content-Type": "application/json",
+                          },
+                        });
+                    };
+                    setLoading(true);
+                    sendOutfit();
+                    setLoading(false);
+                    setSavedImages([]);
+                    setOutfitState('posted');
+                  }
                 })
                 .catch((error) => alert(error.message))
               setUpLoading(false);
           }
-          // Upload the images' URLs to the DB
-          const sendOutfit = async() => {
-              const toSentData = {
-                image: savedImages,
-                token: isUser.replace('"', '')
+          if (filteredImages.length > 1){
+              // Upload the images' URLs to the DB
+              const sendOutfit = async() => {
+                  const toSentData = {
+                    image: savedImages,
+                    token: isUser.replace('"', '')
+                  }
+                  await axios.post('/api/outfits', JSON.stringify(toSentData), {
+                    headers: {
+                      'Content-Type': 'application/json'
+                    }
+                  });
               }
-              await axios.post('/api/outfits', JSON.stringify(toSentData), {
-                headers: {
-                  'Content-Type': 'application/json'
-                }
-              });
+              setLoading(true);
+              sendOutfit();
+              setLoading(false);
+              setSavedImages([]);
+              setOutfitState('posted');
           }
-          setLoading(true);
-          sendOutfit();
-          setLoading(false);
-          setSavedImages([]);
-          setOutfitState('posted')
       } else {
         alert('Please crop your images!')
       }
@@ -171,8 +198,6 @@ const newOutfit = () => {
   useEffect(() => {
     if (outfitState === 'posted') router.push('/outfits');
   }, [outfitState])
-
-  console.log(crops)
 
   return (
     <>
