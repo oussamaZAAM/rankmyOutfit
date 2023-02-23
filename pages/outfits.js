@@ -24,7 +24,6 @@ const outfits = ({ outfitsData }) => {
 
   const [outfitsList, setOutfitsList] = useState(outfitsData);
 
-
   // Functions
   const editOutfitsRate = (outfitIndex, imageIndex, user) => {
     setOutfitsList(prevList => {
@@ -151,12 +150,11 @@ const outfits = ({ outfitsData }) => {
           </h3>
           <div className="flex justify-center items-center">
             <div
-              // onClick={() => setTest((prev) => !prev)}
               className="relative rounded-3xl w-full h-full cursor-pointer group"
             >
               <img
                 className="block object-cover w-full h-full rounded-3xl group-hover:opacity-75 transition duration-300"
-                src={outfit.image.url}
+                src={outfit.image[0].url}
                 alt=""
               />
               <div className="absolute inset-y-2/4 w-full opacity-0 group-hover:opacity-100 transition duration-300">
