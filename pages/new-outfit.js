@@ -11,19 +11,22 @@ import Cropper from 'react-easy-crop'
 import { MdAdd, MdOutlineCrop, MdDoneOutline } from "react-icons/md";
 import { RiImageEditLine } from "react-icons/ri";
 import { TiCancel } from "react-icons/ti";
+import { BsEye, BsEyeSlash } from "react-icons/bs";
 
 import styles from "../styles/Home.module.css";
 import { useRouter } from "next/router";
 
 const newOutfit = () => {
+  const [isUser, setIsUser] = useState();
+
   const [loading, setLoading] = useState(false)
   const [upLoading, setUpLoading] = useState(false)
 
-  const [images, setImages] = useState([{}, {}, {}, {}]);
-  const [crop, setCrop] = useState({ x: 0, y: 0 })
-  const [savedImages, setSavedImages] = useState([]);
   
-  const [isUser, setIsUser] = useState();
+  const initImage = {x: 0, y: 0};
+  const [crops, setCrops] = useState([initImage, {}, {}, {}]);
+  const [images, setImages] = useState([{}, {}, {}, {}]);
+  const [savedImages, setSavedImages] = useState([]);
 
   const [outfitState, setOutfitState] = useState('none');
 
@@ -64,7 +67,7 @@ const newOutfit = () => {
     } else {
       setImages((prevImages) => {
         const newImages = [...prevImages];
-        newImages[index] = {local: base64, formData: formData, crop: true};
+        newImages[index] = {local: base64, formData: formData, isCropped: true};
         return newImages;
       });
     }
@@ -100,19 +103,19 @@ const newOutfit = () => {
   const enableCropImage = (index, boolean) => {
     setImages(prevList => {
       const newList = [...prevList]
-      newList[index] = {...newList[index], crop: boolean}
+      newList[index] = {...newList[index], isCropped: boolean}
       return newList;
     })
   }
 
-  const uploadOutfit = async () => {
+  const addOutfit = async () => {
     // Run conditions on the images
     const filteredImages = images.filter((image) => image.local && image.formData && image.position);
     if (filteredImages.length === 0) {
       alert('Please import at least one image')
       } else {
       filteredImages.forEach((image) => {
-        if (image.crop){
+        if (image.isCropped){
           setImages(prevList => {
             const newList = [...prevList]
             const index = prevList.indexOf(image)
@@ -140,27 +143,26 @@ const newOutfit = () => {
                 .catch((error) => alert(error.message))
               setUpLoading(false);
           }
+          // Upload the images' URLs to the DB
+          const sendOutfit = async() => {
+              const toSentData = {
+                image: savedImages,
+                token: isUser.replace('"', '')
+              }
+              await axios.post('/api/outfits', JSON.stringify(toSentData), {
+                headers: {
+                  'Content-Type': 'application/json'
+                }
+              });
+          }
+          setLoading(true);
+          sendOutfit();
+          setLoading(false);
+          setSavedImages([]);
+          setOutfitState('posted')
       } else {
         alert('Please crop your images!')
       }
-      // Upload the images' URLs to the DB
-      console.log(savedImages)
-      const sendOutfit = async() => {
-          const toSentData = {
-            image: savedImages,
-            token: isUser.replace('"', '')
-          }
-          await axios.post('/api/outfits', JSON.stringify(toSentData), {
-            headers: {
-              'Content-Type': 'application/json'
-            }
-          });
-      }
-      setLoading(true);
-      sendOutfit();
-      setLoading(false);
-      setSavedImages([]);
-      setOutfitState('posted')
     }
   }
 
@@ -169,6 +171,8 @@ const newOutfit = () => {
   useEffect(() => {
     if (outfitState === 'posted') router.push('/outfits');
   }, [outfitState])
+
+  console.log(crops)
 
   return (
     <>
@@ -200,12 +204,18 @@ const newOutfit = () => {
                 <div className={"relative w-56 mobile:w-72 h-72 mobile:h-96 cursor-pointer transition duration-300 group hover:opacity-75 flex justify-center items-center " + (images[0].error && 'border-red-500 border-4')}>
                   {images[0].local 
                   ? (
-                    images[0].crop
+                    images[0].isCropped
                     ? <Cropper
                         image={images[0].local}
-                        crop={crop}
+                        crop={crops[0]}
                         aspect={4.5 / 6}
-                        onCropChange={setCrop}
+                        onCropChange={(e)=>{
+                          setCrops(prevList => {
+                            const newList = [...prevList]
+                            newList[0] = e;
+                            return newList;
+                          })
+                        }}
                         onCropComplete={(croppedArea, croppedAreaPixels)=>onCropComplete(croppedArea, croppedAreaPixels,  0)}
                         showGrid={false}
                       />
@@ -220,14 +230,26 @@ const newOutfit = () => {
                     <div className="block object-cover w-full h-full rounded-3xl bg-gray-500">
                       <div className="absolute inset-y-2/4 w-full h-6 bg-black scale-x-0 lg:scale-x-100 group-hover:scale-x-[0.25] transition duration-100">
                         <p className="font-title font-bold text-white text-base text-center">
-                          
+                          Empty
                         </p>
                       </div>
                     </div>
                   )}
-                  <div className="
+                  {images[0].local && !images[0].isCropped
+                  && <div className={"absolute top-0 right-0 block lg:hidden p-2 rounded-full flex justify-center bg-gray-500 itens-center bg-gray-500 "+(images[0].overview ? 'opacity-50' : 'opacity-100')}>
+                    <button onClick={()=>{
+                      setImages(prevList => {
+                        const newList = [...prevList]
+                        newList[0] = {...newList[0], overview: !newList[0].overview}
+                        return newList;
+                      })
+                    }}>
+                      {images[0].overview ? <BsEyeSlash size={20} fill="white" /> : <BsEye size={20} fill="white" />}
+                    </button>
+                  </div>}
+                  <div className={`
                                   absolute inset-y-2/4 w-full h-6 bg-black 
-                                  scale-x-0 group-hover:scale-x-100 transition duration-200"
+                                  lg:scale-x-0 lg:group-hover:scale-x-100 transition duration-200 `+(images[0].overview ? 'scale-x-0' : 'scale-x-100')}
                   >
                     <div className="flex justify-center items-center h-full w-full">
                       {!images[0].local ? (
@@ -243,7 +265,7 @@ const newOutfit = () => {
                         </label>
                       ) : (
                         <div className="flex justify-center items-center space-x-8">
-                          {!images[0].crop && 
+                          {!images[0].isCropped && 
                             <label htmlFor="reupload0">
                               <RiImageEditLine size={25} color="white" />
                               <input
@@ -254,7 +276,7 @@ const newOutfit = () => {
                                 style={{ display: "none" }}
                               />
                             </label>}
-                          {!images[0].crop 
+                          {!images[0].isCropped 
                             ? <MdOutlineCrop
                               onClick={() => enableCropImage(0, true)}
                               size={25}
@@ -274,7 +296,7 @@ const newOutfit = () => {
                             />
                           }
 
-                          {!images[0].crop && <TiCancel
+                          {!images[0].isCropped && <TiCancel
                             onClick={(e) => deleteImage(e, 0)}
                             size={25}
                             color="white"
@@ -289,12 +311,18 @@ const newOutfit = () => {
                 <div className="relative rounded-3xl w-56 mobile:w-72 h-72 mobile:h-96 cursor-pointer transition duration-300 group hover:opacity-75">
                   {images[1].local 
                   ? (
-                    images[1].crop
+                    images[1].isCropped
                     ? <Cropper
                         image={images[1].local}
-                        crop={crop}
+                        crop={crops[1]}
                         aspect={4.5 / 6}
-                        onCropChange={setCrop}
+                        onCropChange={(e)=>{
+                          setCrops(prevList => {
+                            const newList = [...prevList]
+                            newList[1] = e;
+                            return newList;
+                          })
+                        }}
                         onCropComplete={(croppedArea, croppedAreaPixels)=>onCropComplete(croppedArea, croppedAreaPixels,  1)}
                         showGrid={false}
                       />
@@ -308,15 +336,28 @@ const newOutfit = () => {
                   ) : (
                     <div className="block object-cover w-full h-full rounded-3xl bg-gray-500">
                       <div className="absolute inset-y-2/4 w-full h-6 bg-black scale-x-100 group-hover:scale-x-[0.25] transition duration-100">
-                        {/* <div className="flex justify-center items-center h-full w-full"> */}
                         <p className="font-title font-bold text-white text-base text-center">
                           Empty
                         </p>
-                        {/* </div> */}
                       </div>
                     </div>
                   )}
-                  <div className="absolute inset-y-2/4 w-full h-6 bg-black scale-x-0 group-hover:scale-x-100 transition duration-200">
+                  {images[1].local && !images[1].isCropped
+                  && <div className={"absolute top-0 right-0 block lg:hidden p-2 rounded-full flex justify-center bg-gray-500 itens-center bg-gray-500 "+(images[1].overview ? 'opacity-50' : 'opacity-100')}>
+                    <button onClick={()=>{
+                      setImages(prevList => {
+                        const newList = [...prevList]
+                        newList[1] = {...newList[1], overview: !newList[1].overview}
+                        return newList;
+                      })
+                    }}>
+                      {images[1].overview ? <BsEyeSlash size={20} fill="white" /> : <BsEye size={20} fill="white" />}
+                    </button>
+                  </div>}
+                  <div className={`
+                                  absolute inset-y-2/4 w-full h-6 bg-black 
+                                  lg:scale-x-0 lg:group-hover:scale-x-100 transition duration-200 `+(images[1].overview ? 'scale-x-0' : 'scale-x-100')}
+                  >
                     <div className="flex justify-center items-center h-full w-full">
                       {!images[1].local ? (
                         <label htmlFor="upload1">
@@ -331,7 +372,7 @@ const newOutfit = () => {
                         </label>
                       ) : (
                         <div className="flex justify-center items-center space-x-8">
-                          {!images[1].crop && 
+                          {!images[1].isCropped && 
                             <label htmlFor="reupload1">
                               <RiImageEditLine size={25} color="white" />
                               <input
@@ -342,7 +383,7 @@ const newOutfit = () => {
                                 style={{ display: "none" }}
                               />
                             </label>}
-                            {!images[1].crop 
+                            {!images[1].isCropped 
                             ? <MdOutlineCrop
                               onClick={() => enableCropImage(1, true)}
                               size={25}
@@ -362,7 +403,7 @@ const newOutfit = () => {
                             />
                             }
 
-                          {!images[1].crop && <TiCancel
+                          {!images[1].isCropped && <TiCancel
                             onClick={(e) => deleteImage(e, 1)}
                             size={25}
                             color="white"
@@ -377,12 +418,18 @@ const newOutfit = () => {
                 <div className="relative rounded-3xl w-56 mobile:w-72 h-72 mobile:h-96 cursor-pointer transition duration-300 group hover:opacity-75">
                   {images[2].local 
                   ? (
-                    images[2].crop
+                    images[2].isCropped
                     ? <Cropper
                         image={images[2].local}
-                        crop={crop}
+                        crop={crops[2]}
                         aspect={4.5 / 6}
-                        onCropChange={setCrop}
+                        onCropChange={(e)=>{
+                          setCrops(prevList => {
+                            const newList = [...prevList]
+                            newList[2] = e;
+                            return newList;
+                          })
+                        }}
                         onCropComplete={(croppedArea, croppedAreaPixels)=>onCropComplete(croppedArea, croppedAreaPixels,  2)}
                         showGrid={false}
                       />
@@ -396,15 +443,28 @@ const newOutfit = () => {
                   ) : (
                     <div className="block object-cover w-full h-full rounded-3xl bg-gray-500">
                       <div className="absolute inset-y-2/4 w-full h-6 bg-black scale-x-100 group-hover:scale-x-[0.25] transition duration-100">
-                        {/* <div className="flex justify-center items-center h-full w-full"> */}
                         <p className="font-title font-bold text-white text-base text-center">
                           Empty
                         </p>
-                        {/* </div> */}
                       </div>
                     </div>
                   )}
-                  <div className="absolute inset-y-2/4 w-full h-6 bg-black scale-x-0 group-hover:scale-x-100 transition duration-200">
+                  {images[2].local && !images[2].isCropped
+                  && <div className={"absolute top-0 right-0 block lg:hidden p-2 rounded-full flex justify-center bg-gray-500 itens-center bg-gray-500 "+(images[2].overview ? 'opacity-50' : 'opacity-100')}>
+                    <button onClick={()=>{
+                      setImages(prevList => {
+                        const newList = [...prevList]
+                        newList[2] = {...newList[2], overview: !newList[2].overview}
+                        return newList;
+                      })
+                    }}>
+                      {images[2].overview ? <BsEyeSlash size={20} fill="white" /> : <BsEye size={20} fill="white" />}
+                    </button>
+                  </div>}
+                  <div className={`
+                                  absolute inset-y-2/4 w-full h-6 bg-black 
+                                  lg:scale-x-0 lg:group-hover:scale-x-100 transition duration-200 `+(images[2].overview ? 'scale-x-0' : 'scale-x-100')}
+                  >
                     <div className="flex justify-center items-center h-full w-full">
                       {!images[2].local ? (
                         <label htmlFor="upload2">
@@ -419,7 +479,7 @@ const newOutfit = () => {
                         </label>
                       ) : (
                         <div className="flex justify-center items-center space-x-8">
-                          {!images[2].crop && 
+                          {!images[2].isCropped && 
                             <label htmlFor="reupload2">
                               <RiImageEditLine size={25} color="white" />
                               <input
@@ -430,7 +490,7 @@ const newOutfit = () => {
                                 style={{ display: "none" }}
                               />
                             </label>}
-                          {!images[2].crop 
+                          {!images[2].isCropped 
                             ? <MdOutlineCrop
                               onClick={() => enableCropImage(2, true)}
                               size={25}
@@ -450,7 +510,7 @@ const newOutfit = () => {
                             />
                             }
 
-                          {!images[2].crop && <TiCancel
+                          {!images[2].isCropped && <TiCancel
                             onClick={(e) => deleteImage(e, 2)}
                             size={25}
                             color="white"
@@ -465,12 +525,18 @@ const newOutfit = () => {
                 <div className="relative rounded-3xl w-56 mobile:w-72 h-72 mobile:h-96 cursor-pointer transition duration-300 group hover:opacity-75">
                   {images[3].local 
                   ? (
-                    images[3].crop
+                    images[3].isCropped
                     ? <Cropper
                         image={images[3].local}
-                        crop={crop}
+                        crop={crops[3]}
                         aspect={4.5 / 6}
-                        onCropChange={setCrop}
+                        onCropChange={(e)=>{
+                          setCrops(prevList => {
+                            const newList = [...prevList]
+                            newList[3] = e;
+                            return newList;
+                          })
+                        }}
                         onCropComplete={(croppedArea, croppedAreaPixels)=>onCropComplete(croppedArea, croppedAreaPixels,  3)}
                         showGrid={false}
                       />
@@ -484,15 +550,28 @@ const newOutfit = () => {
                   ) : (
                     <div className="block object-cover w-full h-full rounded-3xl bg-gray-500">
                       <div className="absolute inset-y-2/4 w-full h-6 bg-black scale-x-100 group-hover:scale-x-[0.25] transition duration-100">
-                        {/* <div className="flex justify-center items-center h-full w-full"> */}
                         <p className="font-title font-bold text-white text-base text-center">
                           Empty
                         </p>
-                        {/* </div> */}
                       </div>
                     </div>
                   )}
-                  <div className="absolute inset-y-2/4 w-full h-6 bg-black scale-x-0 group-hover:scale-x-100 transition duration-200">
+                  {images[3].local && !images[3].isCropped
+                  && <div className={"absolute top-0 right-0 block lg:hidden p-2 rounded-full flex justify-center bg-gray-500 itens-center bg-gray-500 "+(images[3].overview ? 'opacity-50' : 'opacity-100')}>
+                    <button onClick={()=>{
+                      setImages(prevList => {
+                        const newList = [...prevList]
+                        newList[3] = {...newList[3], overview: !newList[3].overview}
+                        return newList;
+                      })
+                    }}>
+                      {images[3].overview ? <BsEyeSlash size={20} fill="white" /> : <BsEye size={20} fill="white" />}
+                    </button>
+                  </div>}
+                  <div className={`
+                                  absolute inset-y-2/4 w-full h-6 bg-black 
+                                  lg:scale-x-0 lg:group-hover:scale-x-100 transition duration-200 `+(images[3].overview ? 'scale-x-0' : 'scale-x-100')}
+                  >
                     <div className="flex justify-center items-center h-full w-full">
                       {!images[3].local ? (
                         <label htmlFor="upload3">
@@ -507,7 +586,7 @@ const newOutfit = () => {
                         </label>
                       ) : (
                         <div className="flex justify-center items-center space-x-8">
-                          {!images[3].crop && 
+                          {!images[3].isCropped && 
                             <label htmlFor="reupload3">
                               <RiImageEditLine size={25} color="white" />
                               <input
@@ -518,7 +597,7 @@ const newOutfit = () => {
                                 style={{ display: "none" }}
                               />
                             </label>}
-                          {!images[3].crop 
+                          {!images[3].isCropped 
                             ? <MdOutlineCrop
                               onClick={() => enableCropImage(3, true)}
                               size={25}
@@ -538,7 +617,7 @@ const newOutfit = () => {
                             />
                           }
 
-                          {!images[3].crop && <TiCancel
+                          {!images[3].isCropped && <TiCancel
                             onClick={(e) => deleteImage(e, 3)}
                             size={25}
                             color="white"
@@ -551,7 +630,7 @@ const newOutfit = () => {
               </div>
 
               <div className="flex justify-center items-center my-4">
-                <button onClick={(outfitState === 'none') ? uploadOutfit : void(0)} className={"h-12 w-44 text-center rounded-3xl "+(outfitState === 'posted' ? 'bg-green-500 cursor-not-allowed ' : 'bg-my-purple ')}>
+                <button onClick={(outfitState === 'none') ? addOutfit : void(0)} className={"h-12 w-44 text-center rounded-3xl "+(outfitState === 'posted' ? 'bg-green-500 cursor-not-allowed ' : 'bg-my-purple ')}>
                 {/* <button onClick={uploadOutfit} className={"h-12 w-44 text-center rounded-3xl"}> */}
                   {!(loading || upLoading)
                   ? <p className="font-display text-white text-xl">{(outfitState === 'none') ? 'Upload' : ((outfitState === 'uploaded') ? 'Add' : 'Added')}</p>
