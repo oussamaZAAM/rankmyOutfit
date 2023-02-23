@@ -1,4 +1,4 @@
-import { posts } from "/mockData";
+// import { posts } from "/mockData";
 import jwt_decode from "jwt-decode";
 import { serialize } from "cookie";
 import { verify } from "jsonwebtoken";
@@ -7,7 +7,8 @@ import Outfits from "@/model/OutfitSchema";
 
 export default async function Handler(req, res) {
   if (req.method === "GET") {
-    return res.status(200).json(posts);
+    const posts = await Outfits.find({});
+    return res.status(200).json(posts); 
   }
 
   if (req.method === "POST") {

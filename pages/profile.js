@@ -108,6 +108,7 @@ const Profile = () => {
     if (image && image.length > 0) {
       if (profile) {
         await axios
+          // .post("https://encouraging-gold-gabardine.cyclic.app/api/upload", profile)
           .post("http://localhost:5000/api/upload", profile)
           .then(async (response) => {
             const imageData = {

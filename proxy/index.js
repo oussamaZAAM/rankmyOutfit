@@ -1,5 +1,4 @@
-const { axios } = require('axios');
-const imgbbUploader = require("imgbb-uploader");
+var imgbbUploader = require('imgbb-uploader');
 var express = require('express')
 var multer  = require('multer')
 var dotenv  = require('dotenv')

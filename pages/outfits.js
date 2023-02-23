@@ -23,6 +23,8 @@ const outfits = ({ outfitsData }) => {
   const mockUser = 17;
 
   const [outfitsList, setOutfitsList] = useState(outfitsData);
+  
+  console.log(outfitsList[0].image)
 
 
   // Functions
@@ -73,7 +75,7 @@ const outfits = ({ outfitsData }) => {
           rated = outfit.raters[i].best;
         }
       }
-      const images = outfit.images.map((image, imageIndex) => {
+      const images = outfit.image.map((image, imageIndex) => {
         return (
           <div
             onClick={() => editOutfitsRate(outfitIndex, imageIndex, mockUser)}
@@ -81,7 +83,7 @@ const outfits = ({ outfitsData }) => {
           >
             <img
               className="block object-cover w-full h-full object-cover rounded-3xl"
-              src={image.src}
+              src={image.url}
               style={image.position && {
                 objectPosition: (image.position.left)+'% '+ (image.position.top)+'%',
               }}
@@ -153,7 +155,7 @@ const outfits = ({ outfitsData }) => {
             >
               <img
                 className="block object-cover w-full h-full rounded-3xl group-hover:opacity-75 transition duration-300"
-                src={outfit.image}
+                src={outfit.image.url}
                 alt=""
               />
               <div className="absolute inset-y-2/4 w-full opacity-0 group-hover:opacity-100 transition duration-300">
