@@ -23,8 +23,6 @@ const outfits = ({ outfitsData }) => {
   const mockUser = 17;
 
   const [outfitsList, setOutfitsList] = useState(outfitsData);
-  
-  console.log(outfitsList[0].image)
 
 
   // Functions
@@ -78,6 +76,7 @@ const outfits = ({ outfitsData }) => {
       const images = outfit.image.map((image, imageIndex) => {
         return (
           <div
+            key={image._id}
             onClick={() => editOutfitsRate(outfitIndex, imageIndex, mockUser)}
             className="relative rounded-3xl mobile:w-72 mobile:h-96 cursor-pointer transition duration-300 hover:opacity-75"
           >
@@ -102,6 +101,7 @@ const outfits = ({ outfitsData }) => {
       });
       return (
         <div
+          key={outfit._id}
           className={
             "flex flex-col justify-center items-center rounded px-4 my-4 fold:w-full mobile:w-10/12 " +
             styles.boxshadow
@@ -137,6 +137,7 @@ const outfits = ({ outfitsData }) => {
       !isExist && (userRating = 0);
       return (
         <div
+          key={outfit._id}
           className={
             "flex flex-col justify-center items-center rounded px-4 my-4 fold:w-full mobile:w-10/12 " +
             styles.boxshadow
