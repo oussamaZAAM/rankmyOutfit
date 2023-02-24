@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 import nookies from "nookies";
 
 import React, { useCallback, useEffect, useState } from "react";
+import { useDropzone } from "react-dropzone";
 import Cropper from "react-easy-crop";
 
 import { MdAdd, MdOutlineCrop, MdDoneOutline } from "react-icons/md";
@@ -79,7 +80,7 @@ const Profile = () => {
     });
   };
 
-  const handleUpload = async (e) => {
+  const handleUpload = async (e, type) => {
     const file = e.target.files[0];
 
     // Cloud
@@ -189,6 +190,30 @@ const Profile = () => {
     router.reload();
   }
 
+  const onDrop = useCallback(async acceptedFiles => {
+    const file = acceptedFiles[0];
+
+    // Cloud
+    const formData = new FormData();
+    formData.append("image", file);
+
+    // Local
+    const base64 = await convertToBase64(file);
+
+    var stringLength = base64.length - "data:image/png;base64,".length;
+
+    var sizeInBytes = 4 * Math.ceil(stringLength / 3) * 0.5624896334383812;
+
+    if (sizeInBytes >= 20000000) {
+      // MAX 30MB, here 20MB 😏
+      alert("Image too Large! Maximum size is 20MB");
+    } else {
+      setImage(base64);
+      setProfile(formData);
+    }
+  }, [])
+  const {getRootProps, getInputProps, isDragActive} = useDropzone({onDrop})
+
   return (
     isUser && (
       <div className="flex flex-col justify-center items-center w-full">
@@ -213,24 +238,42 @@ const Profile = () => {
                   showGrid={false}
                 />
               ) : (
-                <img
-                  className="block object-cover w-full h-full rounded-full bg-gray-500"
-                  style={
-                    position && {
-                      objectPosition: position.left + "% " + position.top + "%",
-                    }
+                <div className="relative rounded-full mobile:w-72 mobile:h-72 cursor-pointer transition duration-300 group" {...getRootProps()}>
+                  <input {...getInputProps()} />
+                  {!isDragActive 
+                    ? <img
+                      className="block object-cover w-full h-full rounded-full bg-gray-500"
+                      style={
+                        position && {
+                          objectPosition:
+                            position.left + "% " + position.top + "%",
+                        }
+                      }
+                      src={image}
+                    />
+                    : 
+                    <div className="relative object-cover w-full h-full rounded-full bg-gray-500 border-dashed border-2 border-my-pink1">
+                      <img
+                        className="block object-cover w-full h-full rounded-full blur"
+                        style={
+                          position && {
+                            objectPosition:
+                              position.left + "% " + position.top + "%",
+                          }
+                        }
+                        src={image}
+                      />
+                      <div className="absolute top-1/2 w-full text-center text-black font-bold font-display css-stroke-white">Drag here to overwrite the image</div>
+                    </div>
                   }
-                  src={image}
-                />
+                </div>
               )
             ) : (
-              <div className="block object-cover w-full h-full rounded-full bg-gray-500">
+              <div className="z-50 block object-cover w-full h-full rounded-full bg-gray-500">
                 <div className="absolute inset-y-2/4 w-full h-6 bg-black scale-x-100 group-hover:scale-x-[0.25] transition duration-100">
-                  {/* <div className="flex justify-center items-center h-full w-full"> */}
                   <p className="font-title font-bold text-white text-base text-center">
                     Empty
                   </p>
-                  {/* </div> */}
                 </div>
               </div>
             )}
@@ -288,6 +331,18 @@ const Profile = () => {
               </div>
             </div>
           </div>
+
+          {/* <div className="absolute inset-x-2/4 mt-4">
+            <div {...getRootProps()}>
+              <input {...getInputProps()} />
+              {isDragActive ? (
+                <p>Drop the image here</p>
+              ) : (
+                <p>Drag & drop your image</p>
+              )}
+            </div>
+          </div> */}
+
           <div className="flex justify-center items-center my-4">
             <button
               onClick={editProfileImage}
@@ -326,7 +381,10 @@ const Profile = () => {
           </div>
         </div>
         <div
-          className={"fixed top-1/3 bg-orange-100 border-l-4 border-orange-500 text-orange-700 p-4 transition duration-300  "+(error !== "" ? 'visible scale-150' : 'invisible scale-0')}
+          className={
+            "fixed top-1/3 bg-orange-100 border-l-4 border-orange-500 text-orange-700 p-4 transition duration-300  " +
+            (error !== "" ? "visible scale-150" : "invisible scale-0")
+          }
           role="alert"
         >
           <div className="h-full flex flex-col justify-center">
@@ -358,7 +416,7 @@ export const getServerSideProps = async (context) => {
     .then((response) => console.log(response.data.message))
     .catch((err) => {
       redirection = true;
-    }); 
+    });
 
   if (redirection) {
     return {
