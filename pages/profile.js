@@ -9,6 +9,7 @@ import Cropper from "react-easy-crop";
 
 import { MdAdd, MdOutlineCrop, MdDoneOutline } from "react-icons/md";
 import { RiImageEditLine } from "react-icons/ri";
+import { HiOutlineExclamationCircle } from "react-icons/hi";
 import { TiCancel } from "react-icons/ti";
 
 const Profile = () => {
@@ -41,7 +42,7 @@ const Profile = () => {
     };
     fetchUser();
   }, []);
-console.log(user)
+  
   //---------------------Image Treating---------------------
   const [crop, setCrop] = useState({ x: 0, y: 0 });
   const [position, setPosition] = useState((user && user.image.position) || { left: 50, top: 50 });
@@ -348,6 +349,11 @@ console.log(user)
               </div>
             </div>
           </div>
+
+          {!isDragActive && <div className="flex justify-start items-center my-2">
+            <HiOutlineExclamationCircle size={20} />
+            <p className="ml-2">You can Drag & Drop your image from your local.</p>
+          </div>}
 
           <div className="flex justify-center items-center my-4">
             <button
