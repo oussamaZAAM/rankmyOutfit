@@ -28,7 +28,7 @@
 
 /* Text Stroke  */
 .css-stroke-white{
-  -webkit-text-stroke: 1px white;
+  -webkit-text-stroke: 0.05px white;
 }
 
 /* :root {

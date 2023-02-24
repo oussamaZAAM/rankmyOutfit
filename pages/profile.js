@@ -252,7 +252,7 @@ const Profile = () => {
                       src={image}
                     />
                     : 
-                    <div className="relative object-cover w-full h-full rounded-full bg-gray-500 border-dashed border-2 border-my-pink1">
+                    <div className="relative object-cover w-full h-full rounded-full bg-gray-500 border-dashed border-2 border-white">
                       <img
                         className="block object-cover w-full h-full rounded-full blur"
                         style={
@@ -263,18 +263,26 @@ const Profile = () => {
                         }
                         src={image}
                       />
-                      <div className="absolute top-1/2 w-full text-center text-black font-bold font-display css-stroke-white">Drag here to overwrite the image</div>
+                      <div className="absolute inset-y-2/4 w-full h-6 bg-black scale-x-100 group-hover:scale-x-[0.25] transition duration-100">
+                        <div className="top-1/2 w-full text-center text-black font-bold font-display css-stroke-white">Drag here to overwrite the image</div>
+                      </div>
                     </div>
                   }
                 </div>
               )
             ) : (
-              <div className="z-50 block object-cover w-full h-full rounded-full bg-gray-500">
-                <div className="absolute inset-y-2/4 w-full h-6 bg-black scale-x-100 group-hover:scale-x-[0.25] transition duration-100">
-                  <p className="font-title font-bold text-white text-base text-center">
-                    Empty
-                  </p>
-                </div>
+              <div className={"z-50 block object-cover w-full h-full rounded-full bg-gray-500 "+(isDragActive && 'border-dashed border-2 border-white')} {...getRootProps()}>
+                  <input {...getInputProps()} />
+                  {!isDragActive 
+                    ? <div className="absolute inset-y-2/4 w-full h-6 bg-black scale-x-100 group-hover:scale-x-[0.25] transition duration-100">
+                        <p className="font-title font-bold text-white text-base text-center">
+                          Empty
+                        </p>
+                      </div>
+                    : <div className="absolute inset-y-2/4 w-full h-6 bg-black scale-x-100 group-hover:scale-x-[0.25] transition duration-100">
+                      <div className="top-1/2 w-full text-center text-black font-bold font-display css-stroke-white">Drag here to overwrite the image</div>
+                    </div>
+                  }
               </div>
             )}
 
