@@ -41,11 +41,11 @@ const Profile = () => {
     };
     fetchUser();
   }, []);
-
+console.log(user)
   //---------------------Image Treating---------------------
   const [crop, setCrop] = useState({ x: 0, y: 0 });
-  const [position, setPosition] = useState({ left: 50, top: 50 });
-  const [edit, setEdit] = useState(true);
+  const [position, setPosition] = useState((user && user.image.position) || { left: 50, top: 50 });
+  const [edit, setEdit] = useState(false);
 
   const onCropComplete = useCallback(
     (croppedArea, croppedAreaPixels, index) => {
@@ -225,9 +225,8 @@ const Profile = () => {
   }, [])
   const {getRootProps, getInputProps, isDragActive} = useDropzone({onDrop})
 
-  console.log(crop)
-  console.log(position)
   // -------------------------------------------------------------------------------------------------------------------
+  
   return (
     isUser && (
       <div className="flex flex-col justify-center items-center w-full">
