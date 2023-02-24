@@ -45,7 +45,7 @@ const Profile = () => {
   //---------------------Image Treating---------------------
   const [crop, setCrop] = useState({ x: 0, y: 0 });
   const [position, setPosition] = useState({ left: 50, top: 50 });
-  const [edit, setEdit] = useState(false);
+  const [edit, setEdit] = useState(true);
 
   const onCropComplete = useCallback(
     (croppedArea, croppedAreaPixels, index) => {
@@ -63,6 +63,17 @@ const Profile = () => {
   const [image, setImage] = useState("");
   const [profile, setProfile] = useState();
 
+
+  // -----------------------------Components -------------------------------
+    const DragMessage = () => {
+      return (
+        <div className="absolute inset-y-2/4 w-full h-6 bg-black scale-x-100 group-hover:scale-x-[0.25] transition duration-100">
+          <div className="top-1/2 w-full text-center text-black font-bold font-display css-stroke-white">Drag here to overwrite the image</div>
+        </div>
+      )
+    }
+
+  // ----------------------------Functions----------------------------------
   const convertToBase64 = (file) => {
     return new Promise((resolve, reject) => {
       const fileReader = new FileReader();
@@ -214,6 +225,9 @@ const Profile = () => {
   }, [])
   const {getRootProps, getInputProps, isDragActive} = useDropzone({onDrop})
 
+  console.log(crop)
+  console.log(position)
+  // -------------------------------------------------------------------------------------------------------------------
   return (
     isUser && (
       <div className="flex flex-col justify-center items-center w-full">
@@ -263,9 +277,7 @@ const Profile = () => {
                         }
                         src={image}
                       />
-                      <div className="absolute inset-y-2/4 w-full h-6 bg-black scale-x-100 group-hover:scale-x-[0.25] transition duration-100">
-                        <div className="top-1/2 w-full text-center text-black font-bold font-display css-stroke-white">Drag here to overwrite the image</div>
-                      </div>
+                      <DragMessage />
                     </div>
                   }
                 </div>
@@ -279,9 +291,7 @@ const Profile = () => {
                           Empty
                         </p>
                       </div>
-                    : <div className="absolute inset-y-2/4 w-full h-6 bg-black scale-x-100 group-hover:scale-x-[0.25] transition duration-100">
-                      <div className="top-1/2 w-full text-center text-black font-bold font-display css-stroke-white">Drag here to overwrite the image</div>
-                    </div>
+                    : <DragMessage />
                   }
               </div>
             )}
@@ -339,17 +349,6 @@ const Profile = () => {
               </div>
             </div>
           </div>
-
-          {/* <div className="absolute inset-x-2/4 mt-4">
-            <div {...getRootProps()}>
-              <input {...getInputProps()} />
-              {isDragActive ? (
-                <p>Drop the image here</p>
-              ) : (
-                <p>Drag & drop your image</p>
-              )}
-            </div>
-          </div> */}
 
           <div className="flex justify-center items-center my-4">
             <button
