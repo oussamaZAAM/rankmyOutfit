@@ -64,16 +64,6 @@ const Profile = () => {
   const [image, setImage] = useState("");
   const [profile, setProfile] = useState();
 
-
-  // -----------------------------Components -------------------------------
-    const DragMessage = () => {
-      return (
-        <div className="absolute inset-y-2/4 w-full h-6 bg-black scale-x-100 group-hover:scale-x-[0.25] transition duration-100">
-          <div className="top-1/2 w-full text-center text-black font-bold font-display css-stroke-white">Drag here to overwrite the image</div>
-        </div>
-      )
-    }
-
   // ----------------------------Functions----------------------------------
   const convertToBase64 = (file) => {
     return new Promise((resolve, reject) => {
@@ -268,7 +258,7 @@ const Profile = () => {
                     : 
                     <div className="relative object-cover w-full h-full rounded-full bg-gray-500 border-dashed border-2 border-white">
                       <img
-                        className="block object-cover w-full h-full rounded-full blur"
+                        className="block object-cover w-full h-full rounded-full blur-sm"
                         style={
                           position && {
                             objectPosition:
@@ -277,7 +267,10 @@ const Profile = () => {
                         }
                         src={image}
                       />
-                      <DragMessage />
+                      
+                      <div className="absolute inset-y-2/4 w-full h-6 bg-black scale-x-100 group-hover:scale-x-[0.25] transition duration-100">
+                          <div className="top-1/2 w-full text-center text-black font-bold font-display css-stroke-white">Drag here to overwrite the image</div>
+                      </div>
                     </div>
                   }
                 </div>
@@ -285,14 +278,14 @@ const Profile = () => {
             ) : (
               <div className={"z-50 block object-cover w-full h-full rounded-full bg-gray-500 "+(isDragActive && 'border-dashed border-2 border-white')} {...getRootProps()}>
                   <input {...getInputProps()} />
-                  {!isDragActive 
-                    ? <div className="absolute inset-y-2/4 w-full h-6 bg-black scale-x-100 group-hover:scale-x-[0.25] transition duration-100">
-                        <p className="font-title font-bold text-white text-base text-center">
-                          Empty
-                        </p>
-                      </div>
-                    : <DragMessage />
-                  }
+                  <div className="absolute inset-y-2/4 w-full h-6 bg-black scale-x-100 group-hover:scale-x-[0.25] transition duration-100">
+                    {!isDragActive 
+                      ? <p className="font-title font-bold text-white text-base text-center">
+                            Empty
+                          </p>
+                      : <div className="top-1/2 w-full text-center text-black font-bold font-display css-stroke-white">Drag here to overwrite the image</div>
+                    }
+                  </div>
               </div>
             )}
 
