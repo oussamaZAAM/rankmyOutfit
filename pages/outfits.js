@@ -468,7 +468,7 @@ const outfits = ({ outfitsData }) => {
 export default outfits;
 
 export const getStaticProps = async () => {
-  const res = await fetch(`${server}/api/outfits`);
+  const res = await fetch(`${process.env.NEXTAUTH_URL}/api/outfits`);
   const outfitsData = await res.json();
   return {
     props: {
