@@ -147,7 +147,6 @@ const newOutfit = () => {
                     const sendOutfit = async () => {
                         const toSentData = {
                           image: data,
-                          token: isUser.replace('"', ""),
                         };
                         await axios.post("/api/outfits", JSON.stringify(toSentData), {
                           headers: {
