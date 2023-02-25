@@ -22,9 +22,6 @@ const newOutfit = () => {
   const [loading, setLoading] = useState(false)
   const [upLoading, setUpLoading] = useState(false)
 
-  
-  const initImage = {x: 0, y: 0};
-  const [crops, setCrops] = useState([initImage, initImage, initImage, initImage]);
   const [images, setImages] = useState([{}, {}, {}, {}]);
   const [savedImages, setSavedImages] = useState([]);
 
@@ -67,7 +64,7 @@ const newOutfit = () => {
     } else {
       setImages((prevImages) => {
         const newImages = [...prevImages];
-        newImages[index] = {local: base64, formData: formData, isCropped: true};
+        newImages[index] = {local: base64, formData: formData, isCropped: true, crop: {x: 0, y: 0}};
         return newImages;
       });
     }
@@ -199,6 +196,8 @@ const newOutfit = () => {
     if (outfitState === 'posted') router.push('/outfits');
   }, [outfitState])
 
+  console.log(images[0])
+
   return (
     <>
       <Head>
@@ -232,12 +231,12 @@ const newOutfit = () => {
                     images[0].isCropped
                     ? <Cropper
                         image={images[0].local}
-                        crop={crops[0]}
+                        crop={images[0].crop}
                         aspect={4.5 / 6}
                         onCropChange={(e)=>{
-                          setCrops(prevList => {
+                          setImages(prevList => {
                             const newList = [...prevList]
-                            newList[0] = e;
+                            newList[0] = {...newList[0],  crop: e};
                             return newList;
                           })
                         }}
@@ -339,12 +338,12 @@ const newOutfit = () => {
                     images[1].isCropped
                     ? <Cropper
                         image={images[1].local}
-                        crop={crops[1]}
+                        crop={images[1].crop}
                         aspect={4.5 / 6}
                         onCropChange={(e)=>{
-                          setCrops(prevList => {
+                          setImages(prevList => {
                             const newList = [...prevList]
-                            newList[1] = e;
+                            newList[1] = {...newList[1],  crop: e};
                             return newList;
                           })
                         }}
@@ -446,12 +445,12 @@ const newOutfit = () => {
                     images[2].isCropped
                     ? <Cropper
                         image={images[2].local}
-                        crop={crops[2]}
+                        crop={images[2].crop}
                         aspect={4.5 / 6}
                         onCropChange={(e)=>{
-                          setCrops(prevList => {
+                          setImages(prevList => {
                             const newList = [...prevList]
-                            newList[2] = e;
+                            newList[2] = {...newList[2],  crop: e};
                             return newList;
                           })
                         }}
@@ -553,12 +552,12 @@ const newOutfit = () => {
                     images[3].isCropped
                     ? <Cropper
                         image={images[3].local}
-                        crop={crops[3]}
+                        crop={images[3].crop}
                         aspect={4.5 / 6}
                         onCropChange={(e)=>{
-                          setCrops(prevList => {
+                          setImages(prevList => {
                             const newList = [...prevList]
-                            newList[3] = e;
+                            newList[3] = {...newList[3],  crop: e};
                             return newList;
                           })
                         }}
@@ -701,15 +700,15 @@ export default newOutfit;
 //   }
 // }
 export const getServerSideProps = async (context) => {
-  var redirection;
+  var redirection = false;
   const session = await getSession(context);
   const isUser = nookies.get(context);
-  await axios
-    .post("http://localhost:3000/api/verify", { token: isUser.authentication })
-    .then((response) => console.log(response.data.message))
-    .catch((err) => {
-      redirection = true;
-    }); 
+  // await axios
+  //   .post("http://localhost:3000/api/verify", { token: isUser.authentication })
+  //   .then((response) => console.log(response.data.message))
+  //   .catch((err) => {
+  //     redirection = true;
+  //   }); 
 
   if ((!session) && redirection) {
     return {
