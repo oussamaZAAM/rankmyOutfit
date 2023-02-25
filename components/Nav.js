@@ -29,7 +29,6 @@ const Nav = () => {
                 .get("/api/auth/logout")
                 .then(async (response) => {
                   setIsUser(false);
-                  router.push('/signin')
                 })
                 .catch((error) => {
                   alert(error);
@@ -51,7 +50,6 @@ const Nav = () => {
                 .get("/api/auth/logout")
                 .then(async (response) => {
                   setIsUser(false);
-                  router.push('/signin')
                 })
                 .catch((error) => {
                   alert(error);
