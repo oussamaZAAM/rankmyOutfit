@@ -700,15 +700,26 @@ export default newOutfit;
 //   }
 // }
 export const getServerSideProps = async (context) => {
-  var redirection = false;
+  var redirection;
   const session = await getSession(context);
-  const isUser = nookies.get(context);
-  // await axios
-  //   .post("http://localhost:3000/api/verify", { token: isUser.authentication })
-  //   .then((response) => console.log(response.data.message))
-  //   .catch((err) => {
-  //     redirection = true;
-  //   }); 
+  const nookie = nookies.get(context);
+  const token = nookie.authentication;
+  
+  await fetch(`${process.env.NEXTAUTH_URL}/api/verify`, {
+    method: 'GET',
+    headers: {
+      'Authorization': `${token}`
+    },
+  })
+    .then((response) => {
+      if (response.ok) {
+        return response.json();
+      }
+      return Promise.reject(response);
+    })
+    .catch((response) => {
+      redirection = true;
+    });
 
   if ((!session) && redirection) {
     return {
