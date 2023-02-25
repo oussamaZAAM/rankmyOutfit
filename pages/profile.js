@@ -19,18 +19,15 @@ const Profile = () => {
   const [error, setError] = useState("");
 
   //---------------------User Authentication---------------------
-  const [isUser, setIsUser] = useState();
+  const [isUser, setIsUser] = useState(false);
   const [user, setUser] = useState();
 
   useEffect(() => {
-    const user_token = localStorage.getItem("authentication");
-    const user = JSON.parse(localStorage.getItem("user"));
-
     const fetchUser = async () => {
       await axios
-        .post("/api/profile", { email: user.email })
+        .get("/api/profile")
         .then((response) => {
-          setIsUser(user_token);
+          setIsUser(true);
           setUser(response.data);
           setImage(response.data.image.url);
           setPosition(response.data.image.position);
@@ -415,11 +412,22 @@ export default Profile;
 export const getServerSideProps = async (context) => {
   var redirection;
   const session = await getSession(context);
-  const isUser = nookies.get(context);
-  const res = await axios
-    .post("http://localhost:3000/api/verify", { token: isUser.authentication })
-    .then((response) => console.log(response.data.message))
-    .catch((err) => {
+  const nookie = nookies.get(context);
+  const token = nookie.authentication;
+
+  await fetch(`${process.env.NEXTAUTH_URL}/api/verify`, {
+    method: 'GET',
+    headers: {
+      'Authorization': `${token}`
+    },
+  })
+    .then((response) => {
+      if (response.ok) {
+        return response.json();
+      }
+      return Promise.reject(response);
+    })
+    .catch((response) => {
       redirection = true;
     });
 
