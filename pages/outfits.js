@@ -3,7 +3,6 @@ import { useState } from "react";
 import { MdOutlineAddCircle, MdOutlineArrowDropDown, MdRateReview } from "react-icons/md";
 import { HiOutlineStar, HiStar } from "react-icons/hi";
 import styles from "../styles/Home.module.css";
-import server from "../config";
 import Link from "next/link";
 import badge from "../public/images/badge.png";
 
