@@ -2,7 +2,7 @@ import Head from "next/head";
 import { useSession, signIn, signOut, getSession } from "next-auth/react";
 import Link from "next/link";
 import Image from "next/image";
-import nookies from 'nookies';
+import nookies from "nookies";
 
 import { useFormik } from 'formik';
 
@@ -13,13 +13,12 @@ import { useRouter } from "next/router";
 import axios from "axios";
 import { useState } from "react";
 
-const Signin = ({context}) => {
+const Signin = () => {
   //-----------------------Handle Errors-----------------------
   const [error, setError] = useState('');
 
   //-----------------------Handle Routing-----------------------
   const router = useRouter();
-  const { from } = router.query;
 
   //-----------------------Google/Facebook-----------------------
   const {data: session} = useSession();
@@ -67,7 +66,6 @@ const Signin = ({context}) => {
       },
     })
     .then((response) => {
-      localStorage.setItem("authentication", JSON.stringify(response.data.token));
       localStorage.setItem("user", JSON.stringify(response.data.user));
       router.reload();
     })
@@ -216,16 +214,25 @@ const Signin = ({context}) => {
 export default Signin;
 
 export const getServerSideProps = async (context) => {
-  var redirection;
+  var redirection = false;
   const session = await getSession(context);
-  const isUser = nookies.get(context);
+  const nookie = nookies.get(context);
+  const token = nookie.authentication;
 
-  await axios
-    .post("http://localhost:3000/api/verify", { token: isUser.authentication })
-    .then((response) => {
-      redirection = true;
-    })
-    .catch((err) => console.log(err.data));
+  await fetch(`${process.env.NEXTAUTH_URL}/api/verify`, {
+          method: 'GET',
+          headers: {
+            'Authorization': `${token}`
+          },
+        })
+          .then((response) => {
+            if (response.ok) {
+              redirection = true;
+              return response.json();
+            }
+            return Promise.reject(response);
+          })
+          .catch((response) => void(0));
 
   const url = context.req.headers.referer;
   const query = (url && url.split('?from=')[1]);
