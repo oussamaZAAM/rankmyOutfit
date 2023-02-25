@@ -410,7 +410,7 @@ const Profile = () => {
 export default Profile;
 
 export const getServerSideProps = async (context) => {
-  var redirection;
+  var redirection = false;
   const session = await getSession(context);
   const nookie = nookies.get(context);
   const token = nookie.authentication;
@@ -431,10 +431,12 @@ export const getServerSideProps = async (context) => {
       redirection = true;
     });
 
+    console.log(redirection)
+
   if (redirection) {
     return {
       redirect: {
-        destination: `/signin?from=profile#form`,
+        destination: '/signin?from=profile#form',
       },
     };
   }

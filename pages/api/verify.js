@@ -8,10 +8,6 @@ export default async function Handler(req, res) {
             const { cookies } = req;
             const cookieToken = cookies.authentication;
             const authToken = req.headers.authorization;
-            // if (authToken && verify(authToken, process.env.JWT_SECRET)) {
-            //     return res.status(200).json({message: "Valid Token"});
-            // }
-            console.log(authToken)
             if (authToken) {
                 verify(authToken, process.env.JWT_SECRET)
             } else {
