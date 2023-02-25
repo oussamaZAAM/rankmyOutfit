@@ -23,8 +23,16 @@ export default async function signin(req, res) {
     if (!checkPassword || credentials.email !== user.email) {
         throw new Error("Wrong password, try again")
     }
+
+    const userToToken = {
+      image: user.toJSON().image,
+      _id: user.toJSON()._id,
+      name: user.toJSON().name,
+      email: user.toJSON().email,
+      outfits: user.toJSON().outfits
+    }
     
-    const token = jwt.sign(user.toJSON(), process.env.JWT_SECRET);
+    const token = jwt.sign(userToToken, process.env.JWT_SECRET);
 
     const serialized = serialize("authentication", token, {
         httpOnly: true,
