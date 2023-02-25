@@ -1,6 +1,7 @@
 import Users from "@/model/UserSchema";
 import { serialize } from "cookie";
 import { verify } from "jsonwebtoken";
+import jwt_decode from "jwt-decode";
 
 export default async function Handler(req, res) {
     try {
@@ -23,8 +24,9 @@ export default async function Handler(req, res) {
             return res.status(200).json({message: 'Image updated successfully'});
         }
 
-        if (req.method === 'POST') {
-            const user = await Users.findOne({email: req.body.email});
+        if (req.method === 'GET') {
+            var decoded = jwt_decode(jwt);
+            const user = await Users.findOne({email: decoded.email});
 
             if (!user._id) {
                 const serialised = serialize("authentication", null, {

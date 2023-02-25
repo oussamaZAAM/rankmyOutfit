@@ -196,8 +196,6 @@ const newOutfit = () => {
     if (outfitState === 'posted') router.push('/outfits');
   }, [outfitState])
 
-  console.log(images[0])
-
   return (
     <>
       <Head>
@@ -704,7 +702,7 @@ export const getServerSideProps = async (context) => {
   const session = await getSession(context);
   const nookie = nookies.get(context);
   const token = nookie.authentication;
-  
+
   await fetch(`${process.env.NEXTAUTH_URL}/api/verify`, {
     method: 'GET',
     headers: {
