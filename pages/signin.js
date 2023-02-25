@@ -66,7 +66,6 @@ const Signin = () => {
       },
     })
     .then((response) => {
-      localStorage.setItem("user", JSON.stringify(response.data.user));
       router.reload();
     })
     .catch((error) => {
