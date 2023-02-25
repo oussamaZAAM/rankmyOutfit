@@ -19,7 +19,6 @@ const Nav = () => {
 
   useEffect(() => {
     try {
-      const user = JSON.parse(localStorage.getItem("user"));
       const fetchToken = async () => {
         await axios
           .get("/api/verify")
@@ -29,7 +28,6 @@ const Nav = () => {
               await axios
                 .get("/api/auth/logout")
                 .then(async (response) => {
-                  localStorage.removeItem("user");
                   setIsUser(false);
                   router.push('/signin')
                 })
@@ -42,18 +40,16 @@ const Nav = () => {
       };
       const fetchUser = async () => {
         await axios
-          .post("/api/profile", { email: user.email })
+          .get("/api/profile")
           .then((response) => {
             setIsUser(true);
             setUser(response.data);
           })
           .catch((err) => {
             const removeUser = async () => {
-              console.log('test')
               await axios
                 .get("/api/auth/logout")
                 .then(async (response) => {
-                  localStorage.removeItem("user");
                   setIsUser(false);
                   router.push('/signin')
                 })
@@ -65,19 +61,14 @@ const Nav = () => {
           });
       };
 
-      if (user && user.email && user.name) {
-        fetchToken();
-        fetchUser();
-      } else {
-        throw new Error("No User");
-      }
+      fetchToken();
+      fetchUser();
 
     } catch (err) {
       const removeUser = async () => {
         await axios
           .get("/api/auth/logout")
           .then(async (response) => {
-            localStorage.removeItem("user");
             setIsUser(false);
           })
           .catch((error) => {
