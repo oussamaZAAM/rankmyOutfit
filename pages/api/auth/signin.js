@@ -36,7 +36,6 @@ export default async function signin(req, res) {
     res.setHeader("Set-Cookie", serialized);
 
     const data = {
-      token, 
       user: {
         name: user.name,
         email: user.email,
