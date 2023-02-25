@@ -190,25 +190,29 @@ const Profile = () => {
   }
 
   const onDrop = useCallback(async acceptedFiles => {
-    const file = acceptedFiles[0];
+    if (acceptedFiles[0].type.split('/')[0] === 'image') {
+      const file = acceptedFiles[0];
 
-    // Cloud
-    const formData = new FormData();
-    formData.append("image", file);
+      // Cloud
+      const formData = new FormData();
+      formData.append("image", file);
 
-    // Local
-    const base64 = await convertToBase64(file);
+      // Local
+      const base64 = await convertToBase64(file);
 
-    var stringLength = base64.length - "data:image/png;base64,".length;
+      var stringLength = base64.length - "data:image/png;base64,".length;
 
-    var sizeInBytes = 4 * Math.ceil(stringLength / 3) * 0.5624896334383812;
+      var sizeInBytes = 4 * Math.ceil(stringLength / 3) * 0.5624896334383812;
 
-    if (sizeInBytes >= 20000000) {
-      // MAX 30MB, here 20MB 😏
-      alert("Image too Large! Maximum size is 20MB");
+      if (sizeInBytes >= 20000000) {
+        // MAX 30MB, here 20MB 😏
+        alert("Image too Large! Maximum size is 20MB");
+      } else {
+        setImage(base64);
+        setProfile(formData);
+      }
     } else {
-      setImage(base64);
-      setProfile(formData);
+      alert('Please drag an image');
     }
   }, [])
   const {getRootProps, getInputProps, isDragActive} = useDropzone({onDrop})
