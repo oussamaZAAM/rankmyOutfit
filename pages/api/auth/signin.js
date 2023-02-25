@@ -13,7 +13,7 @@ export default async function signin(req, res) {
     //Check if User Exists
     const user = await Users.findOne({email: credentials.email});
     if(!user) {
-        throw new Error("Email not found");
+        throw new Error("Wrong credentials. Please try again");
     }
 
     //Compare Passwords
@@ -21,7 +21,7 @@ export default async function signin(req, res) {
 
     //Incorrect Credentials
     if (!checkPassword || credentials.email !== user.email) {
-        throw new Error("Wrong password, try again")
+        throw new Error("Wrong credentials. Please try again")
     }
 
     const userToToken = {
