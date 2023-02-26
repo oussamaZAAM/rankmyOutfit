@@ -104,7 +104,8 @@ const newOutfit = () => {
 
   // Handle Drag and Drop Images
   const onDrop = async (acceptedFiles) => {
-    if (images.some((image) => Object.keys(image).length !== 0)) {
+    const emptyImagesCells = images.filter((image) => Object.keys(image).length === 0);
+    if (emptyImagesCells.length < acceptedFiles.length) {
       if (confirm('Do you want to overwrite the uploaded images ?')) {
         void(0);
       } else {
@@ -147,8 +148,6 @@ const newOutfit = () => {
       if (filteredImages.length < 4) {
         const length = filteredImages.length;
         for (let i=4 ; i>length ; i--) {
-          console.log('i')
-          console.log(i)
           filteredImages.push({});
         }
       }
