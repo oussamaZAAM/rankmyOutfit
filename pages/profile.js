@@ -94,14 +94,14 @@ const Profile = () => {
 
       var sizeInBytes = 4 * Math.ceil(stringLength / 3) * 0.5624896334383812;
 
-      if (sizeInBytes >= 20000000) {
-        // MAX 30MB, here 20MB 😏
-        alert("Image too Large! Maximum size is 20MB");
+      if (sizeInBytes >= 5000000) {
+        // MAX 30MB, here 5MB 😏
+        alert("Image too Large! Maximum size is 5MB");
       } else {
         setImage(base64);
         setProfile(formData);
+        setEdit(true);
       }
-      setEdit(true);
       e.target.value = "";
     } else {
       alert('Please drag an image');
@@ -209,12 +209,13 @@ const Profile = () => {
 
       var sizeInBytes = 4 * Math.ceil(stringLength / 3) * 0.5624896334383812;
 
-      if (sizeInBytes >= 20000000) {
-        // MAX 30MB, here 20MB 😏
-        alert("Image too Large! Maximum size is 20MB");
+      if (sizeInBytes >= 5000000) {
+        // MAX 30MB, here 5MB 😏
+        alert("Image too Large! Maximum size is 5MB");
       } else {
         setImage(base64);
         setProfile(formData);
+        setEdit(true);
       }
     } else {
       alert('Please drag an image');

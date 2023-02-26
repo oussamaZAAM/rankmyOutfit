@@ -52,7 +52,7 @@ const newOutfit = () => {
     var sizeInBytes = 4 * Math.ceil((stringLength / 3))*0.5624896334383812;
 
     if (sizeInBytes >= 5000000){ // MAX 30MB, here 5MB 😏
-      alert("Image too Large! Maximum size is 20MB")
+      alert("Image too Large! Maximum size is 5MB")
     } else {
       setImages((prevImages) => {
         const newImages = [...prevImages];
