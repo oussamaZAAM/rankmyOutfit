@@ -15,6 +15,7 @@ import { BsEye, BsEyeSlash } from "react-icons/bs";
 import styles from "../styles/Home.module.css";
 import { useRouter } from "next/router";
 import { useDropzone } from "react-dropzone";
+import Image from "next/image";
 
 const newOutfit = () => {
   const [loading, setLoading] = useState(false)
@@ -284,11 +285,41 @@ const newOutfit = () => {
               <div 
                 className={`
                           flex flex-col justify-center items-center w-full xs:p-4 bg-purple-100 cursor-pointer
-                          w-full max-w-xs max-h-20 sm:max-w-sm md:max-w-lg
+                          w-full h-32 max-w-xs sm:max-w-sm md:max-w-lg
                           `+(isDragActive ? "border-dashed-animate" : "border-dashed border-2 border-black")}
                 {...getRootProps()}
               >
                 <input {...getInputProps()} />
+                <div className="relative flex justify-center items-center w-full">
+                    <Image
+                      height={50}
+                      width={50}
+                      className="w-16 h-16 block object-cover z-10"
+                      src="/images/types/folder.png"
+                    />
+                    <div className="absolute">
+                      <Image
+                        height={50}
+                        width={50}
+                        className={`
+                                    w-4 h-4 block object-cover transition duration-300 `+
+                                    (isDragActive ? 'z-20 translate-x-5 -translate-y-4 rotate-[30deg]' : 'z-0 translate-x-0 translate-y-0 rotate-0')
+                        }
+                        src="/images/types/png.png"
+                      />
+                    </div>
+                    <div className="absolute">
+                      <Image
+                        height={50}
+                        width={50}
+                        className={`
+                                    w-4 h-4 block object-cover transition duration-300 `+
+                                    (isDragActive ? 'z-20 translate-x-1 -translate-y-5 -rotate-[15deg]' : 'z-0 translate-x-0 translate-y-0 rotate-0')
+                        }
+                        src="/images/types/jpg.png"
+                      />
+                    </div>
+                </div>
                 <p className="font-display font-bold text-sm xs:text-md text-center text-black">Drag & Drop your images simultaniously here</p>
                 <p className="font-display font-medium text-xs xs:text-sm text-center text-black">(4 images Maximum)</p>
               </div>
