@@ -6,7 +6,7 @@ import { getSession } from "next-auth/react";
 
 export default async function Handler(req, res) {
   const session = await getSession({ req });
-  var verification;
+  var verification = false;
 
   const { cookies } = req;
   const jwt = cookies.authentication;
@@ -89,7 +89,7 @@ export default async function Handler(req, res) {
         path: "/",
       });
       res.setHeader("Set-Cookie", serialised);
-      return res.status(501).json({ message: "Invalid Token" });
+      return res.status(401).json({ message: "Invalid Token" });
     }
   }
 }

@@ -23,7 +23,7 @@ export default async function Handler(req, res) {
                 path: "/",
             });
             res.setHeader("Set-Cookie", serialised);
-            return res.status(501).json({message: "Invalid Token"});
+            return res.status(401).json({message: "Invalid Token"});
         }
     }
 }
