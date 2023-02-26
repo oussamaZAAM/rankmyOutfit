@@ -1,7 +1,6 @@
-import server from "@/config";
 import axios from "axios";
 import nookies from 'nookies';
-import { getSession, useSession } from "next-auth/react";
+import { getSession } from "next-auth/react";
 import { useCallback, useEffect, useState } from "react";
 import Head from "next/head";
 
@@ -17,8 +16,6 @@ import styles from "../styles/Home.module.css";
 import { useRouter } from "next/router";
 
 const newOutfit = () => {
-  const { data: session, status } = useSession();
-
   const [loading, setLoading] = useState(false)
   const [upLoading, setUpLoading] = useState(false)
 
@@ -54,7 +51,7 @@ const newOutfit = () => {
 
     var sizeInBytes = 4 * Math.ceil((stringLength / 3))*0.5624896334383812;
 
-    if (sizeInBytes >= 20000000){ // MAX 30MB, here 20MB 😏
+    if (sizeInBytes >= 5000000){ // MAX 30MB, here 5MB 😏
       alert("Image too Large! Maximum size is 20MB")
     } else {
       setImages((prevImages) => {

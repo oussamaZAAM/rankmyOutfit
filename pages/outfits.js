@@ -1,6 +1,6 @@
 import Head from "next/head";
 import { useState } from "react";
-import { MdOutlineAddCircle, MdOutlineArrowDropDown, MdRateReview } from "react-icons/md";
+import { MdOutlineAddCircle, MdOutlineArrowDropDown } from "react-icons/md";
 import { HiOutlineStar, HiStar } from "react-icons/hi";
 import styles from "../styles/Home.module.css";
 import Link from "next/link";

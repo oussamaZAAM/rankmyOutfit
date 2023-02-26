@@ -46,7 +46,7 @@ const Profile = () => {
   const [edit, setEdit] = useState(false);
 
   const onCropComplete = useCallback(
-    (croppedArea, croppedAreaPixels, index) => {
+    (croppedArea) => {
       const widthScale = 100 - croppedArea.width;
       const left = widthScale === 0 ? 0 : (croppedArea.x / widthScale) * 100;
       const heightScale = 100 - croppedArea.height;
@@ -101,6 +101,7 @@ const Profile = () => {
         setImage(base64);
         setProfile(formData);
       }
+      setEdit(true);
       e.target.value = "";
     } else {
       alert('Please drag an image');
