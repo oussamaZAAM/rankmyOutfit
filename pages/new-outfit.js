@@ -8,7 +8,7 @@ import FormData from 'form-data';
 import Cropper from 'react-easy-crop'
 
 import { MdAdd, MdOutlineCrop, MdDoneOutline } from "react-icons/md";
-import { RiImageEditLine } from "react-icons/ri";
+import { RiImageEditLine, RiDeleteBin6Line } from "react-icons/ri";
 import { TiCancel } from "react-icons/ti";
 import { BsEye, BsEyeSlash } from "react-icons/bs";
 
@@ -276,6 +276,30 @@ const newOutfit = () => {
               <h3 className="font-title font-bold text-4xl drop-shadow-lg text-my-pink2 mb-4">
                 Outfit
               </h3>
+              
+              <div 
+                className={`
+                          flex flex-col justify-center items-center w-full xs:p-4 bg-purple-100 cursor-pointer
+                          w-full max-w-xs max-h-20 sm:max-w-sm md:max-w-lg
+                          `+(isDragActive ? "border-dashed-animate" : "border-dashed border-2 border-black")}
+                {...getRootProps()}
+              >
+                <input {...getInputProps()} />
+                <p className="font-display font-bold text-sm xs:text-md text-center text-black">Drag & Drop your images simultaniously here</p>
+                <p className="font-display font-medium text-xs xs:text-sm text-center text-black">(4 images Maximum)</p>
+              </div>
+
+              <div 
+                className="w-full max-w-xs max-h-20 sm:max-w-sm md:max-w-xl my-4
+                          flex justify-end items-center 
+                          hover:cursor-pointer
+                          group
+                          "
+                onClick={()=>setImages([{}, {}, {}, {}])}
+              >
+                  <p className="font-title text-sm text-black group-hover:text-red-500 transition duration-150 text-center mx-2">Delete all images</p>
+                  <RiDeleteBin6Line className="group-hover:fill-red-500 transition duration-150" />
+              </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 justify-items-center gap-4">
                 {/* Image 1  */}
@@ -705,18 +729,6 @@ const newOutfit = () => {
                     </div>
                   </div>
                 </div>
-              </div>
-              
-              <div 
-                className={`
-                          flex flex-col justify-center items-center mt-4 w-full xs:p-4 bg-purple-100 
-                          w-full max-w-xs max-h-20 sm:max-w-sm md:max-w-lg
-                          `+(isDragActive ? "border-dashed-animate" : "border-dashed border-2 border-black")}
-                {...getRootProps()}
-              >
-                <input {...getInputProps()} />
-                <p className="font-display font-bold text-sm xs:text-md text-center text-black">Drag & Drop your images simultaniously here</p>
-                <p className="font-display font-medium text-xs xs:text-sm text-center text-black">(4 images Maximum)</p>
               </div>
 
               <div className="flex justify-center items-center my-4">
