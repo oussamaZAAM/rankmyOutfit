@@ -2,14 +2,38 @@ import Users from "@/model/UserSchema";
 import { serialize } from "cookie";
 import { verify } from "jsonwebtoken";
 import jwt_decode from "jwt-decode";
+import { getSession } from "next-auth/react";
 
 export default async function Handler(req, res) {
-    try {
-        const { cookies } = req;
-        const jwt = cookies.authentication;
-        verify(jwt, process.env.JWT_SECRET);
+    const session = await getSession({req});
+    var verification;
 
-        if (req.method === 'PUT') {
+    const { cookies } = req;
+    const jwt = cookies.authentication;
+    try{
+        verify(jwt, process.env.JWT_SECRET);
+        verification = true;
+    } catch(e) {
+        verification = false;
+    }
+    
+    if (session && session.user && session.expires) {
+        if (req.method === 'PUT') { 
+            const user = await Users.findOne({email: session.user.email});
+
+            if (!user) return res.status(404).json({message: 'User not found'});
+
+            const edit = await Users.updateOne(
+                {email: session.user.email}
+            )
+
+            if (!(edit && edit.matchedCount)) return res.status(503).json({message: 'Database Error'});
+
+            return res.status(200).json({message: "Please change your original account's Image"});
+        }
+    }
+    if (verification) {
+        if (req.method === 'PUT') { 
             const user = await Users.findOne({email: req.body.email});
 
             if (!user) return res.status(404).json({message: 'User not found'});
@@ -48,17 +72,5 @@ export default async function Handler(req, res) {
 
             res.status(200).json(requestData);
         }
-
-
-    } catch (e) {
-        const serialised = serialize("authentication", null, {
-            httpOnly: true,
-            secure: process.env.NEXT_ENV !== "dev",
-            sameSite: "strict",
-            maxAge: -1,
-            path: "/",
-        });
-        res.setHeader("Set-Cookie", serialised);
-        return res.status(501).json({message: "Invalid Token"});
     }
 }
