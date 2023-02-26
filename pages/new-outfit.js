@@ -709,14 +709,14 @@ const newOutfit = () => {
               
               <div 
                 className={`
-                          flex flex-col justify-center items-center mt-4 w-full p-4 bg-purple-100 
-                          w-full max-w-xs sm:max-w-sm md:max-w-lg
+                          flex flex-col justify-center items-center mt-4 w-full xs:p-4 bg-purple-100 
+                          w-full max-w-xs max-h-20 sm:max-w-sm md:max-w-lg
                           `+(isDragActive ? "border-dashed-animate" : "border-dashed border-2 border-black")}
                 {...getRootProps()}
               >
                 <input {...getInputProps()} />
-                <p className="font-display font-bold text-md text-center text-black">Drag & Drop your images here</p>
-                <p className="font-display font-medium text-sm text-center text-black">(4 images Maximum)</p>
+                <p className="font-display font-bold text-sm xs:text-md text-center text-black">Drag & Drop your images simultaniously here</p>
+                <p className="font-display font-medium text-xs xs:text-sm text-center text-black">(4 images Maximum)</p>
               </div>
 
               <div className="flex justify-center items-center my-4">
