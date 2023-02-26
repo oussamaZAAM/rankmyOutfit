@@ -116,6 +116,7 @@ const newOutfit = () => {
         alert('Please drag only images!')
       }
     })
+    
     for (let i=0; i<acceptedFiles.length; i++) {
       if ((acceptedFiles[i].type.split('/')[0] === 'image') && (i < 4)) {
         // Cloud
@@ -133,14 +134,32 @@ const newOutfit = () => {
           alert("Image too Large! Maximum size is 5MB")
         } else {
           setImages((prevImages) => {
-            const newImages = [...prevImages]; // Delete the old images
-            newImages[i] = {local: base64, formData: formData, isCropped: true, crop: {x: 0, y: 0}};
+            const newImages = [...prevImages];
+            newImages.push({local: base64, formData: formData, isCropped: true, crop: {x: 0, y: 0}});
             return newImages;
           });
         }
       }
     };
+    setImages((prevImages) => {
+      const newImages = [...prevImages];
+      var filteredImages = newImages.filter(image =>Object.keys(image).length !== 0);
+      if (filteredImages.length < 4) {
+        const length = filteredImages.length;
+        for (let i=4 ; i>length ; i--) {
+          console.log('i')
+          console.log(i)
+          filteredImages.push({});
+        }
+      }
+      if (filteredImages.length > 4) {
+        filteredImages = filteredImages.slice(-4);
+      }
+      return filteredImages;
+    })
   }
+
+  console.log(images)
 
   const {getRootProps, getInputProps, isDragActive} = useDropzone({onDrop})
 
