@@ -110,7 +110,7 @@ const newOutfit = () => {
       }
     })
     for (let i=0; i<acceptedFiles.length; i++) {
-      if (acceptedFiles[i].type.split('/')[0] === 'image') {
+      if ((acceptedFiles[i].type.split('/')[0] === 'image') && (i < 4)) {
         // Cloud
         const formData = new FormData();
         formData.append('image', acceptedFiles[i])
