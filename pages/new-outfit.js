@@ -1,7 +1,7 @@
 import server from "@/config";
 import axios from "axios";
 import nookies from 'nookies';
-import { getSession } from "next-auth/react";
+import { getSession, useSession } from "next-auth/react";
 import { useCallback, useEffect, useState } from "react";
 import Head from "next/head";
 
@@ -17,7 +17,7 @@ import styles from "../styles/Home.module.css";
 import { useRouter } from "next/router";
 
 const newOutfit = () => {
-  const [isUser, setIsUser] = useState();
+  const { data: session, status } = useSession();
 
   const [loading, setLoading] = useState(false)
   const [upLoading, setUpLoading] = useState(false)
@@ -26,11 +26,6 @@ const newOutfit = () => {
   const [savedImages, setSavedImages] = useState([]);
 
   const [outfitState, setOutfitState] = useState('none');
-
-  useEffect(() => {
-    const user_token = localStorage.getItem("authentication");
-    user_token && setIsUser(user_token);
-  }, []);
   
   //Functions
   const onCropComplete = useCallback((croppedArea, croppedAreaPixels, index) => {
@@ -702,21 +697,23 @@ export const getServerSideProps = async (context) => {
   const nookie = nookies.get(context);
   const token = nookie.authentication;
 
-  await fetch(`${process.env.NEXTAUTH_URL}/api/verify`, {
-    method: 'GET',
-    headers: {
-      'Authorization': `${token}`
-    },
-  })
-    .then((response) => {
-      if (response.ok) {
-        return response.json();
-      }
-      return Promise.reject(response);
+  if (!session) {
+    await fetch(`${process.env.NEXTAUTH_URL}/api/verify`, {
+      method: 'GET',
+      headers: {
+        'Authorization': `${token}`
+      },
     })
-    .catch((response) => {
-      redirection = true;
-    });
+      .then((response) => {
+        if (response.ok) {
+          return response.json();
+        }
+        return Promise.reject(response);
+      })
+      .catch((response) => {
+        redirection = true;
+      });
+  }
 
   if ((!session) && redirection) {
     return {
