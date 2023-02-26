@@ -25,7 +25,7 @@ const newOutfit = () => {
   const [outfitState, setOutfitState] = useState('none');
   
   //Functions
-  const onCropComplete = useCallback((croppedArea, croppedAreaPixels, index) => {
+  const onCropComplete = useCallback((croppedArea, index) => {
     const widthScale = 100 - croppedArea.width;
     const left = widthScale === 0 ? 0 : (croppedArea.x / widthScale) * 100;
     const heightScale = 100 - croppedArea.height;
@@ -640,6 +640,15 @@ const newOutfit = () => {
                     </div>
                   </div>
                 </div>
+              </div>
+              
+              <div className="border-dashed-animate flex flex-col justify-center items-center mt-4 w-full p-4 bg-gray-200
+                             
+                             "
+              >
+
+                <p className="font-display font-bold text-md text-center text-black">Drag & Drop your images here</p>
+                <p className="font-display font-medium text-sm text-center text-black">(4 images Maximum)</p>
               </div>
 
               <div className="flex justify-center items-center my-4">

@@ -132,17 +132,6 @@ const Profile = () => {
                     position,
                   },
                 });
-                localStorage.setItem(
-                  "user",
-                  JSON.stringify({
-                    ...user,
-                    image: {
-                      ...user.image,
-                      url: response.data.display_url,
-                      position,
-                    },
-                  })
-                );
               })
               .catch((err) => {
                 setError(err.response.data.message);
@@ -157,10 +146,6 @@ const Profile = () => {
           .put("/api/profile", { email: user.email, image: imageData })
           .then((response) => {
             setUser({ ...user, image: { ...user.image, position } });
-            localStorage.setItem(
-              "user",
-              JSON.stringify({ ...user, image: { ...user.image, position } })
-            );
             router.reload();
           })
           .catch((err) => {
@@ -180,7 +165,6 @@ const Profile = () => {
         .put("/api/profile", { email: user.email, image: imageData })
         .then((response) => {
           setUser({ ...user, image: {} });
-          localStorage.setItem("user", JSON.stringify({ ...user, image: {} }));
           router.reload();
         })
         .catch((err) => {
@@ -195,6 +179,7 @@ const Profile = () => {
   }
 
   const onDrop = useCallback(async acceptedFiles => {
+    console.log(acceptedFiles)
     if (acceptedFiles[0].type.split('/')[0] === 'image') {
       const file = acceptedFiles[0];
 
