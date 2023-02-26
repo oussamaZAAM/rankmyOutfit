@@ -296,13 +296,13 @@ const newOutfit = () => {
               <div 
                 className="w-full max-w-xs max-h-20 sm:max-w-sm md:max-w-xl my-4
                           flex justify-end items-center 
-                          hover:cursor-pointer
-                          group
                           "
                 onClick={()=>setImages([{}, {}, {}, {}])}
               >
-                  <p className="font-title text-sm text-black group-hover:text-red-500 transition duration-150 text-center mx-2">Delete all images</p>
-                  <RiDeleteBin6Line className="group-hover:fill-red-500 transition duration-150" />
+                  <div className="flex hover:cursor-pointer group">
+                    <p className="font-title text-sm text-black group-hover:text-red-500 transition duration-150 text-center mx-2">Delete all images</p>
+                    <RiDeleteBin6Line className="group-hover:fill-red-500 transition duration-150" />
+                  </div>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 justify-items-center gap-4">
