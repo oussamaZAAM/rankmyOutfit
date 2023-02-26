@@ -100,32 +100,36 @@ const newOutfit = () => {
       return newList;
     })
   }
-  // console.log(images)
 
   // Handle Drag and Drop Images
   const onDrop = async (acceptedFiles) => {
-    const emptyImagesCells = images.filter((image) => Object.keys(image).length === 0);
-    if (emptyImagesCells.length < acceptedFiles.length) {
-      if (confirm('Do you want to overwrite the uploaded images ?')) {
-        void(0);
-      } else {
-        return 0;
-      }
-    }
     acceptedFiles.some(file => {
       if (file.type.split('/')[0] !== 'image') {
-        alert('Please drag only images!')
+        alert('Please drag only images!');
       }
     })
+    const acceptedImages = acceptedFiles.filter((file) => file.type.split('/')[0] === 'image');
+    const emptyImagesCells = images.filter((image) => Object.keys(image).length === 0);
+    if (acceptedImages.length <= 4) {
+      if (emptyImagesCells.length < acceptedImages.length) {
+        if (confirm('Do you want to overwrite the uploaded images ?')) {
+          void(0);
+        } else {
+          return 0;
+        }
+      }
+    } else {
+      alert(acceptedImages.length + ' detected, only 4 will be accepted')
+    }
     
-    for (let i=0; i<acceptedFiles.length; i++) {
-      if ((acceptedFiles[i].type.split('/')[0] === 'image') && (i < 4)) {
+    for (let i=0; i<acceptedImages.length; i++) {
+      if ((acceptedImages[i].type.split('/')[0] === 'image') && (i < 4)) {
         // Cloud
         const formData = new FormData();
-        formData.append('image', acceptedFiles[i])
+        formData.append('image', acceptedImages[i])
 
         // Local
-        const base64 = await convertToBase64(acceptedFiles[i]);
+        const base64 = await convertToBase64(acceptedImages[i]);
 
         var stringLength = base64.length - 'data:image/png;base64,'.length;
 
