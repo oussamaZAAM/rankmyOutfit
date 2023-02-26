@@ -14,6 +14,7 @@ import { BsEye, BsEyeSlash } from "react-icons/bs";
 
 import styles from "../styles/Home.module.css";
 import { useRouter } from "next/router";
+import { useDropzone } from "react-dropzone";
 
 const newOutfit = () => {
   const [loading, setLoading] = useState(false)
@@ -24,8 +25,8 @@ const newOutfit = () => {
 
   const [outfitState, setOutfitState] = useState('none');
   
-  //Functions
-  const onCropComplete = useCallback((croppedArea, index) => {
+  // ----------------------------Functions----------------------------------
+  const onCropComplete = useCallback((croppedArea, croppedAreaPixels, index) => {
     const widthScale = 100 - croppedArea.width;
     const left = widthScale === 0 ? 0 : (croppedArea.x / widthScale) * 100;
     const heightScale = 100 - croppedArea.height;
@@ -37,6 +38,7 @@ const newOutfit = () => {
     });
   }, [])
   
+  // Preview images and fill images state
   const handleChange = async (e, index) => {
     const file = e.target.files[0];
 
@@ -80,6 +82,7 @@ const newOutfit = () => {
     });
   };
 
+  // Delete images from images state
   const deleteImage = (e, index) => {
     e.preventDefault();
     setImages((prevImages) => {
@@ -89,6 +92,7 @@ const newOutfit = () => {
     });
   };
 
+  // Handle isCropped state
   const enableCropImage = (index, boolean) => {
     setImages(prevList => {
       const newList = [...prevList]
@@ -96,6 +100,65 @@ const newOutfit = () => {
       return newList;
     })
   }
+
+  // Handle Drag and Drop Images
+  const onDrop = useCallback(async acceptedFiles => {
+    console.log(acceptedFiles);
+    acceptedFiles.some(file => {
+      if (file.type.split('/')[0] !== 'image') {
+        alert('Please drag only images!')
+      }
+    })
+    for (let i=0; i<acceptedFiles.length; i++) {
+      if (acceptedFiles[i].type.split('/')[0] === 'image') {
+        // Cloud
+        const formData = new FormData();
+        formData.append('image', acceptedFiles[i])
+
+        // Local
+        const base64 = await convertToBase64(acceptedFiles[i]);
+
+        var stringLength = base64.length - 'data:image/png;base64,'.length;
+
+        var sizeInBytes = 4 * Math.ceil((stringLength / 3))*0.5624896334383812;
+
+        if (sizeInBytes >= 5000000){ // MAX 30MB, here 5MB 😏
+          alert("Image too Large! Maximum size is 5MB")
+        } else {
+          setImages((prevImages) => {
+            const newImages = [...prevImages]; // Delete the old images
+            newImages[i] = {local: base64, formData: formData, isCropped: true, crop: {x: 0, y: 0}};
+            return newImages;
+          });
+        }
+      }
+    };
+      // const file = acceptedFiles[0];
+
+      // // Cloud
+      // const formData = new FormData();
+      // formData.append("image", file);
+
+      // // Local
+      // const base64 = await convertToBase64(file);
+
+      // var stringLength = base64.length - "data:image/png;base64,".length;
+
+      // var sizeInBytes = 4 * Math.ceil(stringLength / 3) * 0.5624896334383812;
+
+      // if (sizeInBytes >= 5000000) {
+      //   // MAX 30MB, here 5MB 😏
+      //   alert("Image too Large! Maximum size is 5MB");
+      // } else {
+      //   setImage(base64);
+      //   setProfile(formData);
+      //   setEdit(true);
+      // }
+  }, [])
+
+  console.log(images)
+
+  const {getRootProps, getInputProps, isDragActive} = useDropzone({onDrop})
 
   const addOutfit = async () => {
     // Run conditions on the images
@@ -642,11 +705,14 @@ const newOutfit = () => {
                 </div>
               </div>
               
-              <div className="border-dashed-animate flex flex-col justify-center items-center mt-4 w-full p-4 bg-gray-200
-                             
-                             "
+              <div 
+                className={`
+                          flex flex-col justify-center items-center mt-4 w-full p-4 bg-purple-100 
+                          w-full max-w-xs sm:max-w-sm md:max-w-lg
+                          `+(isDragActive ? "border-dashed-animate" : "border-dashed border-2 border-black")}
+                {...getRootProps()}
               >
-
+                <input {...getInputProps()} />
                 <p className="font-display font-bold text-md text-center text-black">Drag & Drop your images here</p>
                 <p className="font-display font-medium text-sm text-center text-black">(4 images Maximum)</p>
               </div>

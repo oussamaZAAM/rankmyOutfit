@@ -62,23 +62,8 @@ const Profile = () => {
   const [profile, setProfile] = useState();
 
   // ----------------------------Functions----------------------------------
-  const convertToBase64 = (file) => {
-    return new Promise((resolve, reject) => {
-      const fileReader = new FileReader();
-      if (!file) {
-        alert("Please pick an image");
-      } else {
-        fileReader.readAsDataURL(file);
-        fileReader.onload = () => {
-          resolve(fileReader.result);
-        };
-      }
-      fileReader.onerror = (error) => {
-        reject(error);
-      };
-    });
-  };
 
+  // Preview images and fill images state
   const handleUpload = async (e, type) => {
     const file = e.target.files[0];
     if (file.type.split('/')[0] === 'image') {
@@ -108,6 +93,54 @@ const Profile = () => {
     }
   };
 
+  const convertToBase64 = (file) => {
+    return new Promise((resolve, reject) => {
+      const fileReader = new FileReader();
+      if (!file) {
+        alert("Please pick an image");
+      } else {
+        fileReader.readAsDataURL(file);
+        fileReader.onload = () => {
+          resolve(fileReader.result);
+        };
+      }
+      fileReader.onerror = (error) => {
+        reject(error);
+      };
+    });
+  };
+
+  // Handle Drag and Drop Images
+  const onDrop = useCallback(async acceptedFiles => {
+    if (acceptedFiles[0].type.split('/')[0] === 'image') {
+      const file = acceptedFiles[0];
+
+      // Cloud
+      const formData = new FormData();
+      formData.append("image", file);
+
+      // Local
+      const base64 = await convertToBase64(file);
+
+      var stringLength = base64.length - "data:image/png;base64,".length;
+
+      var sizeInBytes = 4 * Math.ceil(stringLength / 3) * 0.5624896334383812;
+
+      if (sizeInBytes >= 5000000) {
+        // MAX 30MB, here 5MB 😏
+        alert("Image too Large! Maximum size is 5MB");
+      } else {
+        setImage(base64);
+        setProfile(formData);
+        setEdit(true);
+      }
+    } else {
+      alert('Please drag an image');
+    }
+  }, [])
+  const {getRootProps, getInputProps, isDragActive} = useDropzone({onDrop})
+
+  // Upload image to the server and save data
   const editProfileImage = async () => {
     setLoading(true);
     if (image && image.length > 0) {
@@ -174,39 +207,10 @@ const Profile = () => {
     setLoading(false);
   };
 
+  // Return to Sign in when token is lost
   function restoreSession() {
     router.reload();
   }
-
-  const onDrop = useCallback(async acceptedFiles => {
-    console.log(acceptedFiles)
-    if (acceptedFiles[0].type.split('/')[0] === 'image') {
-      const file = acceptedFiles[0];
-
-      // Cloud
-      const formData = new FormData();
-      formData.append("image", file);
-
-      // Local
-      const base64 = await convertToBase64(file);
-
-      var stringLength = base64.length - "data:image/png;base64,".length;
-
-      var sizeInBytes = 4 * Math.ceil(stringLength / 3) * 0.5624896334383812;
-
-      if (sizeInBytes >= 5000000) {
-        // MAX 30MB, here 5MB 😏
-        alert("Image too Large! Maximum size is 5MB");
-      } else {
-        setImage(base64);
-        setProfile(formData);
-        setEdit(true);
-      }
-    } else {
-      alert('Please drag an image');
-    }
-  }, [])
-  const {getRootProps, getInputProps, isDragActive} = useDropzone({onDrop})
 
   // -------------------------------------------------------------------------------------------------------------------
   
