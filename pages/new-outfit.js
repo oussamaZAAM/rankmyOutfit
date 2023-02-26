@@ -125,7 +125,8 @@ const newOutfit = () => {
           for (let i=0; i<filteredImages.length; i++) {
               // Upload to IMGBB
               setUpLoading(true);
-              await axios.post('http://localhost:5000/api/upload', filteredImages[i].formData)
+              await axios.post('https://encouraging-gold-gabardine.cyclic.app/api/upload', filteredImages[i].formData)
+              // await axios.post('http://localhost:5000/api/upload', filteredImages[i].formData)
                 .then((response) => {
                   if (filteredImages.length > 1) {
                     setSavedImages((prevList) => {
@@ -169,7 +170,6 @@ const newOutfit = () => {
               const sendOutfit = async() => {
                   const toSentData = {
                     image: savedImages,
-                    token: isUser.replace('"', '')
                   }
                   await axios.post('/api/outfits', JSON.stringify(toSentData), {
                     headers: {

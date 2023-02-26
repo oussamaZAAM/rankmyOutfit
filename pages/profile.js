@@ -112,8 +112,8 @@ const Profile = () => {
     if (image && image.length > 0) {
       if (profile) {
         await axios
-          // .post("https://encouraging-gold-gabardine.cyclic.app/api/upload", profile)
-          .post("http://localhost:5000/api/upload", profile)
+          .post("https://encouraging-gold-gabardine.cyclic.app/api/upload", profile)
+          // .post("http://localhost:5000/api/upload", profile)
           .then(async (response) => {
             const imageData = {
               url: response.data.display_url,
@@ -438,8 +438,6 @@ export const getServerSideProps = async (context) => {
     .catch((response) => {
       redirection = true;
     });
-
-    console.log(redirection)
 
   if (redirection) {
     return {
