@@ -163,8 +163,6 @@ const newOutfit = () => {
     })
   }
 
-  console.log(images)
-
   const {getRootProps, getInputProps, isDragActive} = useDropzone({onDrop})
 
   const addOutfit = async () => {
@@ -294,31 +292,57 @@ const newOutfit = () => {
                     <Image
                       height={50}
                       width={50}
-                      className="w-16 h-16 block object-cover z-10"
-                      src="/images/types/folder.png"
+                      className="w-16 h-16 block object-cover z-0 "
+                      src="/images/types/folder1.png"
                     />
-                    <div className="absolute">
-                      <Image
-                        height={50}
-                        width={50}
-                        className={`
-                                    w-4 h-4 block object-cover transition duration-300 `+
-                                    (isDragActive ? 'z-20 translate-x-5 -translate-y-4 rotate-[30deg]' : 'z-0 translate-x-0 translate-y-0 rotate-0')
-                        }
-                        src="/images/types/png.png"
-                      />
-                    </div>
-                    <div className="absolute">
-                      <Image
-                        height={50}
-                        width={50}
-                        className={`
-                                    w-4 h-4 block object-cover transition duration-300 `+
-                                    (isDragActive ? 'z-20 translate-x-1 -translate-y-5 -rotate-[15deg]' : 'z-0 translate-x-0 translate-y-0 rotate-0')
-                        }
-                        src="/images/types/jpg.png"
-                      />
-                    </div>
+
+                    {/* <div className=""> */}
+                      <div className={`
+                                      absolute bottom-0 bg-black border-2 border-white rounded-t-md rounded-br-md translate-x-1 -translate-y-1.5 origin-bottom-left block z-20 transition duration-500 w-16 h-8 `+
+                                      (isDragActive ? '-skew-x-[30deg] scale-y-75' : '-skew-x-6')
+                                    }
+                      ></div>
+                    {/* </div> */}
+
+                    <Image
+                      height={50}
+                      width={50}
+                      className={`
+                                  absolute w-4 h-4 block object-cover transition duration-300 z-10 `+
+                                  (isDragActive ? 'translate-x-7 -translate-y-4 rotate-[30deg]' : 'translate-x-3 translate-y-0.5 rotate-[30deg]')
+                      }
+                      src="/images/types/png.png"
+                    />
+
+                    <Image
+                      height={50}
+                      width={50}
+                      className={`
+                                  absolute w-4 h-4 block object-cover transition duration-300 z-10 `+
+                                  (isDragActive ? 'translate-x-3 -translate-y-5 -rotate-[15deg]' : 'translate-x-2 translate-y-px rotate-[15deg]')
+                      }
+                      src="/images/types/jpg.png"
+                    />
+
+                    <Image
+                      height={50}
+                      width={50}
+                      className={`
+                                  absolute w-4 h-4 block object-cover transitin duration-300 z-10 `+
+                                  (isDragActive ? '-translate-x-3 -translate-y-5 -rotate-[5deg]' : 'translate-x-0 translate-y-0 rotate-0')
+                      }
+                      src="/images/types/svg.png"
+                    />
+
+                    <Image
+                      height={50}
+                      width={50}
+                      className={`
+                                  absolute w-4 h-4 block object-cover transition duration-300 z-10 `+
+                                  (isDragActive ? '-translate-x-5 -translate-y-3 -rotate-[45deg]' : '-translate-x-2 translate-y-px -rotate-[15deg]')
+                      }
+                      src="/images/types/tif.png"
+                    />
                 </div>
                 <p className="font-display font-bold text-sm xs:text-md text-center text-black">Drag & Drop your images simultaniously here</p>
                 <p className="font-display font-medium text-xs xs:text-sm text-center text-black">(4 images Maximum)</p>
