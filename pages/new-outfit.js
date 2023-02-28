@@ -296,20 +296,18 @@ const newOutfit = () => {
                       src="/images/types/folder1.png"
                     />
 
-                    {/* <div className=""> */}
-                      <div className={`
-                                      absolute bottom-0 bg-black border-2 border-white rounded-t-md rounded-br-md translate-x-1 -translate-y-1.5 origin-bottom-left block z-20 transition duration-500 w-16 h-8 `+
-                                      (isDragActive ? '-skew-x-[30deg] scale-y-75' : '-skew-x-6')
-                                    }
-                      ></div>
-                    {/* </div> */}
+                    <div className={`
+                                    absolute bottom-0 bg-black border-2 border-white rounded-t-md rounded-br-md translate-x-1 -translate-y-1.5 origin-bottom-left block z-20 transition duration-500 w-16 h-8 `+
+                                    (isDragActive ? '-skew-x-[30deg] scale-y-75' : '-skew-x-6')
+                                  }
+                    ></div>
 
                     <Image
                       height={50}
                       width={50}
                       className={`
-                                  absolute w-4 h-4 block object-cover transition duration-300 z-10 `+
-                                  (isDragActive ? 'translate-x-7 -translate-y-4 rotate-[30deg]' : 'translate-x-3 translate-y-0.5 rotate-[30deg]')
+                                  absolute w-6 h-6 block object-cover transition duration-300 z-[14] `+
+                                  (isDragActive ? 'translate-x-8 -translate-y-3 rotate-[30deg]' : 'translate-x-3 translate-y-0.5 rotate-[15deg]')
                       }
                       src="/images/types/png.png"
                     />
@@ -318,8 +316,8 @@ const newOutfit = () => {
                       height={50}
                       width={50}
                       className={`
-                                  absolute w-4 h-4 block object-cover transition duration-300 z-10 `+
-                                  (isDragActive ? 'translate-x-3 -translate-y-5 -rotate-[15deg]' : 'translate-x-2 translate-y-px rotate-[15deg]')
+                                  absolute w-6 h-6 block object-cover transition duration-300 z-[13] `+
+                                  (isDragActive ? 'translate-x-4 -translate-y-5 rotate-[10deg]' : 'translate-x-2 translate-y-px rotate-[5deg]')
                       }
                       src="/images/types/jpg.png"
                     />
@@ -328,8 +326,8 @@ const newOutfit = () => {
                       height={50}
                       width={50}
                       className={`
-                                  absolute w-4 h-4 block object-cover transitin duration-300 z-10 `+
-                                  (isDragActive ? '-translate-x-3 -translate-y-5 -rotate-[5deg]' : 'translate-x-0 translate-y-0 rotate-0')
+                                  absolute w-6 h-6 block object-cover transitin duration-300 z-[12] `+
+                                  (isDragActive ? '-translate-x-0 -translate-y-5 -rotate-[10deg]' : 'translate-x-0 translate-y-0 -rotate-[5deg]')
                       }
                       src="/images/types/svg.png"
                     />
@@ -338,8 +336,8 @@ const newOutfit = () => {
                       height={50}
                       width={50}
                       className={`
-                                  absolute w-4 h-4 block object-cover transition duration-300 z-10 `+
-                                  (isDragActive ? '-translate-x-5 -translate-y-3 -rotate-[45deg]' : '-translate-x-2 translate-y-px -rotate-[15deg]')
+                                  absolute w-6 h-6 block object-cover transition duration-300 z-[11] `+
+                                  (isDragActive ? '-translate-x-4 -translate-y-3 -rotate-[30deg]' : '-translate-x-2 translate-y-px -rotate-[15deg]')
                       }
                       src="/images/types/tif.png"
                     />
