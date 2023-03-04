@@ -282,7 +282,7 @@ const newOutfit = () => {
               
               <div 
                 className={`
-                          flex flex-col justify-center items-center w-full xs:p-4 bg-purple-100 cursor-pointer
+                          flex flex-col justify-center items-center xs:p-4 bg-purple-100 cursor-pointer
                           w-full h-32 max-w-xs sm:max-w-sm md:max-w-lg
                           `+(isDragActive ? "border-dashed-animate" : "border-dashed border-2 border-black")}
                 {...getRootProps()}
@@ -293,7 +293,7 @@ const newOutfit = () => {
                       height={50}
                       width={50}
                       className="w-16 h-16 block object-cover z-0 "
-                      src="/images/types/folder1.png"
+                      src="/images/animations/folder1.png"
                     />
 
                     <div className={`
@@ -309,7 +309,7 @@ const newOutfit = () => {
                                   absolute w-6 h-6 block object-cover transition duration-300 z-[14] `+
                                   (isDragActive ? 'translate-x-8 -translate-y-3 rotate-[30deg]' : 'translate-x-3 translate-y-0.5 rotate-[15deg]')
                       }
-                      src="/images/types/png.png"
+                      src="/images/animations/png.png"
                     />
 
                     <Image
@@ -319,7 +319,7 @@ const newOutfit = () => {
                                   absolute w-6 h-6 block object-cover transition duration-300 z-[13] `+
                                   (isDragActive ? 'translate-x-4 -translate-y-5 rotate-[10deg]' : 'translate-x-2 translate-y-px rotate-[5deg]')
                       }
-                      src="/images/types/jpg.png"
+                      src="/images/animations/jpg.png"
                     />
 
                     <Image
@@ -329,7 +329,7 @@ const newOutfit = () => {
                                   absolute w-6 h-6 block object-cover transitin duration-300 z-[12] `+
                                   (isDragActive ? '-translate-x-0 -translate-y-5 -rotate-[10deg]' : 'translate-x-0 translate-y-0 -rotate-[5deg]')
                       }
-                      src="/images/types/svg.png"
+                      src="/images/animations/svg.png"
                     />
 
                     <Image
@@ -339,7 +339,7 @@ const newOutfit = () => {
                                   absolute w-6 h-6 block object-cover transition duration-300 z-[11] `+
                                   (isDragActive ? '-translate-x-4 -translate-y-3 -rotate-[30deg]' : '-translate-x-2 translate-y-px -rotate-[15deg]')
                       }
-                      src="/images/types/tif.png"
+                      src="/images/animations/tif.png"
                     />
                 </div>
                 <p className="font-display font-bold text-sm xs:text-md text-center text-black">Drag & Drop your images simultaniously here</p>
@@ -395,7 +395,7 @@ const newOutfit = () => {
                     </div>
                   )}
                   {images[0].local && !images[0].isCropped
-                  && <div className={"absolute top-0 right-0 block lg:hidden p-2 rounded-full flex justify-center bg-gray-500 itens-center bg-gray-500 "+(images[0].overview ? 'opacity-50' : 'opacity-100')}>
+                  && <div className={"absolute top-0 right-0 lg:hidden p-2 rounded-full flex justify-center itens-center bg-gray-500 "+(images[0].overview ? 'opacity-50' : 'opacity-100')}>
                     <button onClick={()=>{
                       setImages(prevList => {
                         const newList = [...prevList]
@@ -502,7 +502,7 @@ const newOutfit = () => {
                     </div>
                   )}
                   {images[1].local && !images[1].isCropped
-                  && <div className={"absolute top-0 right-0 block lg:hidden p-2 rounded-full flex justify-center bg-gray-500 itens-center bg-gray-500 "+(images[1].overview ? 'opacity-50' : 'opacity-100')}>
+                  && <div className={"absolute top-0 right-0 lg:hidden p-2 rounded-full flex justify-center itens-center bg-gray-500 "+(images[1].overview ? 'opacity-50' : 'opacity-100')}>
                     <button onClick={()=>{
                       setImages(prevList => {
                         const newList = [...prevList]
@@ -609,7 +609,7 @@ const newOutfit = () => {
                     </div>
                   )}
                   {images[2].local && !images[2].isCropped
-                  && <div className={"absolute top-0 right-0 block lg:hidden p-2 rounded-full flex justify-center bg-gray-500 itens-center bg-gray-500 "+(images[2].overview ? 'opacity-50' : 'opacity-100')}>
+                  && <div className={"absolute top-0 right-0 lg:hidden p-2 rounded-full flex justify-center itens-center bg-gray-500 "+(images[2].overview ? 'opacity-50' : 'opacity-100')}>
                     <button onClick={()=>{
                       setImages(prevList => {
                         const newList = [...prevList]
@@ -716,7 +716,7 @@ const newOutfit = () => {
                     </div>
                   )}
                   {images[3].local && !images[3].isCropped
-                  && <div className={"absolute top-0 right-0 block lg:hidden p-2 rounded-full flex justify-center bg-gray-500 itens-center bg-gray-500 "+(images[3].overview ? 'opacity-50' : 'opacity-100')}>
+                  && <div className={"absolute top-0 right-0 lg:hidden p-2 rounded-full flex justify-center itens-center bg-gray-500 "+(images[3].overview ? 'opacity-50' : 'opacity-100')}>
                     <button onClick={()=>{
                       setImages(prevList => {
                         const newList = [...prevList]

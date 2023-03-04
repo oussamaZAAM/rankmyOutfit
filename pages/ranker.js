@@ -1,7 +1,40 @@
 import Head from "next/head";
+import Image from "next/image";
+import { useCallback } from "react";
+import { useDropzone } from "react-dropzone";
 import styles from "../styles/Home.module.css";
 
 const Ranker = () => {
+  // Handle Drag and Drop Images
+  const onDrop = useCallback(async acceptedFiles => {
+    if (acceptedFiles[0].type.split('/')[0] === 'image') {
+      // const file = acceptedFiles[0];
+
+      // // Cloud
+      // const formData = new FormData();
+      // formData.append("image", file);
+
+      // // Local
+      // const base64 = await convertToBase64(file);
+
+      // var stringLength = base64.length - "data:image/png;base64,".length;
+
+      // var sizeInBytes = 4 * Math.ceil(stringLength / 3) * 0.5624896334383812;
+
+      // if (sizeInBytes >= 5000000) {
+      //   // MAX 30MB, here 5MB 😏
+      //   alert("Image too Large! Maximum size is 5MB");
+      // } else {
+      //   setImage(base64);
+      //   setProfile(formData);
+      //   setEdit(true);
+      // }
+    } else {
+      alert('Please drag an image');
+    }
+  }, [])
+
+  const {getRootProps, getInputProps, isDragActive} = useDropzone({onDrop});
   return (
     <>
       <Head>
@@ -11,22 +44,74 @@ const Ranker = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <div className="grid grid-cols-8 w-full">
+      <div className="grid grid-cols-8 w-full" {...getRootProps()}>
+        <input {...getInputProps()} />
+        {isDragActive
+        ? <div className="
+                          col-span-8 md:col-start-0 md:col-span-8 
+                          flex flex-col justify-center items-center 
+                          border-dashed border-2 border-black rounded-3xl
+                          h-[90vh]
+                        "
+          >
+            <div
+              className={
+                "flex flex-col justify-center items-center shadow-lg rounded-[36px] mx-2 px-8 sm:px-16 py-4 mb-8 cursor-pointer bg-black group " +
+                styles.boxshadow
+              }
+            >
+              <div className="relative flex flex-col justify-center items-center">
+                <Image
+                  height={50}
+                  width={50}
+                  className={"w-16 h-16 block object-cover z-10 "+(isDragActive && 'animate-bounce')}
+                  src="/images/animations/upload-arrow.png"
+                />
+                <Image
+                  height={50}
+                  width={50}
+                  className="absolute w-16 h-16 block object-cover z-0"
+                  src="/images/animations/upload-base.png"
+                />
+              </div>
+              <b className="font-display font-medium text-lg mobile:text-xl text-white sm:font-bold">
+                Upload your Images
+              </b>
+              <p className="text-xs font-display text-white sm:font-bold">
+                You can add up to 4 images. Only .png .jpg, jpeg files
+              </p>
+            </div>
+        </div>
+        :
         <div className="md:col-start-2 col-span-8 md:col-span-6 flex flex-col justify-center items-center shadow-md background-image rounded">
-          <h3 className="font-title font-black text-4xl drop-shadow-lg text-black drop-shadow mt-8 mb-4 tracking-wide">
+          <h3 className="font-title font-black text-4xl text-black drop-shadow mt-8 mb-4 tracking-wide">
             Rate your
           </h3>
 
-          <h3 className="font-title font-black text-5xl drop-shadow-lg text-white drop-shadow mb-8 tracking-wide">
+          <h3 className="font-title font-black text-5xl text-white drop-shadow mb-8 tracking-wide">
             Outfit
           </h3>
 
           <div
             className={
-              "flex flex-col justify-center items-center shadow-lg rounded-full mx-2 px-8 sm:px-16 py-4 mb-8 cursor-pointer hover:bg-my-pink1 group " +
+              "flex flex-col justify-center items-center shadow-lg rounded-[36px] mx-2 px-8 sm:px-16 py-4 mb-8 cursor-pointer hover:bg-my-pink1 group " +
               styles.boxshadow
             }
           >
+            <div className="relative flex flex-col justify-center items-center">
+              <Image
+                height={50}
+                width={50}
+                className={"w-16 h-16 block object-cover z-10 "}
+                src="/images/animations/upload-arrow.png"
+              />
+              <Image
+                height={50}
+                width={50}
+                className="absolute w-16 h-16 block object-cover z-0"
+                src="/images/animations/upload-base.png"
+              />
+            </div>
             <b className="font-display font-medium text-lg mobile:text-xl text-white group-hover:text-black sm:group-hover:font-bold">
               Upload your Images
             </b>
@@ -51,7 +136,7 @@ const Ranker = () => {
               While waiting, you can vote other people’s outfits.
             </li>
           </div>
-        </div>
+        </div>}
       </div>
     </>
   );

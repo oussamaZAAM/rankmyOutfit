@@ -138,7 +138,7 @@ const Profile = () => {
       alert('Please drag an image');
     }
   }, [])
-  console.log(error)
+  
   const {getRootProps, getInputProps, isDragActive} = useDropzone({onDrop})
 
   // Upload image to the server and save data

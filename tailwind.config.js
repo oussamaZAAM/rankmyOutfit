@@ -9,6 +9,7 @@ module.exports = {
       animation: {
         'pingonce': 'ping 0.5s ease-in',
         'wiggle': 'wiggle 0.45s ease-in',
+        'bouncing': 'bouncing 1s infinite ease-out',
       },
       keyframes: {
           ping: {
@@ -21,6 +22,11 @@ module.exports = {
             '0%': { transform: 'rotate(0deg)' },
             '50%': { transform: 'rotate(-25deg) scale(1.15)' },
             '100%': { transform: 'rotate(0deg)' },
+          },
+          bouncing: {
+            '0%': { transform: 'translateY(0)'},
+            '50%': { transform: 'translateY(-12px)'},
+            '100%': { transform: 'translateY(0)'},
           }
       },
       colors: {
