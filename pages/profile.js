@@ -138,6 +138,7 @@ const Profile = () => {
       alert('Please drag an image');
     }
   }, [])
+  console.log(error)
   const {getRootProps, getInputProps, isDragActive} = useDropzone({onDrop})
 
   // Upload image to the server and save data
@@ -272,7 +273,7 @@ const Profile = () => {
                 </div>
               )
             ) : (
-              <div className={"z-50 block object-cover w-full h-full rounded-full bg-gray-500 "+(isDragActive && 'border-dashed border-2 border-white')} {...getRootProps()}>
+              (error !== "Invalid Token") && <div className={"z-50 block object-cover w-full h-full rounded-full bg-gray-500 "+(isDragActive && 'border-dashed border-2 border-white')} {...getRootProps()}>
                   <input {...getInputProps()} />
                   <div className="absolute inset-y-2/4 w-full h-6 bg-black scale-x-100 group-hover:scale-x-[0.25] transition duration-100">
                     {!isDragActive 
@@ -383,13 +384,13 @@ const Profile = () => {
         </div>
         <div
           className={
-            "fixed top-1/3 bg-orange-100 border-l-4 border-orange-500 text-orange-700 p-4 transition duration-300  " +
+            "fixed top-1/3 bg-red-100 border-l-4 border-red-500 text-red-700 p-4 transition duration-300  " +
             (error !== "" ? "visible scale-150" : "invisible scale-0")
           }
           role="alert"
         >
           <div className="h-full flex flex-col justify-center">
-            <p className="font-bold">{"error"}</p>
+            <p className="font-bold">error</p>
             <p>Your token is lost. Please : </p>
           </div>
           <div className="flex justify-center items-center my-4">
