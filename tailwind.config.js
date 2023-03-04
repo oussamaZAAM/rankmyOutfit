@@ -25,7 +25,7 @@ module.exports = {
           },
           bouncing: {
             '0%': { transform: 'translateY(0)'},
-            '50%': { transform: 'translateY(-12px)'},
+            '50%': { transform: 'translateY(-12px) scaleY(0.8)'},
             '100%': { transform: 'translateY(0)'},
           }
       },
