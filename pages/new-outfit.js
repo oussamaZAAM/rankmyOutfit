@@ -17,7 +17,7 @@ import { useRouter } from "next/router";
 import { useDropzone } from "react-dropzone";
 import Image from "next/image";
 
-const newOutfit = () => {
+const NewOutfit = () => {
   const [loading, setLoading] = useState(false)
   const [upLoading, setUpLoading] = useState(false)
 
@@ -826,7 +826,7 @@ const newOutfit = () => {
   );
 };
 
-export default newOutfit;
+export default NewOutfit;
 
 // export const getServerSideProps = async (context) => {
 //   const session = await getSession(context);

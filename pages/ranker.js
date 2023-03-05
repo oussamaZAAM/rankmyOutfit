@@ -68,12 +68,14 @@ const Ranker = () => {
                 height={200}
                 className={"w-16 h-16 block object-cover z-10 "+(isDragActive && 'animate-bouncing')}
                 src="/images/animations/upload-arrow.png"
+                alt="Upload"
               />
               <Image
                 width={200}
                 height={200}
                 className="absolute w-16 h-16 block object-cover z-0"
                 src="/images/animations/upload-base.png"
+                alt="Upload"
               />
             </div>
             <b className="font-display font-medium text-lg mobile:text-xl text-white group-hover:text-black sm:group-hover:font-bold">

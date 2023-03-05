@@ -7,7 +7,7 @@ import Link from "next/link";
 import badge from "../public/images/badge.png";
 import Image from "next/image";
 
-const outfits = ({ outfitsData }) => {
+const Outfits = ({ outfitsData }) => {
   const [rate, setRate] = useState(false);
   const [sort, setSort] = useState({
     state: false,
@@ -471,7 +471,7 @@ const outfits = ({ outfitsData }) => {
   );
 };
 
-export default outfits;
+export default Outfits;
 
 export const getStaticProps = async () => {
   const res = await fetch(`${process.env.NEXTAUTH_URL}/api/outfits`);
