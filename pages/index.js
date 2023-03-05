@@ -171,7 +171,7 @@ export default function Home() {
           height={2000}
           alt="Background"
           className="h-48 w-full object-cover -mt-12"
-          src='/images/sub-background2.png'
+          src='/images/subBackground2.png'
         />
 
         <div className="mobile:grid grid-cols-8 w-full">

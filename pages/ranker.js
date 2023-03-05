@@ -45,7 +45,7 @@ const Ranker = () => {
       </Head>
 
       <div className="grid grid-cols-8 w-full">
-        <div className="md:col-start-2 col-span-8 md:col-span-6 flex flex-col justify-center items-center shadow-md rounded bg-[url('/images/sun-tornado1.png')]">
+        <div className="md:col-start-2 col-span-8 md:col-span-6 flex flex-col justify-center items-center shadow-md rounded bg-[url('/images/sunTornado1.png')]">
           <h3 className="font-title font-black text-4xl text-black drop-shadow mt-8 mb-4 tracking-wide">
             Rate your
           </h3>
