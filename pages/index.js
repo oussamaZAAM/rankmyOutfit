@@ -67,8 +67,8 @@ export default function Home() {
 
         {/* Separator 1 */}
         <Image
-          width={500}
-          height={500}
+          width={2000}
+          height={2000}
           alt="Background"
           className="h-48 w-full object-cover -mt-12"
           src='/images/sub-background1.png'
@@ -167,8 +167,8 @@ export default function Home() {
 
         {/* Separator 2 */}
         <Image
-          width={100}
-          height={100}
+          width={2000}
+          height={2000}
           alt="Background"
           className="h-48 w-full object-cover -mt-12"
           src='/images/sub-background2.png'
@@ -248,8 +248,8 @@ export default function Home() {
 
         {/* Separator 3 */}
         <Image
-          width={500}
-          height={500}
+          width={2000}
+          height={2000}
           alt="Background"
           className="h-48 w-full object-cover -mt-12"
           src='/images/sub-background1.png'

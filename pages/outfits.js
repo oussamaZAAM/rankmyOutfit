@@ -26,7 +26,6 @@ const Outfits = ({ outfitsData }) => {
   const mockUser = 17;
 
   const [outfitsList, setOutfitsList] = useState(outfitsData);
-
   // Functions
   const editOutfitsRate = (outfitIndex, imageIndex, user) => {
     setOutfitsList(prevList => {
@@ -475,15 +474,15 @@ const Outfits = ({ outfitsData }) => {
 
 export default Outfits;
 
-export const getStaticProps = async () => {
+export const getServerSideProps = async () => {
   const url =
     process.env.VERCEL_ENV === "production"
       ? "https://rankmy-outfit-pyx6de4hw-oussamazaam.vercel.app/api/outfits"
       : "http://localhost:3000/api/outfits";
 
   const res = await axios.get(url);
-
   const outfitsData = await res.data;
+
   return {
     props: {
       outfitsData,

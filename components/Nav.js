@@ -125,7 +125,7 @@ const Nav = () => {
           </h1>
         </Link>
         <div className="hidden md:flex col-span-2"></div>
-        <div className="flex justify-evenly items-center | invisible sm:visible  | sm:flex col-span-2">
+        <div className="justify-evenly items-center hidden sm:flex col-span-2">
           <h5
             className="text-sm font-bold font-display"
             style={{ color: "#DB76DC" }}

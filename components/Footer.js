@@ -11,8 +11,8 @@ const Footer = () => {
   return (
     <div>
       <Image
-        width={500}
-        height={500}
+        width={2000}
+        height={2000}
         alt="Background2"
         className="h-64 sm:h-48 w-screen object-cover -mt-12 -mb-48 sm:-mb-32"
         src='/images/sub-background2.png'
