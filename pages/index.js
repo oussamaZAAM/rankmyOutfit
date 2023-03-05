@@ -6,6 +6,7 @@ import subBackground1 from "../public/images/sub-background1.png";
 import subBackground2 from "../public/images/sub-background2.png";
 import loading from "../public/images/loading.png";
 import Link from "next/link";
+import Image from "next/image";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -66,7 +67,10 @@ export default function Home() {
         </div>
 
         {/* Separator 1 */}
-        <img
+        <Image
+          width={500}
+          height={500}
+          alt="Background2"
           className="h-48 w-full object-cover -mt-12"
           src={subBackground1.src}
         />
@@ -97,12 +101,14 @@ export default function Home() {
                           rounded-t-full rounded-bl-full drop-shadow-md"
                 style={{ backgroundColor: "#FFF4FF" }}
               >
-                <img
+                <Image
+                  width={160}
+                  height={160}
+                  alt="loading"
                   src={loading.src}
                   className="
                             hidden xs:block
-                            h-24 h-24
-                            sm:h-40 sm:h-40
+                            h-24 sm:h-40
                             object-cover rounded-full border-2"
                 />
                 <p className="
@@ -130,12 +136,14 @@ export default function Home() {
                           rounded-b-full rounded-tl-full  md:rounded-t-full md:rounded-br-full md:rounded-bl-none drop-shadow-md"
                 style={{ backgroundColor: "#FFF4FF" }}
               >
-                <img
+                <Image
+                  width={160}
+                  height={160}
+                  alt="loading"
                   src={loading.src}
                   className="
                             hidden xs:block
-                            h-24 h-24
-                            sm:h-40 sm:h-40
+                            h-24 sm:h-40 
                             object-cover rounded-full border-2"
                 />
                 <p className="
@@ -159,7 +167,10 @@ export default function Home() {
         </div>
 
         {/* Separator 2 */}
-        <img
+        <Image
+          width={100}
+          height={100}
+          alt="Background2"
           className="h-48 w-full object-cover -mt-12"
           src={subBackground2.src}
         />
@@ -237,7 +248,10 @@ export default function Home() {
         </div>
 
         {/* Separator 3 */}
-        <img
+        <Image
+          width={500}
+          height={500}
+          alt="Background1"
           className="h-48 w-full object-cover -mt-12"
           src={subBackground1.src}
         />
@@ -267,12 +281,14 @@ export default function Home() {
                           rounded-b-full rounded-tl-full md:rounded-t-full md:rounded-bl-none md:rounded-br-full drop-shadow-md"
                 style={{ backgroundColor: "#FFF4FF" }}
               >
-                <img
+                <Image
+                  width={160}
+                  height={160}
+                  alt="loading"
                   src={loading.src}
                   className="
                             hidden xs:block
-                            h-24 h-24
-                            sm:h-40 sm:h-40
+                            h-24 sm:h-40 
                             object-cover rounded-full border-2"
                 />
                 <p className="
@@ -299,12 +315,14 @@ export default function Home() {
                           rounded-b-full rounded-t-full drop-shadow-md"
                 style={{ backgroundColor: "#FFF4FF" }}
               >
-                <img
+                <Image
+                  width={160}
+                  height={160}
+                  alt="loading"
                   src={loading.src}
                   className="
                             hidden xs:block
-                            h-24 h-24
-                            sm:h-40 sm:h-40
+                            h-24 sm:h-40 
                             object-cover rounded-full border-2"
                 />
                 <p className="
@@ -331,12 +349,15 @@ export default function Home() {
                           rounded-bl-full rounded-t-full drop-shadow-md"
                 style={{ backgroundColor: "#FFF4FF" }}
               >
-                <img
+                <Image
+                  width={160}
+                  height={160}
+                  alt="loading"
                   src={loading.src}
                   className="
                             hidden xs:block
-                            h-24 h-24
-                            sm:h-40 sm:h-40
+                            h-24
+                            sm:h-40
                             object-cover rounded-full border-2"
                 />
                 <p className="

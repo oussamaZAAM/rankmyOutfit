@@ -64,14 +64,14 @@ const Ranker = () => {
             <input {...getInputProps()} />
             <div className="relative flex flex-col justify-center items-center">
               <Image
-                height={50}
-                width={50}
+                width={200}
+                height={200}
                 className={"w-16 h-16 block object-cover z-10 "+(isDragActive && 'animate-bouncing')}
                 src="/images/animations/upload-arrow.png"
               />
               <Image
-                height={50}
-                width={50}
+                width={200}
+                height={200}
                 className="absolute w-16 h-16 block object-cover z-0"
                 src="/images/animations/upload-base.png"
               />

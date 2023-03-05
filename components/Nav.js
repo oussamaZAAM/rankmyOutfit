@@ -111,11 +111,12 @@ const Nav = () => {
           className="flex justify-center items-center | col-span-5 sm:col-span-4 md:col-span-2"
           href="/"
         >
-          <img
+          <Image
+            width={30}
+            height={30}
             className="mx-2 xs:mx-4"
             src="/favicon.ico"
             alt="logo"
-            width={30}
           />
           <h1
             className="text-md xs:text-xl font-black font-display"
@@ -164,9 +165,9 @@ const Nav = () => {
                   >
                     <span className="sr-only">Open user menu</span>
                     <Image
-                      height={50}
-                      width={50}
-                      className="w-8 h-8 rounded-full block object-cover w-full h-full rounded-3xl bg-gray-500"
+                      height={100}
+                      width={100}
+                      className="w-8 h-8 rounded-full block object-cover bg-gray-500"
                       priority={true}
                       src={src}
                       onError={() => setSrc("/images/user.png")}
@@ -248,8 +249,8 @@ const Nav = () => {
                 >
                   <span className="sr-only">Open user menu</span>
                   <Image
-                    height={50}
-                    width={50}
+                    height={100}
+                    width={100}
                     className="w-8 h-8 rounded-full"
                     src={sessionSrc}
                     onError={() => setSessionSrc("/images/user.png")}

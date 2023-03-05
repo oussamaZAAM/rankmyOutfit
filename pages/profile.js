@@ -11,6 +11,7 @@ import { MdAdd, MdOutlineCrop, MdDoneOutline } from "react-icons/md";
 import { RiImageEditLine } from "react-icons/ri";
 import { HiOutlineExclamationCircle } from "react-icons/hi";
 import { TiCancel } from "react-icons/ti";
+import Image from "next/image";
 
 const Profile = () => {
   //-----------------Router Handling---------------------
@@ -242,7 +243,10 @@ const Profile = () => {
                 <div className="relative rounded-full mobile:w-72 mobile:h-72 cursor-pointer transition duration-300 group" {...getRootProps()}>
                   <input {...getInputProps()} />
                   {!isDragActive 
-                    ? <img
+                    ? <Image
+                      width={250}
+                      height={250}
+                      alt="outfit"
                       className="block object-cover w-full h-full rounded-full bg-gray-500"
                       style={
                         position && {
@@ -254,7 +258,10 @@ const Profile = () => {
                     />
                     : 
                     <div className="relative object-cover w-full h-full rounded-full bg-gray-500 border-dashed border-2 border-white">
-                      <img
+                      <Image
+                        width={250}
+                        height={250}
+                        alt="outfit"
                         className="block object-cover w-full h-full rounded-full blur-sm"
                         style={
                           position && {

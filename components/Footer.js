@@ -6,11 +6,15 @@ import {
   AiFillInstagram,
   AiFillGithub,
 } from "react-icons/ai";
+import Image from "next/image";
 
 const Footer = () => {
   return (
     <div>
-      <img
+      <Image
+        width={500}
+        height={500}
+        alt="Background2"
         className="h-64 sm:h-48 w-screen object-cover -mt-12 -mb-48 sm:-mb-32"
         src={subBackground2.src}
       />
@@ -24,7 +28,7 @@ const Footer = () => {
               <div className="flex flex-col justify-center items-center space-y-4 my-4">
                 <div className="grid grid-cols-6 w-48 cursor-pointer">
                   <div className="flex justify-center items-center col-span-2">
-                    <img src="/favicon.ico" alt="" width={30} />
+                    <Image src="/favicon.ico" alt="logo" width={30} height={30} />
                   </div>
                   <div className="flex justify-center items-center col-start-3 col-span-4">
                     <span

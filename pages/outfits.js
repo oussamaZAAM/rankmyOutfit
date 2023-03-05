@@ -5,6 +5,7 @@ import { HiOutlineStar, HiStar } from "react-icons/hi";
 import styles from "../styles/Home.module.css";
 import Link from "next/link";
 import badge from "../public/images/badge.png";
+import Image from "next/image";
 
 const outfits = ({ outfitsData }) => {
   const [rate, setRate] = useState(false);
@@ -79,17 +80,21 @@ const outfits = ({ outfitsData }) => {
             onClick={() => editOutfitsRate(outfitIndex, imageIndex, mockUser)}
             className="relative rounded-3xl w-64 h-80 mobile:w-72 mobile:h-96 cursor-pointer transition duration-300 hover:opacity-75"
           >
-            <img
+            <Image
+              width={1200}
+              height={1200}
+              alt="outfit"
               className="block object-cover w-full h-full rounded-3xl"
               src={image.url}
               style={image.position && {
                 objectPosition: (image.position.left)+'% '+ (image.position.top)+'%',
               }}
-              alt=""
             />
-            <img
+            <Image
+              width={1200}
+              height={1200}
+              alt="outfit"
               src={badge.src}
-              alt="NextGen"
               className={
                 "absolute h-8 w-8 transition duration-200 top-0 right-0 m-2 " +
                 (imageIndex === rated ? "opacity-100 scale-[2.5]" : " scale-0")
@@ -152,13 +157,15 @@ const outfits = ({ outfitsData }) => {
             <div
               className="relative rounded-3xl w-64 h-80 mobile:w-72 mobile:h-96 cursor-pointer group"
             >
-              <img
+              <Image
+              width={1200}
+              height={1200}
+              alt="outfit"
                 className="block object-cover w-full h-full rounded-3xl group-hover:opacity-75 transition duration-300"
                 src={outfit.image[0].url}
                 style={outfit.image[0].position && {
                   objectPosition: (outfit.image[0].position.left)+'% '+ (outfit.image[0].position.top)+'%',
                 }}
-                alt=""
               />
               <div className="absolute justify-center items-center lg:hidden top-0 right-0 m-1 p-0.5 bg-gray-100 rounded-full">
                   <HiStar onClick={()=>setRate(prev=>!prev)} size={25} className='fill-my-pink1' />

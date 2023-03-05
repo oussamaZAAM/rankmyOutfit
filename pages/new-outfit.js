@@ -290,8 +290,8 @@ const newOutfit = () => {
                 <input {...getInputProps()} />
                 <div className="relative flex justify-center items-center w-full">
                     <Image
-                      height={50}
-                      width={50}
+                      height={100}
+                      width={100}
                       className="w-16 h-16 block object-cover z-0 "
                       src="/images/animations/folder1.png"
                     />
@@ -378,7 +378,10 @@ const newOutfit = () => {
                         onCropComplete={(croppedArea, croppedAreaPixels)=>onCropComplete(croppedArea, croppedAreaPixels,  0)}
                         showGrid={false}
                       />
-                    : <img
+                    : <Image
+                        width={1000}
+                        height={1000}
+                        alt="outfit"
                         className="block object-cover w-full h-full rounded-3xl bg-gray-500"
                         style={images[0].position && {
                           objectPosition: (images[0].position.left)+'% '+ (images[0].position.top)+'%',
@@ -485,7 +488,10 @@ const newOutfit = () => {
                         onCropComplete={(croppedArea, croppedAreaPixels)=>onCropComplete(croppedArea, croppedAreaPixels,  1)}
                         showGrid={false}
                       />
-                    : <img
+                    : <Image
+                        width={1000}
+                        height={1000}
+                        alt="outfit"
                         className="block object-cover w-full h-full rounded-3xl bg-gray-500"
                         style={images[1].position && {
                           objectPosition: (images[1].position.left)+'% '+ (images[1].position.top)+'%',
@@ -592,7 +598,10 @@ const newOutfit = () => {
                         onCropComplete={(croppedArea, croppedAreaPixels)=>onCropComplete(croppedArea, croppedAreaPixels,  2)}
                         showGrid={false}
                       />
-                    : <img
+                    : <Image
+                        width={1000}
+                        height={1000}
+                        alt="outfit"
                         className="block object-cover w-full h-full rounded-3xl bg-gray-500"
                         style={images[2].position && {
                           objectPosition: (images[2].position.left)+'% '+ (images[2].position.top)+'%',
@@ -699,7 +708,10 @@ const newOutfit = () => {
                         onCropComplete={(croppedArea, croppedAreaPixels)=>onCropComplete(croppedArea, croppedAreaPixels,  3)}
                         showGrid={false}
                       />
-                    : <img
+                    : <Image
+                        width={1000}
+                        height={1000}
+                        alt="outfit"
                         className="block object-cover w-full h-full rounded-3xl bg-gray-500"
                         style={images[3].position && {
                           objectPosition: (images[3].position.left)+'% '+ (images[3].position.top)+'%',
