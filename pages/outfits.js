@@ -67,7 +67,7 @@ const Outfits = ({ outfitsData }) => {
   }
 
   // Outfits List
-  const outfits = outfitsList.map((outfit, outfitIndex) => {
+  const outfits = outfitsList.length !== 0 && outfitsList.map((outfit, outfitIndex) => {
     if (outfit.type === "multi") {
       var rated;
       for (let i=0;i<outfit.raters.length;i++) {
