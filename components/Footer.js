@@ -1,21 +1,22 @@
-import Image from "next/image";
-
+import React from "react";
+import subBackground2 from "../public/images/sub-background2.png";
 import {
   AiFillGoogleCircle,
   AiFillTwitterCircle,
   AiFillInstagram,
   AiFillGithub,
 } from "react-icons/ai";
+import Image from "next/image";
 
 const Footer = () => {
   return (
     <div>
       <Image
-        width={2000}
-        height={2000}
+        width={500}
+        height={500}
         alt="Background2"
         className="h-64 sm:h-48 w-screen object-cover -mt-12 -mb-48 sm:-mb-32"
-        src='/images/sub-background2.png'
+        src={subBackground2.src}
       />
 
       <div className="flex w-full">
