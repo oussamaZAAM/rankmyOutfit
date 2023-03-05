@@ -1,12 +1,12 @@
 import Head from "next/head";
-import { Inter } from "@next/font/google";
-import styles from "@/styles/Home.module.css";
-import { MdOutlineDoubleArrow } from "react-icons/md";
-import subBackground1 from "../public/images/sub-background1.png";
-import subBackground2 from "../public/images/sub-background2.png";
-import loading from "../public/images/loading.png";
 import Link from "next/link";
 import Image from "next/image";
+
+import { MdOutlineDoubleArrow } from "react-icons/md";
+
+import { Inter } from "@next/font/google";
+import styles from "@/styles/Home.module.css";
+import loading from "../public/images/loading.png";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -70,9 +70,9 @@ export default function Home() {
         <Image
           width={500}
           height={500}
-          alt="Background2"
+          alt="Background"
           className="h-48 w-full object-cover -mt-12"
-          src={subBackground1.src}
+          src='/images/sub-background1.png'
         />
 
         {/* The Services of the Application */}
@@ -170,9 +170,9 @@ export default function Home() {
         <Image
           width={100}
           height={100}
-          alt="Background2"
+          alt="Background"
           className="h-48 w-full object-cover -mt-12"
-          src={subBackground2.src}
+          src='/images/sub-background2.png'
         />
 
         <div className="mobile:grid grid-cols-8 w-full">
@@ -251,9 +251,9 @@ export default function Home() {
         <Image
           width={500}
           height={500}
-          alt="Background1"
+          alt="Background"
           className="h-48 w-full object-cover -mt-12"
-          src={subBackground1.src}
+          src='/images/sub-background1.png'
         />
 
         {/* Goals  */}

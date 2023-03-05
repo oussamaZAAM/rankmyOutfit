@@ -1,10 +1,9 @@
 import Link from "next/link";
-
+import { useRouter } from "next/router";
+import Image from "next/image";
 import { useSession, signIn, signOut, getSession } from "next-auth/react";
 import { useEffect, useState } from "react";
-import Image from "next/image";
 import axios from "axios";
-import { useRouter } from "next/router";
 
 const Nav = () => {
   const router = useRouter();
@@ -102,7 +101,7 @@ const Nav = () => {
   useEffect(() => {
     status === "authenticated" && setSessionSrc(session.user.image);
     isUser && setSrc(user.image.url);
-  }, [status, isUser, session.user.image, user.image.url]);
+  }, [status, isUser]);
 
   return (
     <div className="grid grid-cols-8 w-full h-16">
@@ -126,7 +125,7 @@ const Nav = () => {
           </h1>
         </Link>
         <div className="hidden md:flex col-span-2"></div>
-        <div className="flex justify-evenly items-center | invisible sm:visible  | hidden sm:flex col-span-2">
+        <div className="flex justify-evenly items-center | invisible sm:visible  | sm:flex col-span-2">
           <h5
             className="text-sm font-bold font-display"
             style={{ color: "#DB76DC" }}

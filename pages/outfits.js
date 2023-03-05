@@ -1,11 +1,12 @@
 import Head from "next/head";
+import Link from "next/link";
+import Image from "next/image";
 import { useState } from "react";
+
 import { MdOutlineAddCircle, MdOutlineArrowDropDown } from "react-icons/md";
 import { HiOutlineStar, HiStar } from "react-icons/hi";
+
 import styles from "../styles/Home.module.css";
-import Link from "next/link";
-import badge from "../public/images/badge.png";
-import Image from "next/image";
 
 const Outfits = ({ outfitsData }) => {
   const [rate, setRate] = useState(false);
@@ -94,7 +95,7 @@ const Outfits = ({ outfitsData }) => {
               width={1200}
               height={1200}
               alt="outfit"
-              src={badge.src}
+              src='/images/badge.png'
               className={
                 "absolute h-8 w-8 transition duration-200 top-0 right-0 m-2 " +
                 (imageIndex === rated ? "opacity-100 scale-[2.5]" : " scale-0")
