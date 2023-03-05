@@ -36,7 +36,7 @@ export default async function signin(req, res) {
 
     const serialized = serialize("authentication", token, {
         httpOnly: true,
-        secure: process.env.NEXT_ENV !== "dev",
+        secure: process.env.VERCEL_ENV !== "development",
         sameSite: "strict",
         maxAge: 60 * 60 * 24 * 14,
         path: "/",

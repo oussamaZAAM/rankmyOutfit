@@ -11,7 +11,7 @@ const options = {}
 let client
 let clientPromise: Promise<MongoClient>
 
-if (process.env.NEXT_ENV === 'dev') {
+if (process.env.VERCEL_ENV === "development") {
   // In development mode, use a global variable so that the value
   // is preserved across module reloads caused by HMR (Hot Module Replacement).
   if (!global._mongoClientPromise) {

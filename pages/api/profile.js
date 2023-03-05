@@ -63,7 +63,7 @@ export default async function Handler(req, res) {
         if (!user._id) {
           const serialised = serialize("authentication", null, {
             httpOnly: true,
-            secure: process.env.NEXT_ENV !== "dev",
+            secure: process.env.VERCEL_ENV !== "development",
             sameSite: "strict",
             maxAge: -1,
             path: "/",
@@ -83,7 +83,7 @@ export default async function Handler(req, res) {
     } else {
       const serialised = serialize("authentication", null, {
         httpOnly: true,
-        secure: process.env.NEXT_ENV !== "dev",
+        secure: process.env.VERCEL_ENV !== "development",
         sameSite: "strict",
         maxAge: -1,
         path: "/",

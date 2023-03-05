@@ -218,7 +218,7 @@ export const getServerSideProps = async (context) => {
   const nookie = nookies.get(context);
   const token = nookie.authentication;
 
-  await fetch(`${process.env.NEXTAUTH_URL}/api/verify`, {
+  await fetch(`${process.env.VERCEL_URL}/api/verify`, {
           method: 'GET',
           headers: {
             'Authorization': `${token}`

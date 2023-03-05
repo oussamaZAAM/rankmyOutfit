@@ -6,7 +6,7 @@ function logout(req, res) {
   if (!jwt) return res.json({ message: "Already logged out" });
   const serialised = serialize("authentication", null, {
     httpOnly: true,
-    secure: process.env.NEXT_ENV !== "dev",
+    secure: process.env.VERCEL_ENV !== "development",
     sameSite: "strict",
     maxAge: -1,
     path: "/",

@@ -78,7 +78,7 @@ export default async function Handler(req, res) {
               //Delete non authenticated user's cookies
               const serialised = serialize("authentication", null, {
                   httpOnly: true,
-                  secure: process.env.NEXT_ENV !== "dev",
+                  secure: process.env.VERCEL_ENV !== "development",
                   sameSite: "strict",
                   maxAge: -1,
                   path: "/",

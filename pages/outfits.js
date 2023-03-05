@@ -475,7 +475,7 @@ const Outfits = ({ outfitsData }) => {
 export default Outfits;
 
 export const getStaticProps = async () => {
-  const res = await fetch(`${process.env.NEXTAUTH_URL}/api/outfits`);
+  const res = await fetch(`${process.env.VERCEL_URL}/api/outfits`);
   const outfitsData = await res.json();
   return {
     props: {
