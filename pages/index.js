@@ -6,7 +6,6 @@ import { MdOutlineDoubleArrow } from "react-icons/md";
 
 import { Inter } from "@next/font/google";
 import styles from "@/styles/Home.module.css";
-import loading from "../public/images/loading.png";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -105,7 +104,7 @@ export default function Home() {
                   width={160}
                   height={160}
                   alt="loading"
-                  src={loading.src}
+                  src="/images/loading.png"
                   className="
                             hidden xs:block
                             h-24 sm:h-40
@@ -140,7 +139,7 @@ export default function Home() {
                   width={160}
                   height={160}
                   alt="loading"
-                  src={loading.src}
+                  src="/images/loading.png"
                   className="
                             hidden xs:block
                             h-24 sm:h-40 
@@ -285,7 +284,7 @@ export default function Home() {
                   width={160}
                   height={160}
                   alt="loading"
-                  src={loading.src}
+                  src="/images/loading.png"
                   className="
                             hidden xs:block
                             h-24 sm:h-40 
@@ -319,7 +318,7 @@ export default function Home() {
                   width={160}
                   height={160}
                   alt="loading"
-                  src={loading.src}
+                  src="/images/loading.png"
                   className="
                             hidden xs:block
                             h-24 sm:h-40 
@@ -353,7 +352,7 @@ export default function Home() {
                   width={160}
                   height={160}
                   alt="loading"
-                  src={loading.src}
+                  src="/images/loading.png"
                   className="
                             hidden xs:block
                             h-24
