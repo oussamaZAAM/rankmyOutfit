@@ -5,11 +5,19 @@ import { verify } from "jsonwebtoken";
 import Users from "@/model/UserSchema";
 import Outfits from "@/model/OutfitSchema";
 import { getSession } from "next-auth/react";
+import connectMongo from "@/database/connection";
 
 export default async function Handler(req, res) {
   if (req.method === "GET") {
-    const posts = await Outfits.find({});
-    return res.status(200).json(posts);
+    try {
+      connectMongo().catch(error => {error: "Connection Failed"})
+      
+      const posts = await Outfits.find({});
+      return res.status(200).json(posts);
+    } catch(e) {
+      console.log(e)
+      return res.status(404).json({message: "Not Found"});
+    }
   }
 
   if (req.method === "POST") {

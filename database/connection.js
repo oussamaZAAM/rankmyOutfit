@@ -2,7 +2,10 @@ import mongoose from "mongoose";
 
 const connectMongo = async() => {
     try {
-        const { connection } = await mongoose.connect(process.env.MONGO_URL)
+        mongoose.set("strictQuery", false);
+        const { connection } = await mongoose.connect(process.env.MONGO_URL, () => {
+            console.log("Connected to MongoDB");
+          });
 
         if (connection.readyState === 1) {
             return Promise.resolve(true)
