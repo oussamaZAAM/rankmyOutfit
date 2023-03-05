@@ -71,7 +71,7 @@ export default function Home() {
           height={2000}
           alt="Background"
           className="h-48 w-full object-cover -mt-12"
-          src='/images/sub-background1.png'
+          src='/images/subBackground1.png'
         />
 
         {/* The Services of the Application */}
@@ -252,7 +252,7 @@ export default function Home() {
           height={2000}
           alt="Background"
           className="h-48 w-full object-cover -mt-12"
-          src='/images/sub-background1.png'
+          src="/images/subBackground1.png"
         />
 
         {/* Goals  */}

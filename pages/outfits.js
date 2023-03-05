@@ -66,7 +66,7 @@ const Outfits = ({ outfitsData }) => {
   }
 
   // Outfits List
-  const outfits = outfitsList.length !== 0 && outfitsList.map((outfit, outfitIndex) => {
+  const outfits = (outfitsList.length !== 0) && outfitsList.map((outfit, outfitIndex) => {
     if (outfit.type === "multi") {
       var rated;
       for (let i=0;i<outfit.raters.length;i++) {
@@ -477,7 +477,7 @@ export default Outfits;
 export const getServerSideProps = async () => {
   const url =
     process.env.VERCEL_ENV === "production"
-      ? "https://rankmy-outfit-pyx6de4hw-oussamazaam.vercel.app/api/outfits"
+      ? "https://rankmyoutfit.vercel.app/api/outfits"
       : "http://localhost:3000/api/outfits";
 
   const res = await axios.get(url);
