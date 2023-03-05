@@ -253,7 +253,7 @@ const NewOutfit = () => {
 
   useEffect(() => {
     if (outfitState === 'posted') router.push('/outfits');
-  }, [outfitState])
+  }, [outfitState, router])
 
   return (
     <>
@@ -294,6 +294,7 @@ const NewOutfit = () => {
                       width={100}
                       className="w-16 h-16 block object-cover z-0 "
                       src="/images/animations/folder1.png"
+                      alt=""
                     />
 
                     <div className={`
@@ -310,6 +311,7 @@ const NewOutfit = () => {
                                   (isDragActive ? 'translate-x-8 -translate-y-3 rotate-[30deg]' : 'translate-x-3 translate-y-0.5 rotate-[15deg]')
                       }
                       src="/images/animations/png.png"
+                      alt=""
                     />
 
                     <Image
@@ -320,6 +322,7 @@ const NewOutfit = () => {
                                   (isDragActive ? 'translate-x-4 -translate-y-5 rotate-[10deg]' : 'translate-x-2 translate-y-px rotate-[5deg]')
                       }
                       src="/images/animations/jpg.png"
+                      alt=""
                     />
 
                     <Image
@@ -330,6 +333,7 @@ const NewOutfit = () => {
                                   (isDragActive ? '-translate-x-0 -translate-y-5 -rotate-[10deg]' : 'translate-x-0 translate-y-0 -rotate-[5deg]')
                       }
                       src="/images/animations/svg.png"
+                      alt=""
                     />
 
                     <Image
@@ -340,6 +344,7 @@ const NewOutfit = () => {
                                   (isDragActive ? '-translate-x-4 -translate-y-3 -rotate-[30deg]' : '-translate-x-2 translate-y-px -rotate-[15deg]')
                       }
                       src="/images/animations/tif.png"
+                      alt=""
                     />
                 </div>
                 <p className="font-display font-bold text-sm xs:text-md text-center text-black">Drag & Drop your images simultaniously here</p>

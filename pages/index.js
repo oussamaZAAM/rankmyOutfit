@@ -84,7 +84,7 @@ export default function Home() {
               <span className="font-bold" style={{ color: "#6F1AB6" }}>
                 rankmyOutfit
               </span>
-              's Services
+              &apos;s Services
             </b>
 
             <div
@@ -267,7 +267,7 @@ export default function Home() {
               <span className="font-bold" style={{ color: "#6F1AB6" }}>
                 rankmyOutfit
               </span>
-              's Goals
+              &apos;s Goals
             </b>
             <div className="
                             flex flex-col justify-aroun items-center

@@ -102,7 +102,7 @@ const Nav = () => {
   useEffect(() => {
     status === "authenticated" && setSessionSrc(session.user.image);
     isUser && setSrc(user.image.url);
-  }, [status, isUser]);
+  }, [status, isUser, session.user.image, user.image.url]);
 
   return (
     <div className="grid grid-cols-8 w-full h-16">

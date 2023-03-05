@@ -6,19 +6,19 @@ export default function Document() {
       <Head>
         {/* Importing Google Fonts */}
         <link
-          href="https://fonts.googleapis.com/css?family=Poppins"
+          href="https://fonts.googleapis.com/css?family=Poppins&display=optional"
           rel="stylesheet"
         />
         <link
-          href="https://fonts.googleapis.com/css2?family=Oswald&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Oswald&display=optional"
           rel="stylesheet"
         />
         <link
-          href="https://fonts.googleapis.com/css2?family=Alumni+Sans&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Alumni+Sans&display=optional"
           rel="stylesheet"
         />
         <link
-          href="https://fonts.googleapis.com/css2?family=Alice&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Alice&display=optional"
           rel="stylesheet"
         />
       </Head>
