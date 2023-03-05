@@ -7,6 +7,7 @@ import { MdOutlineAddCircle, MdOutlineArrowDropDown } from "react-icons/md";
 import { HiOutlineStar, HiStar } from "react-icons/hi";
 
 import styles from "../styles/Home.module.css";
+import axios from "axios";
 
 const Outfits = ({ outfitsData }) => {
   const [rate, setRate] = useState(false);
@@ -475,13 +476,14 @@ const Outfits = ({ outfitsData }) => {
 export default Outfits;
 
 export const getStaticProps = async () => {
-  var res;
-  if (process.env.VERCEL_ENV === 'development') {
-    res = await fetch(`http://localhost:3000/api/outfits`);
-  } else {
-    res = await fetch(`https://rankmy-outfit-pyx6de4hw-oussamazaam.vercel.app/api/outfits`);
-  }
-  const outfitsData = await res.json();
+  const url =
+    process.env.VERCEL_ENV === "production"
+      ? "https://rankmy-outfit-pyx6de4hw-oussamazaam.vercel.app/api/outfits"
+      : "http://localhost:3000/api/outfits";
+
+  const res = await axios.get(url);
+
+  const outfitsData = await res.data;
   return {
     props: {
       outfitsData,
