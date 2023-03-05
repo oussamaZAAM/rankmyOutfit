@@ -69,10 +69,10 @@ const Signup = () => {
       body: JSON.stringify(values),
     };
 
-    await fetch("http://localhost:3000/api/auth/signup", options).then(
+    await fetch("/api/auth/signup", options).then(
       (res) => {
         if (res.ok) {
-          router.push("http://localhost:3000/signin");
+          router.push("/signin");
         } else {
           setError("This email is already in use");
         }
