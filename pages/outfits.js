@@ -475,7 +475,12 @@ const Outfits = ({ outfitsData }) => {
 export default Outfits;
 
 export const getStaticProps = async () => {
-  const res = await fetch(`${process.env.VERCEL_URL}/api/outfits`);
+  var res;
+  if (process.env.VERCEL_ENV === 'development') {
+    res = await fetch(`http://localhost:3000/api/outfits`);
+  } else {
+    res = await fetch(`https://rankmy-outfit-pyx6de4hw-oussamazaam.vercel.app/api/outfits`);
+  }
   const outfitsData = await res.json();
   return {
     props: {
