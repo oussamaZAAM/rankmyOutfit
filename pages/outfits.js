@@ -95,7 +95,7 @@ const Outfits = ({ outfitsData }) => {
               width={1200}
               height={1200}
               alt="outfit"
-              src='/images/badge.png'
+              src='/badge.png'
               className={
                 "absolute h-8 w-8 transition duration-200 top-0 right-0 m-2 " +
                 (imageIndex === rated ? "opacity-100 scale-[2.5]" : " scale-0")

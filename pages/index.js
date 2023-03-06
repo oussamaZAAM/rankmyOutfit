@@ -71,7 +71,7 @@ export default function Home() {
           height={2000}
           alt="Background"
           className="h-48 w-full object-cover -mt-12"
-          src='/images/subBackground1.png'
+          src='https://i.ibb.co/0s5PdkY/sub-Background1.png'
         />
 
         {/* The Services of the Application */}
@@ -104,7 +104,7 @@ export default function Home() {
                   width={160}
                   height={160}
                   alt="loading"
-                  src="/images/loading.png"
+                  src="https://i.ibb.co/0tHFXbL/loading.png"
                   className="
                             hidden xs:block
                             h-24 sm:h-40
@@ -139,7 +139,7 @@ export default function Home() {
                   width={160}
                   height={160}
                   alt="loading"
-                  src="/images/loading.png"
+                  src="https://i.ibb.co/0tHFXbL/loading.png"
                   className="
                             hidden xs:block
                             h-24 sm:h-40 
@@ -171,7 +171,7 @@ export default function Home() {
           height={2000}
           alt="Background"
           className="h-48 w-full object-cover -mt-12"
-          src='/images/subBackground2.png'
+          src='https://i.ibb.co/jHwpXQB/sub-Background2.png'
         />
 
         <div className="mobile:grid grid-cols-8 w-full">
@@ -252,7 +252,7 @@ export default function Home() {
           height={2000}
           alt="Background"
           className="h-48 w-full object-cover -mt-12"
-          src="/images/subBackground1.png"
+          src="https://i.ibb.co/0s5PdkY/sub-Background1.png"
         />
 
         {/* Goals  */}
@@ -284,7 +284,7 @@ export default function Home() {
                   width={160}
                   height={160}
                   alt="loading"
-                  src="/images/loading.png"
+                  src="https://i.ibb.co/0tHFXbL/loading.png"
                   className="
                             hidden xs:block
                             h-24 sm:h-40 
@@ -318,7 +318,7 @@ export default function Home() {
                   width={160}
                   height={160}
                   alt="loading"
-                  src="/images/loading.png"
+                  src="https://i.ibb.co/0tHFXbL/loading.png"
                   className="
                             hidden xs:block
                             h-24 sm:h-40 
@@ -352,7 +352,7 @@ export default function Home() {
                   width={160}
                   height={160}
                   alt="loading"
-                  src="/images/loading.png"
+                  src="https://i.ibb.co/0tHFXbL/loading.png"
                   className="
                             hidden xs:block
                             h-24

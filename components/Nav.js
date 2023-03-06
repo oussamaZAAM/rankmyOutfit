@@ -96,8 +96,8 @@ const Nav = () => {
     }
   };
 
-  const [src, setSrc] = useState("/images/user.png");
-  const [sessionSrc, setSessionSrc] = useState("/images/user.png");
+  const [src, setSrc] = useState("https://i.ibb.co/3FfbGqZ/user.png/images/user.png");
+  const [sessionSrc, setSessionSrc] = useState("https://i.ibb.co/3FfbGqZ/user.png");
   useEffect(() => {
     status === "authenticated" && setSessionSrc(session.user.image);
     isUser && setSrc(user.image.url);
@@ -169,7 +169,7 @@ const Nav = () => {
                       className="w-8 h-8 rounded-full block object-cover bg-gray-500"
                       priority={true}
                       src={src}
-                      onError={() => setSrc("/images/user.png")}
+                      onError={() => setSrc("https://i.ibb.co/3FfbGqZ/user.png")}
                       alt="user photo"
                       style={
                         user.image.position && {
@@ -252,7 +252,7 @@ const Nav = () => {
                     width={100}
                     className="w-8 h-8 rounded-full"
                     src={sessionSrc}
-                    onError={() => setSessionSrc("/images/user.png")}
+                    onError={() => setSessionSrc("https://i.ibb.co/3FfbGqZ/user.png")}
                     alt="user photo"
                   />
                 </button>

@@ -15,7 +15,7 @@ const Footer = () => {
         height={2000}
         alt="Background2"
         className="h-64 sm:h-48 w-screen object-cover -mt-12 -mb-48 sm:-mb-32"
-        src='/images/subBackground2.png'
+        src='https://i.ibb.co/jHwpXQB/sub-Background2.png'
       />
 
       <div className="flex w-full">
