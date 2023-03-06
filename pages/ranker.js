@@ -67,14 +67,14 @@ const Ranker = () => {
                 width={200}
                 height={200}
                 className={"w-16 h-16 block object-cover z-10 "+(isDragActive && 'animate-bouncing')}
-                src="/images/animations/upload-arrow.png"
+                src="https://i.ibb.co/2dY3dyK/upload-arrow.png"
                 alt="Upload"
               />
               <Image
                 width={200}
                 height={200}
                 className="absolute w-16 h-16 block object-cover z-0"
-                src="/images/animations/upload-base.png"
+                src="https://i.ibb.co/ypCgCfF/upload-base.png"
                 alt="Upload"
               />
             </div>
