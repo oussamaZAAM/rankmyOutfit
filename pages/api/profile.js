@@ -73,12 +73,13 @@ export default async function Handler(req, res) {
         }
 
         const requestData = {
+          id: user._id,
           name: user.name,
           email: user.email,
           image: user.image,
         };
 
-        res.status(200).json(requestData);
+        return res.status(200).json(requestData);
       }
     } else {
       const serialised = serialize("authentication", null, {
