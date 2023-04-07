@@ -77,14 +77,21 @@ const Outfits = ({ outfitsData }) => {
 
   //Sumbit Rating to DB
   const submitRate = async(outfit) => {
-    const myRating = outfit.raters.find(rater => rater._id === user.id)
-    const data = {
-      _id: outfit._id,
-      myRating
+    if (user.id !== ''){
+      const myRating = outfit.raters.find(rater => rater._id === user.id)
+      const data = {
+        _id: outfit._id,
+        myRating
+      }
+      await axios.put('/api/outfits/rating', data)
+        .then(response => console.log('success2'))
+        .catch(err => {
+          alert(err.response.data.message)
+          window.location.reload();
+        })
+    } else {
+      alert('Please sign in to rate')
     }
-    await axios.put('/api/outfits/rating', data)
-      .then(response => console.log('success2'))
-      .catch(err => console.log('fail2'))
   }
 
   useEffect(() => {

@@ -26,7 +26,6 @@ export default async function Handler(req, res) {
     } else {
       if (verification) {
         // Rate Posts by JWT users
-        
         var decodedUser = jwt_decode(jwt);
         const thisOutfit = await Outfits.findById(req.body._id)
         const allRaters = thisOutfit.raters.filter(rater => rater.id !== decodedUser._id)
@@ -34,7 +33,6 @@ export default async function Handler(req, res) {
             _id: decodedUser._id,
             rating: req.body.myRating.rating
         })
-        console.log(allRaters)
         const edit = await Outfits.updateOne(
             { _id: req.body._id },
             {
@@ -43,7 +41,10 @@ export default async function Handler(req, res) {
               },
             }
           );
-        return 0;
+        if (!(edit && edit.matchedCount))
+            return res.status(503).json({ message: "Database Error" });
+
+        return res.status(200).json({ message: "Rating updated successfully" });
       } else {
         //Delete non authenticated user's cookies
         const serialised = serialize("authentication", null, {
