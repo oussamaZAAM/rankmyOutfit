@@ -65,6 +65,42 @@ const Outfits = ({ outfitsData }) => {
     })
   }
 
+  //Calculate the average of the ratings
+  const calculateAvgRate = (outfit) => {
+    const ratings = outfit.raters.map((rater)=>rater.rating)
+    const average = array => array.reduce((a, b) => a + b) / array.length;
+    if (ratings.length > 0){
+      return average(ratings)
+    }
+    return 0
+  }
+
+  //Sumbit Rating to DB
+  const submitRate = async(outfit) => {
+    const myRating = outfit.raters.find(rater => rater._id === user.id)
+    const data = {
+      _id: outfit._id,
+      myRating
+    }
+    await axios.put('/api/outfits/rating', data)
+      .then(response => console.log('success2'))
+      .catch(err => console.log('fail2'))
+  }
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      await axios
+        .get("/api/profile")
+        .then((response) => {
+          setUser(response.data);
+        })
+        .catch((err) => {
+        });
+    };
+
+    fetchUser();
+  }, []);
+
   // Outfits List
   const outfits = (outfitsList.length !== 0) && outfitsList.map((outfit, outfitIndex) => {
     if (outfit.type === "multi") {
