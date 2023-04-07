@@ -40,7 +40,10 @@ export default function Home() {
               </span>
             </h1>
           </div>
-          <Link href='/outfits' className="flex justify-center items-center | w-48 sm:w-64 h-12 my-4 rounded-3xl bg-neutral-800">
+          <Link
+            href="/outfits"
+            className="flex justify-center items-center | w-48 sm:w-64 h-12 my-4 rounded-3xl bg-neutral-800"
+          >
             <button className="flex justify-evenly items-center | w-8/12 h-full">
               <b className="text-white">Get Started</b>
               <MdOutlineDoubleArrow color="white" size={35} />
@@ -56,11 +59,15 @@ export default function Home() {
               What do we do
             </b>
             <p className="font-body font-normal text-xl indent-2 my-4 w-11/12 sm:w-9/12 md:w-3/4 lg:1/2">
-              Nullam blandit cursus elit, quis aliquam quam tristique vitae.
-              Class aptent taciti sociosqu ad litora torquent per conubia
-              nostra, per inceptos himenaeos. Phasellus blandit placerat mauris
-              vel pharetra, lobortis mollis fermentum. In eu arcu risus. Nullam
-              blandit cursus
+              Welcome to our outfit rating website, where fashion meets
+              community! Upload your outfit photos and get feedback from our
+              fashion-savvy community, or rate other outfits for inspiration.
+              Discover also our ranking app that rates your outfit based on AI.
+              <br />
+            </p>
+            <p className="font-body font-normal text-xl indent-2 my-4 w-11/12 sm:w-9/12 md:w-3/4 lg:1/2">
+              Let's create a space where fashion is celebrated, and everyone can
+              shine!
             </p>
           </div>
         </div>
@@ -71,7 +78,7 @@ export default function Home() {
           height={2000}
           alt="Background"
           className="h-48 w-full object-cover -mt-12"
-          src='https://i.ibb.co/0s5PdkY/sub-Background1.png'
+          src="https://i.ibb.co/0s5PdkY/sub-Background1.png"
         />
 
         {/* The Services of the Application */}
@@ -104,22 +111,26 @@ export default function Home() {
                   width={160}
                   height={160}
                   alt="loading"
-                  src="https://i.ibb.co/0tHFXbL/loading.png"
+                  src={require('../public/images/service1.png')}
                   className="
                             hidden xs:block
                             h-24 sm:h-40
                             object-cover rounded-full border-2"
                 />
-                <p className="
+                <p
+                  className="
                               font-body font-normal text-center sm:text-base indent-2
-                              my-4 w-10/12 md:w-9/12">
-                  Class aptent taciti sociosqu ad litora torquent per conubia
-                  nostra, per inceptos himenaeos
+                              my-4 w-10/12 md:w-9/12 h-48"
+                >
+                  You can upload photos of their outfits and receive feedback
+                  and ratings from other users on the website.
                 </p>
-                <div className="
+                <div
+                  className="
                                 flex justify-center items-center
                                 sm:h-12 sm:w-24 my-4
-                                rounded-3xl bg-neutral-800">
+                                rounded-3xl bg-neutral-800"
+                >
                   <button className="">
                     <MdOutlineDoubleArrow color="white" size={35} />
                   </button>
@@ -139,28 +150,31 @@ export default function Home() {
                   width={160}
                   height={160}
                   alt="loading"
-                  src="https://i.ibb.co/0tHFXbL/loading.png"
+                  src={require('../public/images/service2.png')}
                   className="
                             hidden xs:block
                             h-24 sm:h-40 
                             object-cover rounded-full border-2"
                 />
-                <p className="
+                <p
+                  className="
                               font-body font-normal text-center sm:text-base indent-2
-                              my-4 w-10/12 md:w-9/12">
-                  Class aptent taciti sociosqu ad litora torquent per conubia
-                  nostra, per inceptos himenaeos
+                              my-4 w-10/12 md:w-9/12 h-48"
+                >
+                  We have a community of fashion enthusiasts where you can
+                  connect with others who share similar interests.
                 </p>
-                <div className="
+                <div
+                  className="
                                 flex justify-center items-center
                                 sm:h-12 sm:w-24 my-4
-                                rounded-3xl bg-neutral-800">
+                                rounded-3xl bg-neutral-800"
+                >
                   <button className="">
                     <MdOutlineDoubleArrow color="white" size={35} />
                   </button>
                 </div>
               </div>
-
             </div>
           </div>
         </div>
@@ -171,7 +185,7 @@ export default function Home() {
           height={2000}
           alt="Background"
           className="h-48 w-full object-cover -mt-12"
-          src='https://i.ibb.co/jHwpXQB/sub-Background2.png'
+          src="https://i.ibb.co/jHwpXQB/sub-Background2.png"
         />
 
         <div className="mobile:grid grid-cols-8 w-full">
@@ -194,23 +208,31 @@ export default function Home() {
             {/* AI Cards */}
             <div className="flex flex-col md:flex-row justify-center items-center my-4">
               <div
-                className="mx-4 p-4 md:px-16 rounded flex flex-col justify-center items-start"
+                className="mx-4 p-4 md:px-8 rounded flex flex-col justify-center items-start"
                 style={{ backgroundColor: "#FFF4FF", maxWidth: "248px" }}
               >
-                <MdOutlineDoubleArrow />
+                <div className="flex justify-start items-center">
+                  <MdOutlineDoubleArrow />
+                  <p className="font-bold text-sm">Saving time and money</p>
+                </div>
                 <p className="font-body">
-                  Class aptent taciti sociosqu ad litora torquent per conubia
-                  nostra, per inceptos hi
+                  You can now quickly determine which outfits look good on you,
+                  saving you time and money on clothes that you may not end up
+                  wearing.
                 </p>
               </div>
               <div
-                className="my-4 mx-4 p-4 md:px-16 rounded flex flex-col justify-center items-start"
+                className="my-4 mx-4 p-4 md:px-8 rounded flex flex-col justify-center items-start"
                 style={{ backgroundColor: "#FFF4FF", maxWidth: "248px" }}
               >
-                <MdOutlineDoubleArrow />
+                <div className="flex justify-start items-center">
+                  <MdOutlineDoubleArrow />
+                  <p className="font-bold text-sm">Improving your fashion</p>
+                </div>
                 <p className="font-body">
-                  Class aptent taciti sociosqu ad litora torquent per conubia
-                  nostra, per inceptos hi
+                  With AI providing you a feedback on your fashion choices,
+                  helping you improve your fashion sense and make better fashion
+                  choices.
                 </p>
               </div>
             </div>
@@ -223,23 +245,30 @@ export default function Home() {
             {/* People Cards */}
             <div className="flex flex-col md:flex-row justify-center items-center my-4">
               <div
-                className="my-4 mx-4 p-4 md:px-16 rounded flex flex-col justify-center items-start"
+                className="my-4 mx-4 p-4 md:px-8 rounded flex flex-col justify-center items-start"
                 style={{ backgroundColor: "#FFF4FF", maxWidth: "248px" }}
               >
-                <MdOutlineDoubleArrow />
+                <div className="flex justify-start items-center">
+                  <MdOutlineDoubleArrow />
+                  <p className="font-bold text-sm">Providing feedback</p>
+                </div>
                 <p className="font-body">
-                  Class aptent taciti sociosqu ad litora torquent per conubia
-                  nostra, per inceptos hi
+                  People can provide feedback on your outfit choices, giving you
+                  an idea of how others perceive your fashion sense.
                 </p>
               </div>
               <div
-                className="mx-4 p-4 md:px-16 rounded flex flex-col justify-center items-start"
+                className="my-4 mx-4 p-4 md:px-8 rounded flex flex-col justify-center items-start"
                 style={{ backgroundColor: "#FFF4FF", maxWidth: "248px" }}
               >
-                <MdOutlineDoubleArrow />
+                <div className="flex justify-start items-center">
+                  <MdOutlineDoubleArrow />
+                  <p className="font-bold text-sm">Sharing inspiration</p>
+                </div>
                 <p className="font-body">
-                  Class aptent taciti sociosqu ad litora torquent per conubia
-                  nostra, per inceptos hi
+                  Other users can share their own outfit photos and fashion
+                  inspiration, giving you ideas for new styles and clothing
+                  combinations.
                 </p>
               </div>
             </div>
@@ -258,20 +287,24 @@ export default function Home() {
         {/* Goals  */}
         <div className="mobile:grid grid-cols-8 w-full">
           {/* Grid to let a margin */}
-          <div className="
+          <div
+            className="
                           flex flex-col justify-start items-center
                           col-start-2 col-span-6
-                          bg-white min-h-60 rounded -mt-12 drop-shadow-md w-full">
+                          bg-white min-h-60 rounded -mt-12 drop-shadow-md w-full"
+          >
             <b className="font-subtitle font-medium text-4xl text-center my-4">
               <span className="font-bold" style={{ color: "#6F1AB6" }}>
                 rankmyOutfit
               </span>
               &apos;s Goals
             </b>
-            <div className="
+            <div
+              className="
                             flex flex-col justify-aroun items-center
                             md:grid md:grid-cols-16 justify-items-center
-                            w-full">
+                            w-full"
+            >
               {/* Goal 1 */}
               <div
                 className="
@@ -284,22 +317,26 @@ export default function Home() {
                   width={160}
                   height={160}
                   alt="loading"
-                  src="https://i.ibb.co/0tHFXbL/loading.png"
+                  src={require('../public/images/goal1.png')}
                   className="
                             hidden xs:block
                             h-24 sm:h-40 
                             object-cover rounded-full border-2"
                 />
-                <p className="
+                <p
+                  className="
                               font-body font-normal text-center sm:text-base indent-2
-                              my-4 w-11/12 sm:w-9/12 md:w-3/4 lg:1/2">
-                  Class aptent taciti sociosqu ad litora torquent per conubia
-                  nostra, per inceptos himenaeos
+                              my-4 w-11/12 sm:w-9/12 md:w-3/4 lg:1/2 h-48"
+                >
+                  Helping users improve their fashion sense with personalized
+                  feedback and ratings on their outfits
                 </p>
-                <div className="
+                <div
+                  className="
                                 flex justify-center items-center
                                 sm:h-12 sm:w-24 my-4
-                                rounded-3xl bg-neutral-800">
+                                rounded-3xl bg-neutral-800"
+                >
                   <button className="">
                     <MdOutlineDoubleArrow color="white" size={35} />
                   </button>
@@ -318,22 +355,26 @@ export default function Home() {
                   width={160}
                   height={160}
                   alt="loading"
-                  src="https://i.ibb.co/0tHFXbL/loading.png"
+                  src={require('../public/images/goal2.png')}
                   className="
                             hidden xs:block
                             h-24 sm:h-40 
                             object-cover rounded-full border-2"
                 />
-                <p className="
+                <p
+                  className="
                               font-body font-normal text-center sm:text-base indent-2
-                              my-4 w-11/12 sm:w-9/12 md:w-3/4 lg:1/2">
-                  Class aptent taciti sociosqu ad litora torquent per conubia
-                  nostra, per inceptos himenaeos
+                              my-4 w-11/12 sm:w-9/12 md:w-3/4 lg:1/2 h-48"
+                >
+                  Creating a community of fashion enthusiasts who can connect,
+                  share ideas, and support each other in their fashion journey
                 </p>
-                <div className="
+                <div
+                  className="
                                 flex justify-center items-center
                                 sm:h-12 sm:w-24 my-4
-                                rounded-3xl bg-neutral-800">
+                                rounded-3xl bg-neutral-800"
+                >
                   <button className="">
                     <MdOutlineDoubleArrow color="white" size={35} />
                   </button>
@@ -352,29 +393,31 @@ export default function Home() {
                   width={160}
                   height={160}
                   alt="loading"
-                  src="https://i.ibb.co/0tHFXbL/loading.png"
+                  src={require('../public/images/goal3.png')}
                   className="
                             hidden xs:block
                             h-24
                             sm:h-40
                             object-cover rounded-full border-2"
                 />
-                <p className="
+                <p
+                  className="
                               font-body font-normal text-center sm:text-base indent-2
-                              my-4 w-11/12 sm:w-9/12 md:w-3/4 lg:1/2">
-                  Class aptent taciti sociosqu ad litora torquent per conubia
-                  nostra, per inceptos himenaeos
+                              my-4 w-11/12 sm:w-9/12 md:w-3/4 lg:1/2 h-48"
+                >
+                  Providing fashion inspiration and ideas to users
                 </p>
-                <div className="
+                <div
+                  className="
                                 flex justify-center items-center
                                 sm:h-12 sm:w-24 my-4
-                                rounded-3xl bg-neutral-800">
+                                rounded-3xl bg-neutral-800"
+                >
                   <button className="">
                     <MdOutlineDoubleArrow color="white" size={35} />
                   </button>
                 </div>
               </div>
-
             </div>
             {/* End Goal Cards  */}
           </div>
