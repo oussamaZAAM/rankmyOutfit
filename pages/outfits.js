@@ -1,7 +1,7 @@
 import Head from "next/head";
 import Link from "next/link";
 import Image from "next/image";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import { MdOutlineAddCircle, MdOutlineArrowDropDown } from "react-icons/md";
 import { HiOutlineStar, HiStar } from "react-icons/hi";
@@ -10,6 +10,10 @@ import styles from "../styles/Home.module.css";
 import axios from "axios";
 
 const Outfits = ({ outfitsData }) => {
+  const [user, setUser] = useState({
+    id: '',
+  });
+
   const [rate, setRate] = useState(false);
   const [sort, setSort] = useState({
     state: false,
@@ -20,10 +24,6 @@ const Outfits = ({ outfitsData }) => {
     type: "both",
   });
   const [rankingType, setRankingType] = useState("basic");
-
-  const [rating, setRating] = useState(0);
-
-  const mockUser = 17;
 
   const [outfitsList, setOutfitsList] = useState(outfitsData);
   // Functions
@@ -47,18 +47,18 @@ const Outfits = ({ outfitsData }) => {
     setOutfitsList(prevList => {
       const prevOutfit = prevList[outfitIndex];
 
-      // --------------------------------| Backend or onClick on 'Rate' |--------------------------------
+      // // --------------------------------| Backend or onClick on 'Rate' |--------------------------------
       // const newRate = ((prevOutfit.rate * prevOutfit.raters.length) + rate) / (prevOutfit.raters.length + 1);
-      // prevOutfit.rate = newRate;
+      // prevOutfit.rate = prevOutfit.rate ? newRate : rate;
 
       var isExist = false;
       for (let i=0;i<prevOutfit.raters.length;i++) {
-        if (prevOutfit.raters[i].id === user) {
+        if (prevOutfit.raters[i]._id === user) {
           prevOutfit.raters[i].rating = rate;
           isExist = true;
         }
       }
-      !isExist && prevOutfit.raters.push({id: user, rating: rate});
+      !isExist && prevOutfit.raters.push({_id: user, rating: rate});
 
       prevList[outfitIndex] = prevOutfit;
       return [...prevList];
@@ -106,7 +106,7 @@ const Outfits = ({ outfitsData }) => {
     if (outfit.type === "multi") {
       var rated;
       for (let i=0;i<outfit.raters.length;i++) {
-        if (outfit.raters[i].id === mockUser) {
+        if (outfit.raters[i]._id === user.id) {
           rated = outfit.raters[i].best;
         }
       }
@@ -114,7 +114,7 @@ const Outfits = ({ outfitsData }) => {
         return (
           <div
             key={image._id}
-            onClick={() => editOutfitsRate(outfitIndex, imageIndex, mockUser)}
+            onClick={() => editOutfitsRate(outfitIndex, imageIndex, user.id)}
             className="relative rounded-3xl w-64 h-80 mobile:w-72 mobile:h-96 cursor-pointer transition duration-300 hover:opacity-75"
           >
             <Image
@@ -170,7 +170,7 @@ const Outfits = ({ outfitsData }) => {
       var userRating;
       var isExist = false;
       for (let i=0;i<outfit.raters.length;i++) {
-        if (outfit.raters[i].id === mockUser) {
+        if (outfit.raters[i]._id === user.id) {
           userRating = outfit.raters[i].rating;
           isExist = true;
         }
@@ -210,7 +210,7 @@ const Outfits = ({ outfitsData }) => {
               <div className={"absolute inset-y-2/4 w-full lg:opacity-0 lg:group-hover:opacity-100 transition duration-300 "+(rate ? 'opacity-100' : 'opacity-0')}>
                 <div className="flex justify-center items-center">
                   <HiOutlineStar
-                    onClick={() => setOutfitRating(outfitIndex, 1, mockUser)}
+                    onClick={() => setOutfitRating(outfitIndex, 1, user.id)}
                     color="black"
                     className={
                       `m-1 h-6 w-6 transition duration-100 ` +
@@ -218,7 +218,7 @@ const Outfits = ({ outfitsData }) => {
                     }
                   />
                   <HiOutlineStar
-                    onClick={() => setOutfitRating(outfitIndex, 2, mockUser)}
+                    onClick={() => setOutfitRating(outfitIndex, 2, user.id)}
                     color="black"
                     className={
                       `m-1 h-6 w-6 ` +
@@ -228,7 +228,7 @@ const Outfits = ({ outfitsData }) => {
                     }
                   />
                   <HiOutlineStar
-                    onClick={() => setOutfitRating(outfitIndex, 3, mockUser)}
+                    onClick={() => setOutfitRating(outfitIndex, 3, user.id)}
                     color="black"
                     className={
                       `m-1 h-6 w-6 transition duration-200 ` +
@@ -236,7 +236,7 @@ const Outfits = ({ outfitsData }) => {
                     }
                   />
                   <HiOutlineStar
-                    onClick={() => setOutfitRating(outfitIndex, 4, mockUser)}
+                    onClick={() => setOutfitRating(outfitIndex, 4, user.id)}
                     color="black"
                     className={
                       `m-1 h-6 w-6 ` +
@@ -246,7 +246,7 @@ const Outfits = ({ outfitsData }) => {
                     }
                   />
                   <HiOutlineStar
-                    onClick={() => setOutfitRating(outfitIndex, 5, mockUser)}
+                    onClick={() => setOutfitRating(outfitIndex, 5, user.id)}
                     color="black"
                     className={
                       `m-1 h-6 w-6 ` +
@@ -259,8 +259,9 @@ const Outfits = ({ outfitsData }) => {
               </div>
             </div>
           </div>
+          <p>{calculateAvgRate(outfit)}</p>
           <div className="flex justify-center items-center my-4">
-            <button className="h-12 w-44 text-center bg-my-purple rounded-3xl">
+            <button onClick={()=>submitRate(outfit)} className="h-12 w-44 text-center bg-my-purple rounded-3xl">
               <p className="font-display text-white text-xl">Rate</p>
             </button>
           </div>
