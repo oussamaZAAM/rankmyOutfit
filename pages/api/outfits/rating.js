@@ -20,29 +20,51 @@ export default async function Handler(req, res) {
     }
 
     //Check if the user is authenticated through (Google / Facebook / ...) Provider
+    console.log(session)
     if (session && session.user && session.expires) {
       //Rate Posts by (Google / Facebook / ...) users
-      return 0;
+      const thisOutfit = await Outfits.findById(req.body._id);
+      const allRaters = thisOutfit.raters.filter(
+        (rater) => rater.id !== decodedUser._id
+      );
+      allRaters.push({
+        _id: decodedUser._id,
+        rating: req.body.myRating.rating,
+      });
+      const edit = await Outfits.updateOne(
+        { _id: req.body._id },
+        {
+          $set: {
+            raters: allRaters,
+          },
+        }
+      );
+      if (!(edit && edit.matchedCount))
+        return res.status(503).json({ message: "Database Error" });
+
+      return res.status(200).json({ message: "Rating updated successfully" });
     } else {
       if (verification) {
         // Rate Posts by JWT users
         var decodedUser = jwt_decode(jwt);
-        const thisOutfit = await Outfits.findById(req.body._id)
-        const allRaters = thisOutfit.raters.filter(rater => rater.id !== decodedUser._id)
+        const thisOutfit = await Outfits.findById(req.body._id);
+        const allRaters = thisOutfit.raters.filter(
+          (rater) => rater.id !== decodedUser._id
+        );
         allRaters.push({
-            _id: decodedUser._id,
-            rating: req.body.myRating.rating
-        })
+          _id: decodedUser._id,
+          rating: req.body.myRating.rating,
+        });
         const edit = await Outfits.updateOne(
-            { _id: req.body._id },
-            {
-              $set: {
-                "raters": allRaters
-              },
-            }
-          );
+          { _id: req.body._id },
+          {
+            $set: {
+              raters: allRaters,
+            },
+          }
+        );
         if (!(edit && edit.matchedCount))
-            return res.status(503).json({ message: "Database Error" });
+          return res.status(503).json({ message: "Database Error" });
 
         return res.status(200).json({ message: "Rating updated successfully" });
       } else {

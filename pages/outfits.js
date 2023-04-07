@@ -8,10 +8,11 @@ import { HiOutlineStar, HiStar } from "react-icons/hi";
 
 import styles from "../styles/Home.module.css";
 import axios from "axios";
+import { getSession } from "next-auth/react";
 
-const Outfits = ({ outfitsData }) => {
+const Outfits = ({ outfitsData, session }) => {
   const [user, setUser] = useState({
-    id: '',
+    id: "",
   });
 
   const [rate, setRate] = useState(false);
@@ -28,23 +29,23 @@ const Outfits = ({ outfitsData }) => {
   const [outfitsList, setOutfitsList] = useState(outfitsData);
   // Functions
   const editOutfitsRate = (outfitIndex, imageIndex, user) => {
-    setOutfitsList(prevList => {
+    setOutfitsList((prevList) => {
       const prevOutfit = prevList[outfitIndex];
       var isExist = false;
-      for (let i=0;i<prevOutfit.raters.length;i++) {
+      for (let i = 0; i < prevOutfit.raters.length; i++) {
         if (prevOutfit.raters[i].id === user) {
           prevOutfit.raters[i].best = imageIndex;
           isExist = true;
         }
       }
-      !isExist && prevOutfit.raters.push({id: user, best: imageIndex});
+      !isExist && prevOutfit.raters.push({ id: user, best: imageIndex });
       prevList[outfitIndex] = prevOutfit;
       return [...prevList];
-    })
-  }
+    });
+  };
 
   const setOutfitRating = (outfitIndex, rate, user) => {
-    setOutfitsList(prevList => {
+    setOutfitsList((prevList) => {
       const prevOutfit = prevList[outfitIndex];
 
       // // --------------------------------| Backend or onClick on 'Rate' |--------------------------------
@@ -52,47 +53,52 @@ const Outfits = ({ outfitsData }) => {
       // prevOutfit.rate = prevOutfit.rate ? newRate : rate;
 
       var isExist = false;
-      for (let i=0;i<prevOutfit.raters.length;i++) {
+      for (let i = 0; i < prevOutfit.raters.length; i++) {
         if (prevOutfit.raters[i]._id === user) {
           prevOutfit.raters[i].rating = rate;
           isExist = true;
         }
       }
-      !isExist && prevOutfit.raters.push({_id: user, rating: rate});
+      !isExist && prevOutfit.raters.push({ _id: user, rating: rate });
 
       prevList[outfitIndex] = prevOutfit;
       return [...prevList];
-    })
-  }
+    });
+  };
 
   //Calculate the average of the ratings
   const calculateAvgRate = (outfit) => {
-    const ratings = outfit.raters.map((rater)=>rater.rating)
-    const average = array => array.reduce((a, b) => a + b) / array.length;
-    if (ratings.length > 0){
-      return average(ratings)
+    const ratings = outfit.raters.map((rater) => rater.rating);
+    const average = (array) => array.reduce((a, b) => a + b) / array.length;
+    if (ratings.length > 0) {
+      return average(ratings);
     }
-    return 0
-  }
+    return 0;
+  };
 
   //Sumbit Rating to DB
-  const submitRate = async(outfit) => {
-    if (user.id !== ''){
-      const myRating = outfit.raters.find(rater => rater._id === user.id)
+  const submitRate = async (outfit) => {
+    if (user.id !== "") {
+      const myRating = outfit.raters.find((rater) => rater._id === user.id);
       const data = {
         _id: outfit._id,
-        myRating
-      }
-      await axios.put('/api/outfits/rating', data)
-        .then(response => console.log('success2'))
-        .catch(err => {
-          alert(err.response.data.message)
+        myRating,
+      };
+      await axios
+        .put("/api/outfits/rating", data)
+        .catch((err) => {
+          alert(err.response.data.message);
           window.location.reload();
-        })
+        });
     } else {
-      alert('Please sign in to rate')
+      if (session) {
+        // Treatment of ratings for session users
+        
+      } else {
+        alert("Please sign in to rate");
+      }
     }
-  }
+  };
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -101,182 +107,201 @@ const Outfits = ({ outfitsData }) => {
         .then((response) => {
           setUser(response.data);
         })
-        .catch((err) => {
-        });
+        .catch((err) => {});
     };
 
     fetchUser();
   }, []);
 
   // Outfits List
-  const outfits = (outfitsList.length !== 0) && outfitsList.map((outfit, outfitIndex) => {
-    if (outfit.type === "multi") {
-      var rated;
-      for (let i=0;i<outfit.raters.length;i++) {
-        if (outfit.raters[i]._id === user.id) {
-          rated = outfit.raters[i].best;
-        }
-      }
-      const images = outfit.image.map((image, imageIndex) => {
-        return (
-          <div
-            key={image._id}
-            onClick={() => editOutfitsRate(outfitIndex, imageIndex, user.id)}
-            className="relative rounded-3xl w-64 h-80 mobile:w-72 mobile:h-96 cursor-pointer transition duration-300 hover:opacity-75"
-          >
-            <Image
-              width={1200}
-              height={1200}
-              alt="outfit"
-              className="block object-cover w-full h-full rounded-3xl"
-              src={image.url}
-              style={image.position && {
-                objectPosition: (image.position.left)+'% '+ (image.position.top)+'%',
-              }}
-            />
-            <Image
-              width={1200}
-              height={1200}
-              alt="outfit"
-              src='/badge.png'
-              className={
-                "absolute h-8 w-8 transition duration-200 top-0 right-0 m-2 " +
-                (imageIndex === rated ? "opacity-100 scale-[2.5]" : " scale-0")
-              }
-            />
-          </div>
-        )
-      });
-      return (
-        <div
-          key={outfit._id}
-          className={
-            "flex flex-col justify-center items-center rounded px-4 my-4 fold:w-full mobile:w-10/12 " +
-            styles.boxshadow
+  const outfits =
+    outfitsList.length !== 0 &&
+    outfitsList.map((outfit, outfitIndex) => {
+      if (outfit.type === "multi") {
+        var rated;
+        for (let i = 0; i < outfit.raters.length; i++) {
+          if (outfit.raters[i]._id === user.id) {
+            rated = outfit.raters[i].best;
           }
-        >
-          <h3 className="font-title font-bold text-4xl drop-shadow-lg text-black    my-4">
-            Choose the best
-          </h3>
-          <h3 className="font-title font-bold text-4xl drop-shadow-lg text-my-pink2 mb-4">
-            Outfit
-          </h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 justify-items-center gap-4">
-
-            {images}
-
-          </div>
-          <div className="flex justify-center items-center my-4">
-            <button className="h-12 w-44 text-center bg-my-purple rounded-3xl">
-              <p className="font-display text-white text-xl">Rate</p>
-            </button>
-          </div>
-        </div>
-      );
-    } else {
-      var userRating;
-      var isExist = false;
-      for (let i=0;i<outfit.raters.length;i++) {
-        if (outfit.raters[i]._id === user.id) {
-          userRating = outfit.raters[i].rating;
-          isExist = true;
         }
-      } 
-      !isExist && (userRating = 0);
-      return (
-        <div
-          key={outfit._id}
-          className={
-            "flex flex-col justify-center items-center rounded px-4 my-4 fold:w-full mobile:w-10/12 " +
-            styles.boxshadow
-          }
-        >
-          <h3 className="font-title font-bold text-4xl drop-shadow-lg text-black my-4">
-            Rate this
-          </h3>
-          <h3 className="font-title font-bold text-4xl drop-shadow-lg text-my-pink2 mb-4">
-            Outfit
-          </h3>
-          <div className="flex justify-center items-center">
+        const images = outfit.image.map((image, imageIndex) => {
+          return (
             <div
-              className="relative rounded-3xl w-64 h-80 mobile:w-72 mobile:h-96 cursor-pointer group"
+              key={image._id}
+              onClick={() => editOutfitsRate(outfitIndex, imageIndex, user.id)}
+              className="relative rounded-3xl w-64 h-80 mobile:w-72 mobile:h-96 cursor-pointer transition duration-300 hover:opacity-75"
             >
               <Image
-              width={1200}
-              height={1200}
-              alt="outfit"
-                className="block object-cover w-full h-full rounded-3xl group-hover:opacity-75 transition duration-300"
-                src={outfit.image[0].url}
-                style={outfit.image[0].position && {
-                  objectPosition: (outfit.image[0].position.left)+'% '+ (outfit.image[0].position.top)+'%',
-                }}
+                width={1200}
+                height={1200}
+                alt="outfit"
+                className="block object-cover w-full h-full rounded-3xl"
+                src={image.url}
+                style={
+                  image.position && {
+                    objectPosition:
+                      image.position.left + "% " + image.position.top + "%",
+                  }
+                }
               />
-              <div className="absolute justify-center items-center lg:hidden top-0 right-0 m-1 p-0.5 bg-gray-100 rounded-full">
-                  <HiStar onClick={()=>setRate(prev=>!prev)} size={25} className='fill-my-pink1' />
-              </div>
-              <div className={"absolute inset-y-2/4 w-full lg:opacity-0 lg:group-hover:opacity-100 transition duration-300 "+(rate ? 'opacity-100' : 'opacity-0')}>
-                <div className="flex justify-center items-center">
-                  <HiOutlineStar
-                    onClick={() => setOutfitRating(outfitIndex, 1, user.id)}
-                    color="black"
-                    className={
-                      `m-1 h-6 w-6 transition duration-100 ` +
-                      (userRating >= 1 ? "fill-black" : "fill-transparent")
+              <Image
+                width={1200}
+                height={1200}
+                alt="outfit"
+                src="/badge.png"
+                className={
+                  "absolute h-8 w-8 transition duration-200 top-0 right-0 m-2 " +
+                  (imageIndex === rated
+                    ? "opacity-100 scale-[2.5]"
+                    : " scale-0")
+                }
+              />
+            </div>
+          );
+        });
+        return (
+          <div
+            key={outfit._id}
+            className={
+              "flex flex-col justify-center items-center rounded px-4 my-4 fold:w-full mobile:w-10/12 " +
+              styles.boxshadow
+            }
+          >
+            <h3 className="font-title font-bold text-4xl drop-shadow-lg text-black    my-4">
+              Choose the best
+            </h3>
+            <h3 className="font-title font-bold text-4xl drop-shadow-lg text-my-pink2 mb-4">
+              Outfit
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 justify-items-center gap-4">
+              {images}
+            </div>
+            <div className="flex justify-center items-center my-4">
+              <button className="h-12 w-44 text-center bg-my-purple rounded-3xl">
+                <p className="font-display text-white text-xl">Rate</p>
+              </button>
+            </div>
+          </div>
+        );
+      } else {
+        var userRating;
+        var isExist = false;
+        for (let i = 0; i < outfit.raters.length; i++) {
+          if (outfit.raters[i]._id === user.id) {
+            userRating = outfit.raters[i].rating;
+            isExist = true;
+          }
+        }
+        !isExist && (userRating = 0);
+        return (
+          <div
+            key={outfit._id}
+            className={
+              "flex flex-col justify-center items-center rounded px-4 my-4 fold:w-full mobile:w-10/12 " +
+              styles.boxshadow
+            }
+          >
+            <h3 className="font-title font-bold text-4xl drop-shadow-lg text-black my-4">
+              Rate this
+            </h3>
+            <h3 className="font-title font-bold text-4xl drop-shadow-lg text-my-pink2 mb-4">
+              Outfit
+            </h3>
+            <div className="flex justify-center items-center">
+              <div className="relative rounded-3xl w-64 h-80 mobile:w-72 mobile:h-96 cursor-pointer group">
+                <Image
+                  width={1200}
+                  height={1200}
+                  alt="outfit"
+                  className="block object-cover w-full h-full rounded-3xl group-hover:opacity-75 transition duration-300"
+                  src={outfit.image[0].url}
+                  style={
+                    outfit.image[0].position && {
+                      objectPosition:
+                        outfit.image[0].position.left +
+                        "% " +
+                        outfit.image[0].position.top +
+                        "%",
                     }
+                  }
+                />
+                <div className="absolute justify-center items-center lg:hidden top-0 right-0 m-1 p-0.5 bg-gray-100 rounded-full">
+                  <HiStar
+                    onClick={() => setRate((prev) => !prev)}
+                    size={25}
+                    className="fill-my-pink1"
                   />
-                  <HiOutlineStar
-                    onClick={() => setOutfitRating(outfitIndex, 2, user.id)}
-                    color="black"
-                    className={
-                      `m-1 h-6 w-6 ` +
-                      (userRating >= 2
-                        ? "transition duration-150 fill-black"
-                        : "transition duration-300 fill-transparent")
-                    }
-                  />
-                  <HiOutlineStar
-                    onClick={() => setOutfitRating(outfitIndex, 3, user.id)}
-                    color="black"
-                    className={
-                      `m-1 h-6 w-6 transition duration-200 ` +
-                      (userRating >= 3 ? "fill-black" : "fill-transparent")
-                    }
-                  />
-                  <HiOutlineStar
-                    onClick={() => setOutfitRating(outfitIndex, 4, user.id)}
-                    color="black"
-                    className={
-                      `m-1 h-6 w-6 ` +
-                      (userRating >= 4
-                        ? "transition duration-300 fill-black"
-                        : "transition duration-150 fill-transparent")
-                    }
-                  />
-                  <HiOutlineStar
-                    onClick={() => setOutfitRating(outfitIndex, 5, user.id)}
-                    color="black"
-                    className={
-                      `m-1 h-6 w-6 ` +
-                      (userRating === 5
-                        ? "transition duration-500 fill-black"
-                        : "transition duration-100 fill-transparent")
-                    }
-                  />
+                </div>
+                <div
+                  className={
+                    "absolute inset-y-2/4 w-full lg:opacity-0 lg:group-hover:opacity-100 transition duration-300 " +
+                    (rate ? "opacity-100" : "opacity-0")
+                  }
+                >
+                  <div className="flex justify-center items-center">
+                    <HiOutlineStar
+                      onClick={() => setOutfitRating(outfitIndex, 1, user.id)}
+                      color="black"
+                      className={
+                        `m-1 h-6 w-6 transition duration-100 ` +
+                        (userRating >= 1 ? "fill-black" : "fill-transparent")
+                      }
+                    />
+                    <HiOutlineStar
+                      onClick={() => setOutfitRating(outfitIndex, 2, user.id)}
+                      color="black"
+                      className={
+                        `m-1 h-6 w-6 ` +
+                        (userRating >= 2
+                          ? "transition duration-150 fill-black"
+                          : "transition duration-300 fill-transparent")
+                      }
+                    />
+                    <HiOutlineStar
+                      onClick={() => setOutfitRating(outfitIndex, 3, user.id)}
+                      color="black"
+                      className={
+                        `m-1 h-6 w-6 transition duration-200 ` +
+                        (userRating >= 3 ? "fill-black" : "fill-transparent")
+                      }
+                    />
+                    <HiOutlineStar
+                      onClick={() => setOutfitRating(outfitIndex, 4, user.id)}
+                      color="black"
+                      className={
+                        `m-1 h-6 w-6 ` +
+                        (userRating >= 4
+                          ? "transition duration-300 fill-black"
+                          : "transition duration-150 fill-transparent")
+                      }
+                    />
+                    <HiOutlineStar
+                      onClick={() => setOutfitRating(outfitIndex, 5, user.id)}
+                      color="black"
+                      className={
+                        `m-1 h-6 w-6 ` +
+                        (userRating === 5
+                          ? "transition duration-500 fill-black"
+                          : "transition duration-100 fill-transparent")
+                      }
+                    />
+                  </div>
                 </div>
               </div>
             </div>
+            <p>{calculateAvgRate(outfit)}</p>
+            <div className="flex justify-center items-center my-4">
+              <button
+                onClick={() => submitRate(outfit)}
+                className="h-12 w-44 text-center bg-my-purple rounded-3xl"
+              >
+                <p className="font-display text-white text-xl">Rate</p>
+              </button>
+            </div>
           </div>
-          <p>{calculateAvgRate(outfit)}</p>
-          <div className="flex justify-center items-center my-4">
-            <button onClick={()=>submitRate(outfit)} className="h-12 w-44 text-center bg-my-purple rounded-3xl">
-              <p className="font-display text-white text-xl">Rate</p>
-            </button>
-          </div>
-        </div>
-      );
-    }
-  });
-
+        );
+      }
+    });
 
   // ---------------------------------------------| Render |--------------------------------------------------
   return (
@@ -290,7 +315,6 @@ const Outfits = ({ outfitsData }) => {
 
       <div className="grid grid-cols-8 w-full">
         <div className="lg:col-start-2 col-span-8 lg:col-span-6 flex flex-col justify-center items-center">
-
           {/*-------------------------------------------| Adding a new Outfit |------------------------------------------ */}
 
           <div
@@ -473,7 +497,10 @@ const Outfits = ({ outfitsData }) => {
               </div>
             </div>
 
-            <Link href='/new-outfit' className="flex sm:mx-8 md:mx-14 lg:mx-20 justify-center items-center">
+            <Link
+              href="/new-outfit"
+              className="flex sm:mx-8 md:mx-14 lg:mx-20 justify-center items-center"
+            >
               <MdOutlineAddCircle className="fill-my-pink1 w-20 sm:w-24 h-20 sm:h-24 cursor-pointer" />
             </Link>
 
@@ -518,7 +545,9 @@ const Outfits = ({ outfitsData }) => {
 
 export default Outfits;
 
-export const getServerSideProps = async () => {
+export const getServerSideProps = async (context) => {
+  const session = await getSession(context);
+
   const url =
     process.env.VERCEL_ENV === "production"
       ? "https://rankmyoutfit.vercel.app/api/outfits"
@@ -530,6 +559,7 @@ export const getServerSideProps = async () => {
   return {
     props: {
       outfitsData,
+      session,
     },
   };
 };
