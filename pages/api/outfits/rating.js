@@ -3,6 +3,7 @@ import jwt_decode from "jwt-decode";
 import { verify } from "jsonwebtoken";
 import { getSession } from "next-auth/react";
 import Outfits from "@/model/OutfitSchema";
+import Users from "@/model/UserSchema";
 
 // Update Rating values
 export default async function Handler(req, res) {
@@ -20,15 +21,14 @@ export default async function Handler(req, res) {
     }
 
     //Check if the user is authenticated through (Google / Facebook / ...) Provider
-    console.log(session)
     if (session && session.user && session.expires) {
       //Rate Posts by (Google / Facebook / ...) users
       const thisOutfit = await Outfits.findById(req.body._id);
       const allRaters = thisOutfit.raters.filter(
-        (rater) => rater.id !== decodedUser._id
+        (rater) => rater.email !== session?.user?.email
       );
       allRaters.push({
-        _id: decodedUser._id,
+        email: session?.user?.email,
         rating: req.body.myRating.rating,
       });
       const edit = await Outfits.updateOne(
@@ -49,7 +49,8 @@ export default async function Handler(req, res) {
         var decodedUser = jwt_decode(jwt);
         const thisOutfit = await Outfits.findById(req.body._id);
         const allRaters = thisOutfit.raters.filter(
-          (rater) => rater.id !== decodedUser._id
+          (rater) => !(rater._id.equals(decodedUser._id))
+          
         );
         allRaters.push({
           _id: decodedUser._id,
