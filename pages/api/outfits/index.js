@@ -15,7 +15,6 @@ export default async function Handler(req, res) {
       const posts = await Outfits.find({});
       return res.status(200).json(posts);
     } catch(e) {
-      console.log(e)
       return res.status(404).json({message: "Not Found"});
     }
   }

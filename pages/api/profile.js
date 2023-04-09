@@ -32,7 +32,19 @@ export default async function Handler(req, res) {
         .status(200)
         .json({ message: "Please change your original account's Image" });
     }
-    console.log('test')
+
+    if (req.method === "GET") {
+      const user = await Users.findOne({ email: session.user.email });
+
+      const requestData = {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        image: user.image,
+      };
+
+      return res.status(200).json(requestData);
+    }
   } else {
     if (verification) {
       if (req.method === "PUT") {

@@ -56,7 +56,6 @@ export default async function Handler(req, res) {
             _id: decodedUser._id,
             best: req.body.myBest.best,
           });
-          console.log(allRaters)
           const edit = await Outfits.updateOne(
             { _id: req.body._id },
             {
