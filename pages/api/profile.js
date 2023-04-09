@@ -32,6 +32,7 @@ export default async function Handler(req, res) {
         .status(200)
         .json({ message: "Please change your original account's Image" });
     }
+    console.log('test')
   } else {
     if (verification) {
       if (req.method === "PUT") {
@@ -61,14 +62,14 @@ export default async function Handler(req, res) {
         const user = await Users.findOne({ email: decoded.email });
 
         if (!user._id) {
-          const serialised = serialize("authentication", null, {
+          const serialized = serialize("authentication", null, {
             httpOnly: true,
             secure: process.env.VERCEL_ENV !== "development",
             sameSite: "strict",
             maxAge: -1,
             path: "/",
           });
-          res.setHeader("Set-Cookie", serialised);
+          res.setHeader("Set-Cookie", serialized);
           return res.status(404).json({ message: "User not found" });
         }
 
@@ -82,14 +83,14 @@ export default async function Handler(req, res) {
         return res.status(200).json(requestData);
       }
     } else {
-      const serialised = serialize("authentication", null, {
+      const serialized = serialize("authentication", null, {
         httpOnly: true,
         secure: process.env.VERCEL_ENV !== "development",
         sameSite: "strict",
         maxAge: -1,
         path: "/",
       });
-      res.setHeader("Set-Cookie", serialised);
+      res.setHeader("Set-Cookie", serialized);
       return res.status(401).json({ message: "Invalid Token" });
     }
   }

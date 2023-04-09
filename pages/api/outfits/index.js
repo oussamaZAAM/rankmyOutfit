@@ -84,14 +84,14 @@ export default async function Handler(req, res) {
               });
           } else {
               //Delete non authenticated user's cookies
-              const serialised = serialize("authentication", null, {
+              const serialized = serialize("authentication", null, {
                   httpOnly: true,
                   secure: process.env.VERCEL_ENV !== "development",
                   sameSite: "strict",
                   maxAge: -1,
                   path: "/",
               });
-              res.setHeader("Set-Cookie", serialised);
+              res.setHeader("Set-Cookie", serialized);
               return res.status(501).json({ message: "Invalid Token" });
           }
       }
