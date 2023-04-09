@@ -44,23 +44,32 @@ const Outfits = ({ outfitsData, session }) => {
     });
   };
 
-  const setOutfitRating = (outfitIndex, rate, user) => {
+  const setOutfitRating = (outfitIndex, rate) => {
     setOutfitsList((prevList) => {
       const prevOutfit = prevList[outfitIndex];
 
-      // // --------------------------------| Backend or onClick on 'Rate' |--------------------------------
-      // const newRate = ((prevOutfit.rate * prevOutfit.raters.length) + rate) / (prevOutfit.raters.length + 1);
-      // prevOutfit.rate = prevOutfit.rate ? newRate : rate;
-
-      var isExist = false;
-      for (let i = 0; i < prevOutfit.raters.length; i++) {
-        if (prevOutfit.raters[i]._id === user) {
-          prevOutfit.raters[i].rating = rate;
-          isExist = true;
+      if (user?.id !== '' && user?.name && user?.email && user?.image) {
+        var isExist = false;
+        for (let i = 0; i < prevOutfit.raters.length; i++) {
+          if (prevOutfit.raters[i]._id === user.id) {
+            prevOutfit.raters[i].rating = rate;
+            isExist = true;
+          }
         }
+        !isExist && prevOutfit.raters.push({ _id: user.id, rating: rate });
       }
-      !isExist && prevOutfit.raters.push({ _id: user, rating: rate });
-
+      
+      if (session?.user?.email && session?.user?.image && session?.user?.name) {
+        var isExist = false;
+        for (let i = 0; i < prevOutfit.raters.length; i++) {
+          if (prevOutfit.raters[i].email === session.user.email) {
+            prevOutfit.raters[i].rating = rate;
+            isExist = true;
+          }
+        }
+        !isExist && prevOutfit.raters.push({ _id: session.user.email, rating: rate });
+      }
+        
       prevList[outfitIndex] = prevOutfit;
       return [...prevList];
     });
@@ -101,8 +110,17 @@ const Outfits = ({ outfitsData, session }) => {
         });
     } else {
       if (session) {
-        // Treatment of ratings for session users
-        
+        const myRating = outfit.raters.find((rater) => rater.email === session?.user?.email);
+        const data = {
+          _id: outfit._id,
+          myRating,
+        };
+        await axios
+          .put("/api/outfits/rating", data)
+          .catch((err) => {
+            alert(err.response.data.message);
+            window.location.reload();
+          });
       } else {
         alert("Please sign in to rate");
       }
@@ -209,6 +227,10 @@ const Outfits = ({ outfitsData, session }) => {
             userRating = outfit.raters[i].rating;
             isExist = true;
           }
+          if (outfit.raters[i].email && session?.user?.email && outfit.raters[i].email === session?.user?.email) {
+            userRating = outfit.raters[i].rating;
+            isExist = true;
+          }
         }
         !isExist && (userRating = 0);
         return (
@@ -258,7 +280,7 @@ const Outfits = ({ outfitsData, session }) => {
                 >
                   <div className="flex justify-center items-center">
                     <HiOutlineStar
-                      onClick={() => setOutfitRating(outfitIndex, 1, user.id)}
+                      onClick={() => setOutfitRating(outfitIndex, 1)}
                       color="black"
                       className={
                         `m-1 h-6 w-6 transition duration-100 ` +
@@ -266,7 +288,7 @@ const Outfits = ({ outfitsData, session }) => {
                       }
                     />
                     <HiOutlineStar
-                      onClick={() => setOutfitRating(outfitIndex, 2, user.id)}
+                      onClick={() => setOutfitRating(outfitIndex, 2)}
                       color="black"
                       className={
                         `m-1 h-6 w-6 ` +
@@ -276,7 +298,7 @@ const Outfits = ({ outfitsData, session }) => {
                       }
                     />
                     <HiOutlineStar
-                      onClick={() => setOutfitRating(outfitIndex, 3, user.id)}
+                      onClick={() => setOutfitRating(outfitIndex, 3)}
                       color="black"
                       className={
                         `m-1 h-6 w-6 transition duration-200 ` +
@@ -284,7 +306,7 @@ const Outfits = ({ outfitsData, session }) => {
                       }
                     />
                     <HiOutlineStar
-                      onClick={() => setOutfitRating(outfitIndex, 4, user.id)}
+                      onClick={() => setOutfitRating(outfitIndex, 4)}
                       color="black"
                       className={
                         `m-1 h-6 w-6 ` +
@@ -294,7 +316,7 @@ const Outfits = ({ outfitsData, session }) => {
                       }
                     />
                     <HiOutlineStar
-                      onClick={() => setOutfitRating(outfitIndex, 5, user.id)}
+                      onClick={() => setOutfitRating(outfitIndex, 5)}
                       color="black"
                       className={
                         `m-1 h-6 w-6 ` +
