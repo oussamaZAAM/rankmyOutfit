@@ -18,6 +18,7 @@ const outfitSchema = new Schema({
     raters: [{
         email: String,
         rating: Number,
+        best: Number
     }],
 });
 
