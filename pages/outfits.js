@@ -27,17 +27,31 @@ const Outfits = ({ outfitsData, session }) => {
   const [rankingType, setRankingType] = useState("basic");
   const [outfitsList, setOutfitsList] = useState(outfitsData);
   // Functions
-  const editOutfitsRate = (outfitIndex, imageIndex, user) => {
+  const setOutfitsBest = (outfitIndex, imageIndex) => {
     setOutfitsList((prevList) => {
       const prevOutfit = prevList[outfitIndex];
-      var isExist = false;
-      for (let i = 0; i < prevOutfit.raters.length; i++) {
-        if (prevOutfit.raters[i]._id === user) {
-          prevOutfit.raters[i].best = imageIndex;
-          isExist = true;
+      
+      if (user?.id !== '' && user?.name && user?.email && user?.image) {
+        var isExist = false;
+        for (let i = 0; i < prevOutfit.raters.length; i++) {
+          if (prevOutfit.raters[i]._id === user.id) {
+            prevOutfit.raters[i].best = imageIndex;
+            isExist = true;
+          }
         }
+        !isExist && prevOutfit.raters.push({ _id: user.id, best: imageIndex });
       }
-      !isExist && prevOutfit.raters.push({ _id: user, best: imageIndex });
+      
+      if (session?.user?.email && session?.user?.image && session?.user?.name) {
+        var isExist = false;
+        for (let i = 0; i < prevOutfit.raters.length; i++) {
+          if (prevOutfit.raters[i].email === session.user.email) {
+            prevOutfit.raters[i].best = imageIndex;
+            isExist = true;
+          }
+        }
+        !isExist && prevOutfit.raters.push({ email: session.user.email, best: imageIndex });
+      }
       prevList[outfitIndex] = prevOutfit;
       return [...prevList];
     });
@@ -66,7 +80,7 @@ const Outfits = ({ outfitsData, session }) => {
             isExist = true;
           }
         }
-        !isExist && prevOutfit.raters.push({ _id: session.user.email, rating: rate });
+        !isExist && prevOutfit.raters.push({ email: session.user.email, rating: rate });
       }
         
       prevList[outfitIndex] = prevOutfit;
@@ -83,59 +97,8 @@ const Outfits = ({ outfitsData, session }) => {
     }
     return 0;
   };
-
-  //Sumbit Rating to DB
-  const submitRate = async (outfit) => {
-    setOutfitsList((prevList) => {
-      for (let i = 0; i < prevList.length; i++) {
-        if (prevList[i] === outfit) {
-          prevList[i].loading = true;
-        }
-      }
-      return [...prevList]
-    })
-
-    if (user.id !== "") {
-      const myRating = outfit.raters.find((rater) => rater._id === user.id);
-      const data = {
-        _id: outfit._id,
-        myRating,
-      };
-      await axios
-        .put("/api/outfits/rating", data)
-        .catch((err) => {
-          alert(err.response.data.message);
-          window.location.reload();
-        });
-    } else {
-      if (session) {
-        const myRating = outfit.raters.find((rater) => rater.email === session?.user?.email);
-        const data = {
-          _id: outfit._id,
-          myRating,
-        };
-        await axios
-          .put("/api/outfits/rating", data)
-          .catch((err) => {
-            alert(err.response.data.message);
-            window.location.reload();
-          });
-      } else {
-        alert("Please sign in to rate");
-      }
-    }
-
-    setOutfitsList((prevList) => {
-      for (let i = 0; i < prevList.length; i++) {
-        if (prevList[i] === outfit) {
-          prevList[i].loading = false;
-        }
-      }
-      return [...prevList]
-    })
-  };
-
-  // Submit the Best Outfit
+  
+  // Submit the Best Outfit to DB
   const submitBest = async (outfit) => {
     setOutfitsList((prevList) => {
       for (let i = 0; i < prevList.length; i++) {
@@ -152,7 +115,7 @@ const Outfits = ({ outfitsData, session }) => {
         _id: outfit._id,
         myBest,
       };
-      await axios
+      myBest && await axios
         .put("/api/outfits/rating", data)
         .catch((err) => {
           alert(err.response.data.message);
@@ -165,7 +128,7 @@ const Outfits = ({ outfitsData, session }) => {
           _id: outfit._id,
           myBest,
         };
-        await axios
+        myBest && await axios
           .put("/api/outfits/rating", data)
           .catch((err) => {
             alert(err.response.data.message);
@@ -185,6 +148,57 @@ const Outfits = ({ outfitsData, session }) => {
       return [...prevList]
     })
   }
+
+  //Sumbit Rating to DB
+  const submitRate = async (outfit) => {
+    setOutfitsList((prevList) => {
+      for (let i = 0; i < prevList.length; i++) {
+        if (prevList[i] === outfit) {
+          prevList[i].loading = true;
+        }
+      }
+      return [...prevList]
+    })
+
+    if (user.id !== "") {
+      const myRating = outfit.raters.find((rater) => rater._id === user.id);
+      const data = {
+        _id: outfit._id,
+        myRating,
+      };
+      myRating && await axios
+        .put("/api/outfits/rating", data)
+        .catch((err) => {
+          alert(err.response.data.message);
+          window.location.reload();
+        });
+    } else {
+      if (session) {
+        const myRating = outfit.raters.find((rater) => rater.email === session?.user?.email);
+        const data = {
+          _id: outfit._id,
+          myRating,
+        };
+        myRating && await axios
+          .put("/api/outfits/rating", data)
+          .catch((err) => {
+            alert(err.response.data.message);
+            window.location.reload();
+          });
+      } else {
+        alert("Please sign in to rate");
+      }
+    }
+
+    setOutfitsList((prevList) => {
+      for (let i = 0; i < prevList.length; i++) {
+        if (prevList[i] === outfit) {
+          prevList[i].loading = false;
+        }
+      }
+      return [...prevList]
+    })
+  };
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -209,12 +223,16 @@ const Outfits = ({ outfitsData, session }) => {
           if (outfit.raters[i]._id === user.id) {
             rated = outfit.raters[i].best;
           }
+          
+          if (outfit.raters[i].email && session?.user?.email && outfit.raters[i].email === session?.user?.email) {
+            rated = outfit.raters[i].best;
+          }
         }
         const images = outfit.image.map((image, imageIndex) => {
           return (
             <div
               key={image._id}
-              onClick={() => editOutfitsRate(outfitIndex, imageIndex, user.id)}
+              onClick={() => setOutfitsBest(outfitIndex, imageIndex, user.id)}
               className="relative rounded-3xl w-64 h-80 mobile:w-72 mobile:h-96 cursor-pointer transition duration-300 hover:opacity-75"
             >
               <Image
