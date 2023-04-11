@@ -66,7 +66,7 @@ export default function Home() {
               <br />
             </p>
             <p className="font-body font-normal text-xl indent-2 my-4 w-11/12 sm:w-9/12 md:w-3/4 lg:1/2">
-              Let's create a space where fashion is celebrated, and everyone can
+              Let&aposs create a space where fashion is celebrated, and everyone can
               shine!
             </p>
           </div>
