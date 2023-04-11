@@ -111,7 +111,7 @@ export default function Home() {
                   width={160}
                   height={160}
                   alt="loading"
-                  src={require('../public/images/service1.png')}
+                  src={require('public/service1.png')}
                   className="
                             hidden xs:block
                             h-24 sm:h-40
@@ -150,7 +150,7 @@ export default function Home() {
                   width={160}
                   height={160}
                   alt="loading"
-                  src={require('../public/images/service2.png')}
+                  src={require('public/service2.png')}
                   className="
                             hidden xs:block
                             h-24 sm:h-40 
@@ -317,7 +317,7 @@ export default function Home() {
                   width={160}
                   height={160}
                   alt="loading"
-                  src={require('../public/images/goal1.png')}
+                  src={require('public/goal1.png')}
                   className="
                             hidden xs:block
                             h-24 sm:h-40 
@@ -355,7 +355,7 @@ export default function Home() {
                   width={160}
                   height={160}
                   alt="loading"
-                  src={require('../public/images/goal2.png')}
+                  src={require('public/goal2.png')}
                   className="
                             hidden xs:block
                             h-24 sm:h-40 
@@ -393,7 +393,7 @@ export default function Home() {
                   width={160}
                   height={160}
                   alt="loading"
-                  src={require('../public/images/goal3.png')}
+                  src={require('public/goal3.png')}
                   className="
                             hidden xs:block
                             h-24
